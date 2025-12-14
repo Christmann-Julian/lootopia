@@ -1,0 +1,31 @@
+email:
+  confirm:
+    subject: "Confirmez votre adresse email"
+    greeting: "Bonjour %firstname% %lastname%,"
+    intro: "Merci de vous être inscrit. Cliquez sur le bouton ci-dessous pour confirmer votre adresse email et activer votre compte."
+    button: "Confirmer mon email"
+    expires: "Ce lien expire dans %expires%."
+    fallback: "Si le bouton ci-dessous ne fonctionne pas, copiez-collez ce lien dans votre navigateur :"
+    notice: "Si vous n'avez pas demandé cette confirmation, ignorez ce message."
+    plain: |
+      Bonjour %firstname% %lastname%,
+
+      Merci de vous être inscrit. Copiez-collez le lien suivant dans votre navigateur pour confirmer votre adresse email :
+      %signedUrl%
+
+      Ce lien peut expirer.
+  reset:
+    subject: "Réinitialisez votre mot de passe"
+    greeting: "Bonjour %firstname% %lastname%,"
+    intro: "Vous avez demandé la réinitialisation de votre mot de passe. Cliquez sur le bouton ci‑dessous pour choisir un nouveau mot de passe."
+    button: "Réinitialiser mon mot de passe"
+    expires: "Ce lien expirera le %expires%."
+    fallback: "Si le bouton ci‑dessous ne fonctionne pas, copiez-collez ce lien dans votre navigateur :"
+    notice: "Si vous n'avez pas demandé la réinitialisation, ignorez ce message."
+    plain: |
+      Bonjour %firstname% %lastname%,
+
+      Vous avez demandé la réinitialisation de votre mot de passe. Copiez-collez le lien suivant dans votre navigateur pour définir un nouveau mot de passe :
+      %resetUrl%
+
+      Ce lien expirera le %expires%.
