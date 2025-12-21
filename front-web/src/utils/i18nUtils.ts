@@ -12,7 +12,7 @@ export type Locale = {
 
 export const locales: Locale[] = [
   {
-    name: "English",
+    name: "English (US)",
     code: "en",
     country_code: "US",
     locale_code: "en-US",
@@ -72,12 +72,18 @@ export const getLanguageByLocaleCode = (localeCode: string): string | null => {
 };
 
 /**
- * Change la langue de l'application et met à jour la direction du document
+ * Change la langue de l'application, met à jour la direction du document et le path de l'URL
  * @param langCode Le code de la langue à changer (ex: 'en', 'fr')
  */
 export const changeLanguage = async (langCode: string): Promise<void> => {
   await i18nNext.changeLanguage(langCode);
   document.documentElement.dir = getDirection();
+
+  const url = new URL(window.location.href);
+  url.pathname = `/${langCode}${url.pathname.replace(/^\/[^/]+/, "")}`;
+  window.history.pushState({}, "", url.toString());
+
+  // window.location.reload();
 };
 
 /**

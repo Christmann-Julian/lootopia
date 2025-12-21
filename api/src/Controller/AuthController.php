@@ -209,6 +209,7 @@ final class AuthController extends AbstractController
                 properties: [
                     new OA\Property(property: 'firstname', type: 'string', example: 'Jean'),
                     new OA\Property(property: 'lastname', type: 'string', example: 'Dupont'),
+                    new OA\Property(property: 'company', type: 'string', example: 'ACME Corp', nullable: true),
                     new OA\Property(property: 'email', type: 'string', example: 'jean.dupont@example.com'),
                     new OA\Property(property: 'password', type: 'string', example: 'Secret123!'),
                 ],
@@ -234,6 +235,7 @@ final class AuthController extends AbstractController
         $registerUserRequest = new RegisterUserRequest(
             $data['firstname'] ?? '',
             $data['lastname'] ?? '',
+            $data['company'] ?? null,
             $data['email'] ?? '',
             $data['password'] ?? ''
         );
@@ -244,6 +246,7 @@ final class AuthController extends AbstractController
         $user->setFirstname($registerUserRequest->getFirstname())
             ->setLastname($registerUserRequest->getLastname())
             ->setEmail($registerUserRequest->getEmail())
+            ->setCompany($registerUserRequest->getCompany())
             ->setIsVerified(false)
             ->setPassword($passwordHasher->hashPassword($user, $registerUserRequest->getPassword()))
             ->setRoles(['ROLE_USER']);
@@ -349,7 +352,7 @@ final class AuthController extends AbstractController
             $message = '?error='.urlencode($translator->trans('auth.signed_url_invalid', [], 'messages'));
         }
 
-        return $this->redirect('http://localhost:3000/login'.$message);
+        return $this->redirect('http://localhost:5173/'.$message);
     }
 
     #[OA\Post(
@@ -396,7 +399,7 @@ final class AuthController extends AbstractController
         $entityManager->persist($resetToken);
         $entityManager->flush();
 
-        $resetUrl = sprintf('http://localhost:3000/reset-password?token=%s&email=%s', $tokenString, urlencode((string) $user->getEmail()));
+        $resetUrl = sprintf('http://localhost:5173/reset-password?token=%s&email=%s', $tokenString, urlencode((string) $user->getEmail()));
 
         $emailMessage = (new TemplatedEmail())
             ->from(new Address('no-reply@example.com'))

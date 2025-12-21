@@ -15,6 +15,9 @@ final class UpdateUserRequest
     #[Assert\Length(min: 2, max: 100)]
     private string $lastname;
 
+    #[Assert\Length(max: 255)]
+    private ?string $company = null;
+
     #[Assert\NotBlank]
     #[Assert\Email]
     #[UniqueEmail]
@@ -29,12 +32,14 @@ final class UpdateUserRequest
     public function __construct(
         string $firstname = '',
         string $lastname = '',
+        ?string $company = null,
         string $email = '',
         array $roles = [],
         bool $isVerified = false,
     ) {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
+        $this->company = $company;
         $this->email = $email;
         $this->roles = $roles;
         $this->isVerified = $isVerified;
@@ -48,6 +53,11 @@ final class UpdateUserRequest
     public function getLastname(): string
     {
         return $this->lastname;
+    }
+
+    public function getCompany(): ?string
+    {
+        return $this->company;
     }
 
     public function getEmail(): string

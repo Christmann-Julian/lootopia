@@ -1,0 +1,11 @@
+{
+    "required": "Ce champ est obligatoire.",
+    "minLength": "La longueur minimale est de {{min}} caractères.",
+    "maxLength": "La longueur maximale est de {{max}} caractères.",
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide.",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
+    "passwordStrength": "La force du mot de passe : {{strength}}",
+    "weak": "faible",
+    "medium": "moyenne",
+    "strong": "forte"
+}

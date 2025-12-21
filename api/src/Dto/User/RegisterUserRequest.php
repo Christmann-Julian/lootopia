@@ -16,6 +16,9 @@ class RegisterUserRequest
     #[Assert\Length(min: 2, max: 100)]
     private string $lastname = '';
 
+    #[Assert\Length(max: 255)]
+    private ?string $company = null;
+
     #[Assert\NotBlank]
     #[Assert\Email]
     #[UniqueEmail]
@@ -30,11 +33,13 @@ class RegisterUserRequest
     public function __construct(
         string $firstname,
         string $lastname,
+        ?string $company,
         string $email,
         string $password,
     ) {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
+        $this->company = $company;
         $this->email = $email;
         $this->password = $password;
     }
@@ -47,6 +52,11 @@ class RegisterUserRequest
     public function getLastname(): string
     {
         return $this->lastname;
+    }
+
+    public function getCompany(): ?string
+    {
+        return $this->company;
     }
 
     public function getEmail(): string

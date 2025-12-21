@@ -91,6 +91,7 @@ final class UserController extends AbstractController
                         new OA\Property(property: 'id', type: 'integer'),
                         new OA\Property(property: 'firstname', type: 'string'),
                         new OA\Property(property: 'lastname', type: 'string'),
+                        new OA\Property(property: 'company', type: 'string', nullable: true),
                         new OA\Property(property: 'email', type: 'string'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'isVerified', type: 'boolean'),
@@ -115,6 +116,7 @@ final class UserController extends AbstractController
         $dto = new CreateUserRequest(
             $data['firstname'] ?? '',
             $data['lastname'] ?? '',
+            $data['company'] ?? null,
             $data['email'] ?? '',
             $data['password'] ?? '',
             $data['roles'] ?? ['ROLE_USER'],
@@ -127,6 +129,7 @@ final class UserController extends AbstractController
         $user->setFirstname($dto->getFirstname())
             ->setLastname($dto->getLastname())
             ->setEmail($dto->getEmail())
+            ->setCompany($dto->getCompany())
             ->setRoles(array_values($dto->getRoles()))
             ->setIsVerified($dto->isVerified())
             ->setPassword($passwordHasher->hashPassword($user, $dto->getPassword()));
@@ -165,6 +168,7 @@ final class UserController extends AbstractController
                         new OA\Property(property: 'id', type: 'integer'),
                         new OA\Property(property: 'firstname', type: 'string'),
                         new OA\Property(property: 'lastname', type: 'string'),
+                        new OA\Property(property: 'company', type: 'string', nullable: true),
                         new OA\Property(property: 'email', type: 'string'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'isVerified', type: 'boolean'),
@@ -197,6 +201,7 @@ final class UserController extends AbstractController
         $dto = new UpdateUserRequest(
             $data['firstname'] ?? '',
             $data['lastname'] ?? '',
+            $data['company'] ?? null,
             $data['email'] ?? '',
             $this->isGranted('ROLE_ADMIN') ? $data['roles'] ?? [] : $currentUser->getRoles(),
             $this->isGranted('ROLE_ADMIN') ? $data['isVerified'] ?? false : $currentUser->isVerified()

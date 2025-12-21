@@ -10,15 +10,15 @@ i18next
   .init({
     supportedLngs: ["en", "fr"],
     fallbackLng: "en",
-    ns: ["common"],
+    ns: ["common", "auth"],
     defaultNS: "common",
     debug: false,
     detection: {
-      order: ["path", "cookie", "navigator", "htmlTag"],
+      order: ["path", "cookie", "navigator"],
       caches: ["cookie"],
     },
     backend: {
-      loadPath: "/translations/{{lng}}/{{ns}}.json",
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
   });
 
