@@ -1,0 +1,10 @@
+auth:
+    invalid_credentials: 'Identifiant ou mot de passe invalide'
+    user_not_found: "Utilisateur non trouvé"
+    email_not_verified: "Vous devez vérifier votre adresse email avant de vous connecter"
+    email_verified: "Votre adresse email a été vérifiée avec succès."
+    email_address_not_registered: "Cette adresse email n'est pas liée à un compte. Veuillez vous inscrire d'abord."
+    email_address_already_verified: "Cette adresse email a déjà été vérifiée."
+    signed_url_invalid: "Ce lien de vérification n'est plus valide. Veuillez demander un nouveau lien."
+    invalid_reset_password_request: "La demande de réinitialisation du mot de passe est invalide ou a expiré."
+

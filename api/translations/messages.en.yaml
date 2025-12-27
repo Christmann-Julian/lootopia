@@ -1,0 +1,9 @@
+auth:
+    invalid_credentials: 'Invalid email or password'
+    user_not_found: 'User not found'
+    email_not_verified: 'You must verify your email address before logging in'
+    email_verified: 'Your email address has been successfully verified.'
+    email_address_not_registered: 'This email address is not associated with an account. Please sign up first.'
+    email_address_already_verified: 'This email address has already been verified.'
+    signed_url_invalid: 'This verification link is no longer valid. Please request a new link.'
+    invalid_reset_password_request: 'The password reset request is invalid or has expired.'

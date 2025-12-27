@@ -1,0 +1,59 @@
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stats-grid .card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.stats-grid .card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.stats-grid .card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  text-transform: capitalize;
+}
+
+.stats-grid .card-icon {
+  width: 16px;
+  height: 16px;
+  color: hsl(var(--muted-foreground));
+}
+
+.stats-grid .card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stats-grid .card-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+}
+
+.stats-grid .card-description {
+  font-size: 13px;
+  color: hsl(var(--muted-foreground));
+}
+
+.stats-grid .trend-positive {
+  color: #10b981;
+}
+
+.stats-grid .trend-negative {
+  color: #ef4444;
+}

@@ -1,0 +1,99 @@
+services:
+  # Base de données MariaDB
+  db:
+    image: mariadb:10.4.32
+    container_name: lootopia_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lootopia
+      MYSQL_USER: lootopia
+      MYSQL_PASSWORD: lootopia
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - lootopia_network
+
+  # API Symfony
+  api:
+    build:
+      context: ../api
+      dockerfile: Dockerfile
+    container_name: lootopia_api
+    volumes:
+      - ../api:/var/www
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "mysql://lootopia:lootopia@db:3306/lootopia?serverVersion=mariadb-10.4.32"
+      MAILER_DSN: "smtp://mailpit:1025"
+    networks:
+      - lootopia_network
+
+  # Front Web (Vite + React)
+  front-web:
+    build:
+      context: ../front-web
+      dockerfile: Dockerfile
+    container_name: lootopia_front_web
+    volumes:
+      - ../front-web:/app
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    networks:
+      - lootopia_network
+
+  # Front Mobile (React Native + Expo)
+  front-mobile:
+    build:
+      context: ../front-mobile
+      dockerfile: Dockerfile
+    container_name: lootopia_front_mobile
+    volumes:
+      - ../front-mobile:/app
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - REACT_NATIVE_PACKAGER_HOSTNAME=localhost
+    networks:
+      - lootopia_network
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: lootopia_phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - lootopia_network
+
+  # Mailpit
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: lootopia_mailpit
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Interface web
+    networks:
+      - lootopia_network
+
+networks:
+  lootopia_network:
+    driver: bridge
+
+volumes:
+  db_data:
