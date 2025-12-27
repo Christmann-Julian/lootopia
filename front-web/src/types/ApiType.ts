@@ -1,4 +1,3 @@
-
 export type ApiErrorResponse = {
   code: number;
   message: string;

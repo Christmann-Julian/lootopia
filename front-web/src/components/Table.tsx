@@ -414,7 +414,7 @@ export default function Table() {
           </tbody>
         </table>
       </div>
-        <Pagination />
+      <Pagination />
     </div>
   );
 }

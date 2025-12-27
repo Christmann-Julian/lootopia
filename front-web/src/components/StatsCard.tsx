@@ -24,9 +24,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
       </div>
       <div className="card-content">
         <div className="card-value">{cardValue}</div>
-        <div className={`card-description ${classDescription || ""}`}>
-          {cardDescription}
-        </div>
+        <div className={`card-description ${classDescription || ""}`}>{cardDescription}</div>
       </div>
     </div>
   );

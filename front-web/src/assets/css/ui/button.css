@@ -70,7 +70,8 @@
 }
 
 /* Dropdown */
-.dropdown, .dropdown-button {
+.dropdown,
+.dropdown-button {
   position: relative;
 }
 
