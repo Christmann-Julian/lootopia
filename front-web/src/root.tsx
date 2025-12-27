@@ -13,13 +13,9 @@ import React, { useEffect } from "react";
 import "./services/i18n";
 import "./assets/css/style.css";
 import { getLanguage, getAvailableLanguages } from "./utils/i18nUtils";
+import { useTranslation } from "react-i18next";
 
-export function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-
+export function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = getLanguage();
   }, []);
@@ -28,10 +24,7 @@ export function Layout({
     <html lang="en">
       <head>
         <meta charSet="UTF-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>My App</title>
         <Meta />
         <Links />
@@ -45,11 +38,21 @@ export function Layout({
   );
 }
 
+export function HydrateFallback() {
+  const { t } = useTranslation(["common"]);
+  return (
+    <div className="loading-container">
+      <div className="spinner"></div>
+      <div className="loading-text">{t("loading")}</div>
+    </div>
+  );
+}
+
 export default function Root() {
-  const { locale } = useParams()
+  const { locale } = useParams();
 
   if (locale && !getAvailableLanguages().includes(locale)) {
-    return <Navigate to={`/${getLanguage()}/not-found`} />
+    return <Navigate to={`/${getLanguage()}/not-found`} />;
   }
 
   return <Outlet />;
@@ -57,16 +60,14 @@ export default function Root() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  let message = 'Oops!';
-  let details = 'An unexpected error occurred.';
+  let message = "Oops!";
+  let details = "An unexpected error occurred.";
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? '404' : 'Error';
+    message = error.status === 404 ? "404" : "Error";
     details =
-      error.status === 404
-        ? 'The requested page could not be found.'
-        : error.statusText || details;
+      error.status === 404 ? "The requested page could not be found." : error.statusText || details;
   } else if (error && error instanceof Error) {
     details = error.message;
     stack = error.stack;

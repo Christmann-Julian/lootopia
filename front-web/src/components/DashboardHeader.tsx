@@ -1,47 +1,69 @@
-import "../assets/css/ui/dashboard-header.css"
-import "../assets/css/ui/button.css"
-import React, { useState, useEffect } from "react"
+import "../assets/css/ui/dashboard-header.css";
+import "../assets/css/ui/button.css";
+import React, { useState, useEffect } from "react";
 import { locales, changeLanguage, getCurrentLocale } from "../utils/i18nUtils";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
+import { api, setAccessToken } from "../services/auth/auth";
+import Cookies from "js-cookie";
+import Toast from "./Toast";
 
 type DashboardHeaderProps = {
-  title: string
-}
+  title: string;
+};
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
-  const { t } = useTranslation(["auth"]);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const { t } = useTranslation(["auth", "common"]);
+  const navigate = useNavigate();
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error" | "info" | "warning";
+  } | null>(null);
 
   const toggleDropdown = (dropdown: string) => {
-    setOpenDropdown((prev) => (prev === dropdown ? null : dropdown))
-  }
+    setOpenDropdown((prev) => (prev === dropdown ? null : dropdown));
+  };
 
   const handleClickOutside = (event: MouseEvent) => {
-    const target = event.target as HTMLElement
+    const target = event.target as HTMLElement;
     if (!target.closest(".dropdown")) {
-      setOpenDropdown(null)
+      setOpenDropdown(null);
     }
-  }
+  };
 
   const handleLanguageChange = async (langCode: string) => {
-    await changeLanguage(langCode)
-    setOpenDropdown(null)
-  }
+    await changeLanguage(langCode);
+    setOpenDropdown(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/api/auth/logout");
+    } catch (error) {
+      setToast({ message: t("internalServerError", { ns: "common" }), type: "error" });
+    } finally {
+      setAccessToken(null);
+      Cookies.remove("REFRESH_TOKEN", { path: "/" });
+      navigate(`/${getCurrentLocale().code}`);
+    }
+  };
 
   useEffect(() => {
     if (openDropdown) {
-      document.addEventListener("click", handleClickOutside)
+      document.addEventListener("click", handleClickOutside);
     } else {
-      document.removeEventListener("click", handleClickOutside)
+      document.removeEventListener("click", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("click", handleClickOutside)
-    }
-  }, [openDropdown])
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [openDropdown]);
 
   return (
     <header className="header">
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <h1>{title}</h1>
       <div className="header-right">
         <div className="dropdown">
@@ -51,7 +73,8 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
           >
             <img
               src={`https://flagcdn.com/w40/${getCurrentLocale().country_code.toLowerCase()}.webp`}
-              width="30"/>
+              width="30"
+            />
           </button>
           <ul
             className={`dropdown-menu dropdown-menu-right ${
@@ -59,10 +82,15 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
             }`}
           >
             {locales.map((locale) => (
-              <li key={locale.code} className="li-icon" onClick={() => handleLanguageChange(locale.code)}>
+              <li
+                key={locale.code}
+                className="li-icon"
+                onClick={() => handleLanguageChange(locale.code)}
+              >
                 <img
                   src={`https://flagcdn.com/w20/${locale.country_code.toLowerCase()}.webp`}
-                  width="20"/>
+                  width="20"
+                />
                 {locale.name}
               </li>
             ))}
@@ -105,13 +133,18 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
                 <polyline points="16 17 21 12 16 7"></polyline>
                 <line x1="21" y1="12" x2="9" y2="12"></line>
               </svg>
-              <span>{t("logout.logoutButton")}</span>
+              <button
+                style={{ border: "none", background: "none", cursor: "pointer" }}
+                onClick={handleLogout}
+              >
+                {t("logout.logoutButton")}
+              </button>
             </li>
           </ul>
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default DashboardHeader
+export default DashboardHeader;

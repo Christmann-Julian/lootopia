@@ -142,6 +142,10 @@ final class AuthController extends AbstractController
         $refreshTokenString = $data['refresh_token'] ?? '';
         $clientType = $data['client_type'] ?? 'web';
 
+        if ($clientType == 'web' && empty($refreshTokenString)) {
+            $refreshTokenString = $request->cookies->get('REFRESH_TOKEN', '');
+        }
+
         $refreshToken = $refreshTokenRepository->findOneBy(['token' => $refreshTokenString]);
 
         if (!$refreshToken || !$refreshTokenManager->isRefreshTokenValid($refreshToken)) {
@@ -191,6 +195,10 @@ final class AuthController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $refreshTokenString = $data['refresh_token'] ?? '';
+
+        if (empty($refreshTokenString)) {
+            $refreshTokenString = $request->cookies->get('REFRESH_TOKEN', '');
+        }
 
         $refreshToken = $refreshTokenRepository->findOneBy(['token' => $refreshTokenString]);
 
@@ -399,7 +407,7 @@ final class AuthController extends AbstractController
         $entityManager->persist($resetToken);
         $entityManager->flush();
 
-        $resetUrl = sprintf('http://localhost:5173/reset-password?token=%s&email=%s', $tokenString, urlencode((string) $user->getEmail()));
+        $resetUrl = sprintf('http://localhost:5173/%s/reset-password?token=%s&email=%s', $request->getLocale(), $tokenString, urlencode((string) $user->getEmail()));
 
         $emailMessage = (new TemplatedEmail())
             ->from(new Address('no-reply@example.com'))
