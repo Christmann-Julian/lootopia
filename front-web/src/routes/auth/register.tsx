@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { getLanguage } from "../../utils/i18nUtils";
@@ -6,23 +6,43 @@ import axios from "axios";
 import type { RegisterFormData } from "../../types/FormType";
 import type { ApiErrorResponse } from "../../types/ApiType";
 import Toast from "../../components/Toast";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useFetcher } from "react-router";
 import "../../assets/css/register.css";
 
 export function meta() {
-  return [{ title: "Inscription | Lootopia" }];
+  const { t } = useTranslation("auth");
+  return [{ title: t("register.metaTitle", { ns: "auth" }) }];
+}
+
+export async function clientAction({ request }: { request: Request }) {
+  const data = await request.json();
+  try {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    await axios.post(`${apiUrl}/api/auth/register?locale=${getLanguage()}`, data);
+    return { success: true };
+  } catch (error: any) {
+    if (axios.isAxiosError(error) && error.response) {
+      const apiError = error.response.data as ApiErrorResponse;
+      if (apiError.details) {
+        for (const field in apiError.details) {
+          return { error: apiError.details[field]?.[0] || true };
+        }
+      }
+    }
+    return { error: true };
+  }
 }
 
 export default function Register() {
   const [passwordStrength, setPasswordStrength] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info" | "warning";
   } | null>(null);
   const { t } = useTranslation(["auth", "validation", "common"]);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const fetcher = useFetcher();
 
   const {
     register,
@@ -31,36 +51,27 @@ export default function Register() {
     formState: { errors },
   } = useForm<RegisterFormData>();
 
-  const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
-    setIsLoading(true);
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await axios.post(
-        `${apiUrl}/api/auth/register?locale=${getLanguage()}`,
-        data
-      );
-      navigate(`/${getLanguage()}/register-success`);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        const apiError = error.response.data as ApiErrorResponse;
-        if (apiError.details) {
-          Object.keys(apiError.details).forEach((field) => {
-            setToast({
-              message: apiError.details?.[field]?.[0] || t("internalServerError", { ns: "common" }),
-              type: "error",
-            });
-          });
-        }
-      } else {
-        setToast({
-          message: t("internalServerError", { ns: "common" }),
-          type: "error",
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
+    fetcher.submit(data, {
+      method: "post",
+      encType: "application/json",
+    });
   };
+
+  useEffect(() => {
+    if (fetcher.data?.success) {
+      navigate(`/${getLanguage()}/register-success`);
+    } else if (fetcher.data?.error) {
+      console.log(fetcher.data.error);
+      setToast({
+        message:
+          fetcher.data.error == true
+            ? t("internalServerError", { ns: "common" })
+            : fetcher.data.error,
+        type: "error",
+      });
+    }
+  }, [fetcher.data, t, navigate]);
 
   const evaluatePasswordStrength = (password: string) => {
     let strength = 0;
@@ -95,10 +106,6 @@ export default function Register() {
         <div className="card-header">
           <h1 className="card-title">{t("register.title")}</h1>
           <p className="card-description">{t("register.subtitle")}</p>
-        </div>
-
-        <div className="alert alert-error" id="errorAlert">
-          Veuillez corriger les erreurs dans le formulaire.
         </div>
 
         <form id="registerForm" onSubmit={handleSubmit(onSubmit)}>
@@ -404,10 +411,14 @@ export default function Register() {
             </div>
           </div>
 
-          <button type="submit" className="button button-primary">
-            {isLoading ? (
+          <button
+            type="submit"
+            className="button button-primary"
+            disabled={fetcher.state === "submitting"}
+          >
+            {fetcher.state === "submitting" ? (
               <svg
-                className="spinner"
+                className="spinner-btn"
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"

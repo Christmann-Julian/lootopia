@@ -303,19 +303,6 @@ body {
   color: hsl(var(--accent-foreground));
 }
 
-.spinner {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .divider {
   display: flex;
   align-items: center;
