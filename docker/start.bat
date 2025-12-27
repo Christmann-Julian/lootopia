@@ -40,7 +40,7 @@ if "%exitCode%"=="0" (
     echo   - API Symfony      : http://localhost:8000/api/doc (30s pour le démarrage)
     echo   - Front Web        : http://localhost:5173
     echo   - phpMyAdmin       : http://localhost:8080
-    echo   - MailHog          : http://localhost:8025
+    echo   - Mailpit          : http://localhost:8025
     echo.
     echo Voir les logs :
     echo   logs.bat
@@ -50,8 +50,7 @@ if "%exitCode%"=="0" (
     echo.
 ) else (
     echo Erreur lors du démarrage des conteneurs
-    echo Affichage des logs pour diagnostiquer le problème...
-    docker-compose logs
+    echo lancer docker-compose logs pour diagnostiquer le problème
     pause
     exit /b %exitCode%
 )

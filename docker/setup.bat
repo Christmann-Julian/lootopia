@@ -7,11 +7,11 @@ echo ================================
 echo.
 
 echo  Démarrage des conteneurs...
-docker-compose up -d --build
+docker compose up -d --build
 
 echo.
-echo  Attente du démarrage des services (30s)...
-timeout /t 30 /nobreak >nul
+echo  Attente du démarrage des services (45s)...
+timeout /t 45 /nobreak >nul
 
 echo.
 echo   Configuration de la base de données Symfony...
@@ -29,7 +29,7 @@ echo  Services disponibles :
 echo   - API Symfony      : http://localhost:8000/api/doc (30s pour démarrer)
 echo   - Front Web        : http://localhost:5173
 echo   - phpMyAdmin       : http://localhost:8080
-echo   - MailHog          : http://localhost:8025
+echo   - Mailpit          : http://localhost:8025
 echo.
 echo  Commandes utiles :
 echo   - Démarrer        : start.bat

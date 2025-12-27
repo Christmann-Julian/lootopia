@@ -7,7 +7,7 @@ echo ================================
 echo.
 
 echo Arrêt des conteneurs...
-docker-compose down
+docker compose down
 
 if errorlevel 0 (
     echo.

@@ -13,7 +13,7 @@ echo -e "${BLUE}================================${NC}"
 echo ""
 
 echo -e "${YELLOW}Arrêt des conteneurs...${NC}"
-docker-compose down
+docker compose down
 
 if [ $? -eq 0 ]; then
     echo ""

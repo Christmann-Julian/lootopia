@@ -17,11 +17,11 @@ echo -e "${YELLOW}Configuration des permissions...${NC}"
 chmod +x start.sh stop.sh logs.sh setup.sh
 
 echo -e "${YELLOW}Démarrage des conteneurs...${NC}"
-docker-compose up -d --build
+docker compose up -d --build
 
 echo ""
-echo -e "${YELLOW}Attente du démarrage des services (30s)...${NC}"
-sleep 30
+echo -e "${YELLOW}Attente du démarrage des services (45s)...${NC}"
+sleep 45
 
 echo ""
 echo -e "${YELLOW}Configuration de la base de données Symfony...${NC}"
@@ -39,7 +39,7 @@ echo -e "${BLUE} Services disponibles :${NC}"
 echo -e "  ${GREEN}-${NC} API Symfony      : ${YELLOW}http://localhost:8000/api/doc${NC} (30s pour démarrer)"
 echo -e "  ${GREEN}-${NC} Front Web        : ${YELLOW}http://localhost:5173${NC}"
 echo -e "  ${GREEN}-${NC} phpMyAdmin       : ${YELLOW}http://localhost:8080${NC}"
-echo -e "  ${GREEN}-${NC} MailHog          : ${YELLOW}http://localhost:8025${NC}"
+echo -e "  ${GREEN}-${NC} Mailpit          : ${YELLOW}http://localhost:8025${NC}"
 echo ""
 echo -e "${BLUE} Commandes utiles :${NC}"
 echo -e "  ${GREEN}-${NC} Démarrer        : ${YELLOW}./start.sh${NC}"

@@ -20,13 +20,13 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Vérifier si Docker Compose est installé
-if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
+if ! command -v docker compose &> /dev/null && ! docker compose version &> /dev/null; then
     echo -e "${RED}Docker Compose n'est pas installé${NC}"
     exit 1
 fi
 
 echo -e "${YELLOW}Démarrage des conteneurs...${NC}"
-docker-compose up -d
+docker compose up -d
 
 if [ $? -eq 0 ]; then
     echo ""
@@ -36,7 +36,7 @@ if [ $? -eq 0 ]; then
     echo -e "  ${GREEN}-${NC} API Symfony      : ${YELLOW}http://localhost:8000/api/doc${NC} (30s pour le démarrage)"
     echo -e "  ${GREEN}-${NC} Front Web        : ${YELLOW}http://localhost:5173${NC}"
     echo -e "  ${GREEN}-${NC} phpMyAdmin       : ${YELLOW}http://localhost:8080${NC}"
-    echo -e "  ${GREEN}-${NC} MailHog          : ${YELLOW}http://localhost:8025${NC}"
+    echo -e "  ${GREEN}-${NC} Mailpit          : ${YELLOW}http://localhost:8025${NC}"
     echo ""
     echo -e "${BLUE}Voir les logs :${NC}"
     echo -e "  ${YELLOW}./logs.sh${NC}"

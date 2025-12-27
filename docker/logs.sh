@@ -13,9 +13,9 @@ echo ""
 if [ $# -eq 0 ]; then
     echo "Affichage de tous les logs (Ctrl+C pour quitter)..."
     echo ""
-    docker-compose logs -f
+    docker compose logs -f
 else
     echo "Affichage des logs de $1 (Ctrl+C pour quitter)..."
     echo ""
-    docker-compose logs -f "$1"
+    docker compose logs -f "$1"
 fi
