@@ -29,7 +29,7 @@ services:
       - db
     environment:
       DATABASE_URL: "mysql://lootopia:lootopia@db:3306/lootopia?serverVersion=mariadb-10.4.32"
-      MAILER_DSN: "smtp://mailhog:1025"
+      MAILER_DSN: "smtp://mailpit:1025"
     networks:
       - lootopia_network
 
@@ -81,10 +81,10 @@ services:
     networks:
       - lootopia_network
 
-  # MailHog
-  mailhog:
-    image: mailhog/mailhog:latest
-    container_name: lootopia_mailhog
+  # Mailpit
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: lootopia_mailpit
     ports:
       - "1025:1025"  # SMTP
       - "8025:8025"  # Interface web
