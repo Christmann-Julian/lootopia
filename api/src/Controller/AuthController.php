@@ -142,7 +142,7 @@ final class AuthController extends AbstractController
         $refreshTokenString = $data['refresh_token'] ?? '';
         $clientType = $data['client_type'] ?? 'web';
 
-        if ($clientType == 'web' && empty($refreshTokenString)) {
+        if ('web' == $clientType && empty($refreshTokenString)) {
             $refreshTokenString = $request->cookies->get('REFRESH_TOKEN', '');
         }
 
