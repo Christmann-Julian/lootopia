@@ -122,6 +122,17 @@
   gap: 4px;
 }
 
+.dropdown-menu li.li-icon a {
+  color: inherit;
+  text-decoration: inherit;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: inherit;
+  width: 100%;
+  height: 100%;
+}
+
 .dropdown-menu li:hover {
   background: hsl(var(--accent));
   color: hsl(var(--accent-foreground));

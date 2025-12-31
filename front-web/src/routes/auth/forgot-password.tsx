@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Link, useFetcher, type ClientActionFunctionArgs } from "react-router";
-import { getLanguage } from "../../utils/i18nUtils";
+import {
+  Link,
+  useFetcher,
+  useParams,
+  type ClientActionFunctionArgs,
+  type LinksFunction,
+  type MetaFunction,
+} from "react-router";
 import Toast from "../../components/Toast";
 import { api } from "../../services/auth/auth";
+import i18n from "i18next";
 import type { ForgotPasswordFormData } from "../../types/FormType";
-import "../../assets/css/forgot-password.css";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -18,12 +24,17 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
   }
 }
 
-export function meta() {
-  const { t } = useTranslation("auth");
-  return [{ title: t("forgotPassword.metaTitle", { ns: "auth" }) }];
-}
+export const meta: MetaFunction = () => [
+  { title: i18n.t("forgotPassword.metaTitle", { ns: "auth" }) },
+];
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/assets/css/forgot-password.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
+];
 
 export default function ForgotPassword() {
+  const { lang } = useParams();
   const { t } = useTranslation(["auth", "validation", "common"]);
   const fetcher = useFetcher();
   const [toast, setToast] = useState<{
@@ -151,7 +162,7 @@ export default function ForgotPassword() {
 
         <div className="card-footer">
           <p className="footer-text">
-            <Link to={`/${getLanguage()}`} className="link">
+            <Link to={`/${lang}`} className="link">
               <svg
                 width="14"
                 height="14"

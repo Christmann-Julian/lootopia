@@ -1,39 +1,45 @@
 import { useState, useEffect } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { getLanguage } from "../../utils/i18nUtils";
-import axios from "axios";
 import type { RegisterFormData } from "../../types/FormType";
 import type { ApiErrorResponse } from "../../types/ApiType";
 import Toast from "../../components/Toast";
-import { Link, useNavigate, useFetcher } from "react-router";
-import "../../assets/css/register.css";
+import {
+  Link,
+  useNavigate,
+  useFetcher,
+  type MetaFunction,
+  type LinksFunction,
+  useParams,
+  type ClientActionFunctionArgs,
+} from "react-router";
+import i18n from "i18next";
+import { api } from "../../services/auth/auth";
 
-export function meta() {
-  const { t } = useTranslation("auth");
-  return [{ title: t("register.metaTitle", { ns: "auth" }) }];
-}
-
-export async function clientAction({ request }: { request: Request }) {
+export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
   try {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    await axios.post(`${apiUrl}/api/auth/register?locale=${getLanguage()}`, data);
+    await api.post("/api/auth/register", data);
     return { success: true };
-  } catch (error: any) {
-    if (axios.isAxiosError(error) && error.response) {
-      const apiError = error.response.data as ApiErrorResponse;
-      if (apiError.details) {
-        for (const field in apiError.details) {
-          return { error: apiError.details[field]?.[0] || true };
-        }
-      }
+  } catch (err: any) {
+    const apiError = err.response?.data as ApiErrorResponse;
+    if (apiError?.details) {
+      const firstError = Object.values(apiError.details)[0];
+      return { error: firstError?.[0] || true };
     }
     return { error: true };
   }
 }
 
+export const meta: MetaFunction = () => [{ title: i18n.t("register.metaTitle", { ns: "auth" }) }];
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/assets/css/register.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
+];
+
 export default function Register() {
+  const { lang } = useParams();
   const [passwordStrength, setPasswordStrength] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [toast, setToast] = useState<{
@@ -51,7 +57,7 @@ export default function Register() {
     formState: { errors },
   } = useForm<RegisterFormData>();
 
-  const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
+  const onSubmit: SubmitHandler<RegisterFormData> = (data: RegisterFormData) => {
     fetcher.submit(data, {
       method: "post",
       encType: "application/json",
@@ -60,9 +66,8 @@ export default function Register() {
 
   useEffect(() => {
     if (fetcher.data?.success) {
-      navigate(`/${getLanguage()}/register-success`);
+      navigate(`/${lang}/register-success`);
     } else if (fetcher.data?.error) {
-      console.log(fetcher.data.error);
       setToast({
         message:
           fetcher.data.error == true
@@ -73,7 +78,7 @@ export default function Register() {
     }
   }, [fetcher.data, t, navigate]);
 
-  const evaluatePasswordStrength = (password: string) => {
+  const evaluatePasswordStrength = (password: string): string => {
     let strength = 0;
 
     if (password.length >= 10) strength++;
@@ -87,7 +92,7 @@ export default function Register() {
     return "strong";
   };
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = (): void => {
     setPasswordVisible((prev) => !prev);
   };
 
@@ -451,7 +456,7 @@ export default function Register() {
         <div className="card-footer">
           <p className="footer-text">
             {t("register.alreadyHaveAccount")} &nbsp;
-            <Link to={`/${getLanguage()}`} className="link">
+            <Link to={`/${lang}`} className="link">
               {t("register.loginHere")}
             </Link>
           </p>

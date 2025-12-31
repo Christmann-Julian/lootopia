@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import "../../assets/css/login.css";
 import {
   useFetcher,
   Link,
   useNavigate,
   useSearchParams,
+  useParams,
+  type LinksFunction,
   type ClientActionFunctionArgs,
+  type MetaFunction,
 } from "react-router";
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { api, setAccessToken } from "../../services/auth/auth";
-import { getLanguage } from "../../utils/i18nUtils";
 import Toast from "../../components/Toast";
+import i18n from "i18next";
+import type { LoginFormData } from "../../types/FormType";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -28,19 +31,22 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
   }
 }
 
-export function meta() {
-  const { t } = useTranslation("auth");
-  return [
-    { title: t("login.metaTitle") },
-    {
-      name: "description",
-      content: t("login.metaDescription"),
-    },
-  ];
-}
+export const meta: MetaFunction = () => [
+  { title: i18n.t("login.metaTitle", { ns: "auth" }) },
+  {
+    name: "description",
+    content: i18n.t("login.metaDescription", { ns: "auth" }),
+  },
+];
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/assets/css/login.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
+];
 
 export default function Login() {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const { lang } = useParams();
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const { t } = useTranslation(["auth", "common"]);
   const [searchParams, setSearchParams] = useSearchParams();
   const fetcher = useFetcher();
@@ -50,9 +56,9 @@ export default function Login() {
     type: "success" | "error" | "info" | "warning";
   } | null>(null);
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<LoginFormData>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<LoginFormData> = (data: LoginFormData) => {
     fetcher.submit(data, {
       method: "post",
       encType: "application/json",
@@ -62,7 +68,7 @@ export default function Login() {
 
   useEffect(() => {
     if (fetcher.data?.success) {
-      navigate(`/${getLanguage()}/dashboard`);
+      navigate(`/${lang}/dashboard`);
     } else if (fetcher.data?.error) {
       setToast({ message: fetcher.data.error, type: "error" });
     }
@@ -78,7 +84,7 @@ export default function Login() {
     }
   }, [fetcher.data, navigate, searchParams, setSearchParams]);
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = (): void => {
     setPasswordVisible((prev) => !prev);
   };
 
@@ -176,7 +182,7 @@ export default function Login() {
                 {t("login.rememberMe")}
               </label>
             </div> */}
-            <Link to={`/${getLanguage()}/forgot-password`} className="link">
+            <Link to={`/${lang}/forgot-password`} className="link">
               {t("login.forgotPassword")}
             </Link>
           </div>
@@ -213,14 +219,16 @@ export default function Login() {
                 <line x1="15" y1="12" x2="3" y2="12"></line>
               </svg>
             )}
-            {fetcher.state === "submitting" ? t("common:loading") : t("login.loginButton")}
+            {fetcher.state === "submitting"
+              ? t("loading", { ns: "common" })
+              : t("login.loginButton")}
           </button>
         </form>
 
         <div className="card-footer">
           <p className="footer-text">
             {t("login.noAccount")} &nbsp;
-            <Link to={`/${getLanguage()}/register`} className="link">
+            <Link to={`/${lang}/register`} className="link">
               {t("login.createAccount")}
             </Link>
           </p>

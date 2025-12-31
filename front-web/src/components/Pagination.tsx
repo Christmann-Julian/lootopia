@@ -1,5 +1,3 @@
-import "../assets/css/ui/pagination.css";
-
 export default function Pagination() {
   return (
     <div className="pagination">

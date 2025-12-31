@@ -1,4 +1,3 @@
-import "../assets/css/ui/table.css";
 import Pagination from "./Pagination";
 
 export default function Table() {
