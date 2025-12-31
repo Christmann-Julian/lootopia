@@ -1,8 +1,8 @@
 import { Outlet } from "react-router";
-import { requireAuth } from "../../services/auth/guard";
+import { requirePermission } from "../../services/auth/guard";
 
 export async function clientLoader() {
-  return await requireAuth();
+  return await requirePermission("ROLE_USER");
 }
 
 export default function AuthLayout() {

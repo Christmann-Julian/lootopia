@@ -1,5 +1,13 @@
 import axios from "axios";
-import { getLanguage } from "../../utils/i18nUtils";
+import i18next from "i18next";
+import { jwtDecode } from "jwt-decode";
+
+type MyTokenPayload = {
+  username: string;
+  roles: string[];
+  iat: number;
+  exp: number;
+};
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -7,7 +15,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const locale = getLanguage();
+  const locale = i18next.language;
   if (config.url) {
     const url = new URL(config.url, config.baseURL);
     url.searchParams.set("locale", locale);
@@ -28,3 +36,27 @@ export const setAccessToken = (token: string | null) => {
 };
 
 export const getAccessToken = () => accessToken;
+
+export const getPermissions = (): string[] => {
+  const token = getAccessToken();
+  if (!token) return [];
+  try {
+    const decoded = jwtDecode<MyTokenPayload>(token);
+    return decoded.roles || [];
+  } catch {
+    return [];
+  }
+};
+
+export async function isAuth(): Promise<boolean> {
+  const token = getAccessToken();
+  if (token) return true;
+
+  try {
+    const res = await api.post("/api/auth/token/refresh", { client_type: "web" });
+    setAccessToken(res.data.token);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

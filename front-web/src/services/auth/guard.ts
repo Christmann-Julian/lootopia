@@ -1,16 +1,6 @@
 import { redirect } from "react-router";
-import { api, setAccessToken, getAccessToken } from "./auth";
-import { getLanguage } from "../../utils/i18nUtils";
-
-export async function requireAuth() {
-  const authenticated = await isAuth();
-
-  if (authenticated) {
-    return null;
-  } else {
-    throw redirect(`/${getLanguage()}`);
-  }
-}
+import { getPermissions, isAuth } from "./auth";
+import i18n from "i18next";
 
 export async function requireGuest() {
   const authenticated = await isAuth();
@@ -18,19 +8,21 @@ export async function requireGuest() {
   if (!authenticated) {
     return null;
   } else {
-    throw redirect(`/${getLanguage()}/dashboard`);
+    throw redirect(`/${i18n.language}/dashboard`);
   }
 }
 
-export async function isAuth(): Promise<boolean> {
-  const token = getAccessToken();
-  if (token) return true;
+export async function requirePermission(permission: string) {
+  const authenticated = await isAuth();
 
-  try {
-    const res = await api.post("/api/auth/token/refresh", { client_type: "web" });
-    setAccessToken(res.data.token);
-    return true;
-  } catch (e) {
-    return false;
+  if (!authenticated) {
+    throw redirect(`/${i18n.language}/login`);
   }
+
+  const userPermissions = getPermissions();
+  if (userPermissions.includes(permission)) {
+    return null;
+  }
+
+  throw redirect(`/${i18n.language}/dashboard?error=unauthorized`);
 }
