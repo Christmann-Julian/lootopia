@@ -1,6 +1,7 @@
 {
     "welcome": "Bienvenue dans notre application !",
     "appName": "Lootopia",
+    "metaTitle": "{{title}} | Lootopia",
     "internalServerError": "Erreur interne du serveur. Veuillez réessayer plus tard.",
     "loading": "Chargement..."
 }
