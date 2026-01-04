@@ -3,5 +3,10 @@
     "appName": "Lootopia",
     "metaTitle": "{{title}} | Lootopia",
     "internalServerError": "Erreur interne du serveur. Veuillez réessayer plus tard.",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "error404": {
+        "title": "Page non trouvée",
+        "description": "Désolé, nous n'avons pas pu trouver la page que vous recherchez. Elle a peut-être été déplacée ou supprimée.",
+        "goHome": "Retour à l'accueil"
+    }
 }

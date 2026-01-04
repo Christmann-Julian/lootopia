@@ -10,11 +10,13 @@ import {
   useParams,
   redirect,
   type LoaderFunctionArgs,
+  useNavigation,
 } from "react-router";
 import React, { useEffect } from "react";
 import i18n from "i18next";
 import i18nConfig from "./services/i18n";
 import Loading from "./components/Loading";
+import { Navigate } from "react-router";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: "/assets/css/style.css" }];
 
@@ -50,7 +52,14 @@ export function HydrateFallback() {
 }
 
 export default function Root() {
-  return <Outlet />;
+  const navigation = useNavigation();
+  const isNavigating = Boolean(navigation.location);
+  
+  return (
+    <>
+      {isNavigating ? <Loading /> : <Outlet />}
+    </>
+  );
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -81,9 +90,11 @@ export function ErrorBoundary() {
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404 ? "The requested page could not be found." : error.statusText || details;
+    if (error.status === 404) {
+      return <Navigate to={`/${i18n.language}/not-found`} />;
+    }
+    message = "Error";
+    details = error.statusText || details;
   } else if (error && error instanceof Error) {
     details = error.message;
     stack = error.stack;

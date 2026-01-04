@@ -17,5 +17,7 @@ export default [
       route("settings", "./routes/dashboard/settings.tsx"),
       route("admin/users", "./routes/dashboard/users.tsx"),
     ]),
+
+    route("*", "./routes/not-found.tsx"),
   ]),
 ] satisfies RouteConfig;
