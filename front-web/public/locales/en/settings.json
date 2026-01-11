@@ -1,0 +1,23 @@
+{
+    "profile": {
+        "title": "My Account",
+        "description": "Manage your account information.",
+        "firstName": "First Name",
+        "firstNamePlaceholder": "John",
+        "lastName": "Last Name",
+        "lastNamePlaceholder": "Doe",
+        "email": "Email Address",
+        "emailPlaceholder": "john.doe@example.com",
+        "company": "Company",
+        "companyPlaceholder": "Lootopia Inc."
+    },
+    "changePassword": {
+        "title": "Password",
+        "description": "Regularly change your password to secure your account.",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmNewPassword": "Confirm New Password",
+        "success": "Your password has been changed successfully."
+    },
+    "save": "Save Changes"
+}

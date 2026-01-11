@@ -1,0 +1,13 @@
+{
+    "title": {
+        "users": "Users List"
+    },
+    "columns": {
+        "id": "ID",
+        "firstname": "First Name",
+        "lastname": "Last Name",
+        "email": "Email",
+        "company": "Company",
+        "roles": "Roles"
+    }
+}

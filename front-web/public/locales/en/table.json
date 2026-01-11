@@ -1,0 +1,23 @@
+{
+    "deleteSuccess": "Item successfully deleted.",
+    "deleteMultipleSuccess": "{{count}} items successfully deleted.",
+    "deleteError": "Error during deletion.",
+    "searchPlaceholder": "Search...",
+    "exportBtn": "Export",
+    "exportMultipleBtn": "Export selection",
+    "addBtn": "Add",
+    "deleteBtn": "Delete",
+    "columnActions": "Actions",
+    "tableLoading": "Loading...",
+    "noResults": "No results found.",
+    "alertInfoSelected": "{{count}} row(s) selected",
+    "pagination": {
+        "displayingResults": "Displaying <strong>{{startItem}}</strong> to <strong>{{endItem}}</strong> of <strong>{{totalItems}}</strong> results"
+    },
+    "confirmDelete": {
+        "messageMultiple": "Are you sure you want to delete the {{count}} selected items?",
+        "message": "Are you sure you want to delete this item?",
+        "confirmButton": "Confirm",
+        "cancelButton": "Cancel"
+    }
+}

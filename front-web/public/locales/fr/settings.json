@@ -1,0 +1,23 @@
+{
+    "profile": {
+        "title": "Mon compte",
+        "description": "Gérez les informations de votre compte.",
+        "firstName": "Prénom",
+        "firstNamePlaceholder": "Jean",
+        "lastName": "Nom",
+        "lastNamePlaceholder": "Dupont",
+        "email": "Adresse e-mail",
+        "emailPlaceholder": "jean.dupont@example.com",
+        "company": "Entreprise",
+        "companyPlaceholder": "Lootopia Inc."
+    },
+    "changePassword": {
+        "title": "Mot de passe",
+        "description": "Modifiez votre mot de passe régulièrement pour sécuriser votre compte.",
+        "currentPassword": "Mot de passe actuel",
+        "newPassword": "Nouveau mot de passe",
+        "confirmNewPassword": "Confirmer le nouveau mot de passe",
+        "success": "Votre mot de passe a été modifié avec succès."
+    },
+    "save": "Enregistrer les modifications"
+}
