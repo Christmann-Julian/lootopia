@@ -3,7 +3,6 @@ import type { MetaFunction, LinksFunction } from "react-router";
 import SideBar from "../../components/SideBar";
 import DashboardHeader from "../../components/DashboardHeader";
 import StatCard from "../../components/StatsCard";
-import Table from "../../components/Table";
 import i18n from "i18next";
 
 export const meta: MetaFunction = () => [
@@ -114,7 +113,6 @@ export default function Dashboard() {
             classDescription="trend-positive"
           />
         </div>
-        <Table />
       </main>
     </div>
   );

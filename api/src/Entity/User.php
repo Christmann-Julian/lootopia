@@ -174,6 +174,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $data;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'firstname' => $this->getFirstname(),
+            'lastname' => $this->getLastname(),
+            'company' => $this->getCompany(),
+            'roles' => $this->getRoles(),
+            'isVerified' => $this->isVerified(),
+            'createdAt' => $this->getCreatedAt()?->format(\DateTimeInterface::ATOM),
+            'updatedAt' => $this->getUpdatedAt()?->format(\DateTimeInterface::ATOM),
+        ];
+    }
+
     #[\Deprecated]
     public function eraseCredentials(): void
     {

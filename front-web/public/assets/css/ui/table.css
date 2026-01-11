@@ -62,7 +62,6 @@
 }
 
 .table-container .alert {
-  display: none;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
@@ -85,6 +84,7 @@
   display: flex;
   gap: 8px;
   margin-left: auto;
+  margin-top: 15px;
 }
 
 /* Table */
