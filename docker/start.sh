@@ -38,12 +38,6 @@ if [ $? -eq 0 ]; then
     echo -e "  ${GREEN}-${NC} phpMyAdmin       : ${YELLOW}http://localhost:8080${NC}"
     echo -e "  ${GREEN}-${NC} Mailpit          : ${YELLOW}http://localhost:8025${NC}"
     echo ""
-    echo -e "${BLUE}Voir les logs :${NC}"
-    echo -e "  ${YELLOW}./logs.sh${NC}"
-    echo ""
-    echo -e "${BLUE}Arrêter les services :${NC}"
-    echo -e "  ${YELLOW}./stop.sh${NC}"
-    echo ""
 else
     echo -e "${RED}Erreur lors du démarrage des conteneurs${NC}"
     exit 1

@@ -32,6 +32,12 @@ docker exec -it lootopia_api php bin/console doctrine:database:create --if-not-e
 # Exécuter les migrations
 docker exec -it lootopia_api php bin/console doctrine:migrations:migrate --no-interaction
 
+# Charger les fixtures
+docker exec -it lootopia_api php bin/console doctrine:fixtures:load --no-interaction
+
+# Génerer la clé JWT
+docker exec -it lootopia_api php bin/console lexik:jwt:generate-keypair
+
 echo ""
 echo -e "${GREEN} Installation terminée !${NC}"
 echo ""
@@ -40,9 +46,4 @@ echo -e "  ${GREEN}-${NC} API Symfony      : ${YELLOW}http://localhost:8000/api/
 echo -e "  ${GREEN}-${NC} Front Web        : ${YELLOW}http://localhost:5173${NC}"
 echo -e "  ${GREEN}-${NC} phpMyAdmin       : ${YELLOW}http://localhost:8080${NC}"
 echo -e "  ${GREEN}-${NC} Mailpit          : ${YELLOW}http://localhost:8025${NC}"
-echo ""
-echo -e "${BLUE} Commandes utiles :${NC}"
-echo -e "  ${GREEN}-${NC} Démarrer        : ${YELLOW}./start.sh${NC}"
-echo -e "  ${GREEN}-${NC} Arrêter         : ${YELLOW}./stop.sh${NC}"
-echo -e "  ${GREEN}-${NC} Voir les logs   : ${YELLOW}./logs.sh${NC}"
 echo ""

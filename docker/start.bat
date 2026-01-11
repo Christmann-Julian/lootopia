@@ -42,12 +42,6 @@ if "%exitCode%"=="0" (
     echo   - phpMyAdmin       : http://localhost:8080
     echo   - Mailpit          : http://localhost:8025
     echo.
-    echo Voir les logs :
-    echo   logs.bat
-    echo.
-    echo Arrêter les services :
-    echo   stop.bat
-    echo.
 ) else (
     echo Erreur lors du démarrage des conteneurs
     echo lancer docker-compose logs pour diagnostiquer le problème
