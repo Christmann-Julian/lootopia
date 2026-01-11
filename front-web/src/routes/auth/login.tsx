@@ -63,13 +63,13 @@ export default function Login() {
       method: "post",
       encType: "application/json",
     });
-    reset();
   };
 
   useEffect(() => {
     if (fetcher.data?.success) {
       navigate(`/${lang}/dashboard`);
     } else if (fetcher.data?.error) {
+      reset();
       setToast({ message: fetcher.data.error, type: "error" });
     }
 

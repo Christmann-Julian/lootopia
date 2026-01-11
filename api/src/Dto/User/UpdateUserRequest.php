@@ -2,7 +2,6 @@
 
 namespace App\Dto\User;
 
-use App\Validator\Constraints\UniqueEmail;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UpdateUserRequest
@@ -20,7 +19,6 @@ final class UpdateUserRequest
 
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[UniqueEmail]
     private string $email;
 
     /** @var array<string> */

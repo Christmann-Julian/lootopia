@@ -170,3 +170,4 @@ Error: Error
 'Please select a valid range.': 'Please select a valid range.'
 'Please enter a valid week.': 'Please enter a valid week.'
 'user_already_exists': "A user with this email already exists."
+'invalid_current_password': "The current password is incorrect."

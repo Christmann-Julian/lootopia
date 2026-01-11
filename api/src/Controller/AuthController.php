@@ -206,7 +206,49 @@ final class AuthController extends AbstractController
             $refreshTokenManager->revokeAllRefreshTokens($refreshToken);
         }
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        $response = new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        $response->headers->clearCookie('REFRESH_TOKEN');
+
+        return $response;
+    }
+
+    #[OA\Get(
+        summary: 'Get current authenticated user info',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Current user info',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer', example: 1),
+                        new OA\Property(property: 'firstname', type: 'string', example: 'Jean'),
+                        new OA\Property(property: 'lastname', type: 'string', example: 'Dupont'),
+                        new OA\Property(property: 'email', type: 'string', example: 'jean.dupont@example.com'),
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(response: 401, description: 'Access denied'),
+        ]
+    )]
+    #[Route('/me', name: 'me', methods: ['GET'])]
+    public function me(): JsonResponse
+    {
+        /** @var User|null $user */
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw new ApiException(Response::HTTP_UNAUTHORIZED, 'Access denied');
+        }
+
+        return new JsonResponse([
+            'id' => $user->getId(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'email' => $user->getEmail(),
+            'company' => $user->getCompany(),
+            'roles' => $user->getRoles(),
+        ]);
     }
 
     #[OA\Post(

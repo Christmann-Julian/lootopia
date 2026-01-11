@@ -54,12 +54,8 @@ export function HydrateFallback() {
 export default function Root() {
   const navigation = useNavigation();
   const isNavigating = Boolean(navigation.location);
-  
-  return (
-    <>
-      {isNavigating ? <Loading /> : <Outlet />}
-    </>
-  );
+
+  return <>{isNavigating ? <Loading /> : <Outlet />}</>;
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {

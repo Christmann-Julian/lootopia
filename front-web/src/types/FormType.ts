@@ -22,3 +22,16 @@ export type LoginFormData = {
   email: string;
   password: string;
 };
+
+export type EditUserFormData = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  company?: string;
+};
+
+export type ChangePasswordFormData = {
+  currentPassword: string;
+  newPassword: string;
+};

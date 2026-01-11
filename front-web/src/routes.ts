@@ -18,6 +18,8 @@ export default [
       route("admin/users", "./routes/dashboard/users.tsx"),
     ]),
 
+    ...prefix("action", [route("change-password", "./routes/action/change-password.tsx")]),
+
     route("*", "./routes/not-found.tsx"),
   ]),
 ] satisfies RouteConfig;

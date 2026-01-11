@@ -16,7 +16,7 @@ export async function requirePermission(permission: string) {
   const authenticated = await isAuth();
 
   if (!authenticated) {
-    throw redirect(`/${i18n.language}/login`);
+    throw redirect(`/${i18n.language}`);
   }
 
   const userPermissions = getPermissions();

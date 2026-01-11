@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, Link, useLocation, useParams } from "react-router";
 import { api, setAccessToken } from "../services/auth/auth";
 import { locales, type Locale } from "../types/LocaleType";
-import Cookies from "js-cookie";
 import Toast from "./Toast";
 
 type DashboardHeaderProps = {
@@ -50,7 +49,6 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
       setToast({ message: t("internalServerError", { ns: "common" }), type: "error" });
     } finally {
       setAccessToken(null);
-      Cookies.remove("REFRESH_TOKEN", { path: "/" });
       navigate(`/${lang}`);
       setIsLoggingOut(false);
     }
