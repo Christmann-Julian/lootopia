@@ -61,8 +61,24 @@ Ce script va :
 - Construire tous les conteneurs
 - Créer la base de données
 - Exécuter les migrations Symfony
+- Exécuter les fixtures
+- Créer les clés public/privée
 
 Pour expo, il faut se connecter sur le container mobile pour lancer le serveur.
+
+```bash
+# Linux / macOS
+./connect.sh mobile
+
+# Windows
+connect.bat mobile
+```
+
+Pour recevoir les mails :
+
+```bash
+docker exec -it lootopia_api php bin/console messenger:consume async
+```
 
 **DÉMARRAGES SUIVANTS :**
 
@@ -73,6 +89,8 @@ Pour expo, il faut se connecter sur le container mobile pour lancer le serveur.
 # Windows
 start.bat
 ```
+
+Pour expo et les mails, c'est le même process que pour l'installation.
 
 ### 4. Commandes utiles
 
