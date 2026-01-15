@@ -17,7 +17,7 @@ if errorlevel 1 (
 )
 
 REM Vérifier si Docker Compose est installé
-docker-compose --version >nul 2>&1
+docker compose --version >nul 2>&1
 if errorlevel 1 (
     docker compose version >nul 2>&1
     if errorlevel 1 (
@@ -28,7 +28,7 @@ if errorlevel 1 (
 )
 
 echo Démarrage des conteneurs...
-docker-compose up -d
+docker compose up -d
 
 set "exitCode=%ERRORLEVEL%"
 
@@ -44,7 +44,6 @@ if "%exitCode%"=="0" (
     echo.
 ) else (
     echo Erreur lors du démarrage des conteneurs
-    echo lancer docker-compose logs pour diagnostiquer le problème
     pause
     exit /b %exitCode%
 )
