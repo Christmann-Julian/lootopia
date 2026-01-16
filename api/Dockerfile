@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+RUN echo "memory_limit=1G" > /usr/local/etc/php/conf.d/memory-limit.ini
+
 WORKDIR /var/www
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash && \
