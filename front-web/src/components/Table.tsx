@@ -1,10 +1,10 @@
 import type { JSX } from "react/jsx-dev-runtime";
-import { Link, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import { useState, useEffect, useCallback } from "react";
 import Pagination from "./Pagination";
 import ConfirmationDialog from "./ConfirmationDialog";
 import Toast from "./Toast";
-import { api } from "../services/auth/auth";
+import { api } from "../services/auth";
 import { useTranslation } from "react-i18next";
 
 export type MetaData = {
@@ -31,7 +31,6 @@ type TableProps = {
 export default function Table({ title, columns, apiEndpoint }: TableProps) {
   const { t } = useTranslation(["table", "common"]);
 
-  const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState<any[]>([]);
   const [meta, setMeta] = useState<MetaData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,17 +41,31 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [isBulkDeleteConfirm, setIsBulkDeleteConfirm] = useState(false);
 
-  const currentSort = searchParams.get("sort") || "id";
-  const currentDirection = searchParams.get("direction") || "asc";
-  const currentSearch = searchParams.get("q") || "";
+  const [localParams, setLocalParams] = useState({
+    page: 1,
+    limit: 10,
+    sort: "id",
+    direction: "asc",
+    q: "",
+  });
+
+  const currentSort = localParams.sort;
+  const currentDirection = localParams.direction;
+  const currentSearch = localParams.q;
 
   const [localSearch, setLocalSearch] = useState(currentSearch);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
-    const params = new URLSearchParams(searchParams);
-    if (!params.has("page")) params.set("page", "1");
-    if (!params.has("limit")) params.set("limit", "10");
+    const params = new URLSearchParams(
+      Object.entries(localParams).reduce(
+        (acc, [key, value]) => {
+          acc[key] = String(value);
+          return acc;
+        },
+        {} as Record<string, string>
+      )
+    );
 
     try {
       const response = await api.get(`${apiEndpoint}?${params.toString()}`);
@@ -64,7 +77,7 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [searchParams, apiEndpoint]);
+  }, [localParams, apiEndpoint]);
 
   useEffect(() => {
     fetchData();
@@ -98,16 +111,8 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
     }
   };
 
-  const updateParams = (newParams: Record<string, string | number>) => {
-    const current = new URLSearchParams(searchParams);
-    Object.entries(newParams).forEach(([key, value]) => {
-      if (value === "" || value === null || value === undefined) {
-        current.delete(key);
-      } else {
-        current.set(key, String(value));
-      }
-    });
-    setSearchParams(current);
+  const updateParams = (newParams: Partial<typeof localParams>) => {
+    setLocalParams((prev) => ({ ...prev, ...newParams }));
   };
 
   useEffect(() => {
@@ -116,15 +121,16 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (localSearch !== currentSearch) {
+      if (localSearch !== localParams.q) {
         updateParams({ q: localSearch, page: 1 });
       }
     }, 1000);
     return () => clearTimeout(timeoutId);
-  }, [localSearch, currentSearch]);
+  }, [localSearch, localParams.q]);
 
   const handleSort = (key: string) => {
-    const newDirection = currentSort === key && currentDirection === "asc" ? "desc" : "asc";
+    const newDirection =
+      localParams.sort === key && localParams.direction === "asc" ? "desc" : "asc";
     updateParams({ sort: key, direction: newDirection, page: 1 });
   };
 
