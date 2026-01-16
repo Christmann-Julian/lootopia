@@ -12,22 +12,18 @@ import {
   type LoaderFunctionArgs,
   useNavigation,
 } from "react-router";
-import React, { useEffect } from "react";
 import i18n from "i18next";
 import i18nConfig from "./services/i18n";
 import Loading from "./components/Loading";
 import { Navigate } from "react-router";
+import { useLanguageSync } from "./hooks/useLanguageSync";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: "/assets/css/style.css" }];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { lang } = useParams();
 
-  useEffect(() => {
-    if (lang && i18n.language !== lang) {
-      i18n.changeLanguage(lang);
-    }
-  }, [lang]);
+  useLanguageSync(lang);
 
   return (
     <html lang={lang}>
