@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher, useParams } from "react-router";
-import { set, useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import type { ChangePasswordFormData } from "../types/FormType";
 import Toast from "./Toast";
 
@@ -54,13 +54,13 @@ export default function ChangePassword({ userId }: ChangePasswordProps) {
     } else if (fetcher.data?.error) {
       setToast({
         message:
-          fetcher.data.error == true
+          fetcher.data.error === true
             ? t("internalServerError", { ns: "common" })
             : fetcher.data.error,
         type: "error",
       });
     }
-  }, [fetcher.data, t]);
+  }, [fetcher.data, t, reset]);
 
   const evaluatePasswordStrength = (password: string): string => {
     let strength = 0;

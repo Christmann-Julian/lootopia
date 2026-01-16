@@ -15,11 +15,16 @@ export type MetaData = {
   direction: "asc" | "desc";
 };
 
-export type Column = {
+export type Column<T = Record<string, unknown>> = {
   key: string;
   label: string;
   sortable?: boolean;
-  render?: (value: any, row: any) => JSX.Element | string;
+  render?: (value: T[keyof T], row: T) => JSX.Element | string;
+};
+
+type TableRow = {
+  id: number;
+  [key: string]: unknown;
 };
 
 type TableProps = {
@@ -31,7 +36,7 @@ type TableProps = {
 export default function Table({ title, columns, apiEndpoint }: TableProps) {
   const { t } = useTranslation(["table", "common"]);
 
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<TableRow[]>([]);
   const [meta, setMeta] = useState<MetaData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
@@ -71,13 +76,13 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
       const response = await api.get(`${apiEndpoint}?${params.toString()}`);
       setData(response.data.data);
       setMeta(response.data.meta);
-    } catch (err: any) {
+    } catch {
       setToast({ message: t("internalServerError", { ns: "common" }), type: "error" });
       setData([]);
     } finally {
       setIsLoading(false);
     }
-  }, [localParams, apiEndpoint]);
+  }, [localParams, apiEndpoint, t]);
 
   useEffect(() => {
     fetchData();
@@ -92,7 +97,7 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
       await api.delete(`${apiEndpoint}/${rowId}`);
       setToast({ message: t("deleteSuccess", { ns: "table" }), type: "success" });
       fetchData();
-    } catch (err) {
+    } catch {
       setToast({ message: t("deleteError", { ns: "table" }), type: "error" });
     }
   };
@@ -106,14 +111,14 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
       });
       fetchData();
       setSelectedIds([]);
-    } catch (err) {
+    } catch {
       setToast({ message: t("deleteError", { ns: "table" }), type: "error" });
     }
   };
 
-  const updateParams = (newParams: Partial<typeof localParams>) => {
+  const updateParams = useCallback((newParams: Partial<typeof localParams>) => {
     setLocalParams((prev) => ({ ...prev, ...newParams }));
-  };
+  }, []);
 
   useEffect(() => {
     setLocalSearch(currentSearch);
@@ -126,7 +131,7 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
       }
     }, 1000);
     return () => clearTimeout(timeoutId);
-  }, [localSearch, localParams.q]);
+  }, [localSearch, localParams.q, updateParams]);
 
   const handleSort = (key: string) => {
     const newDirection =
@@ -184,7 +189,7 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
       .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "");
 
-  const generateCsv = (rowsToExport: any[]) => {
+  const generateCsv = (rowsToExport: Record<string, unknown>[]) => {
     const csvContent = [
       columns.map((col) => col.label).join(","),
       ...rowsToExport.map((row) =>
@@ -338,7 +343,9 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
                   </td>
                   {columns.map((column) => (
                     <td key={column.key}>
-                      {column.render ? column.render(row[column.key], row) : row[column.key]}
+                      {column.render
+                        ? column.render(row[column.key] as string, row)
+                        : (row[column.key] as string)}
                     </td>
                   ))}
                   <td>

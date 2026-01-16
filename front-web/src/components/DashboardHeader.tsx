@@ -45,7 +45,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
     setIsLoggingOut(true);
     try {
       await api.post("/api/auth/logout");
-    } catch (error) {
+    } catch {
       setToast({ message: t("internalServerError", { ns: "common" }), type: "error" });
     } finally {
       setAccessToken(null);

@@ -13,14 +13,18 @@ import Toast from "../../components/Toast";
 import { api } from "../../services/auth";
 import i18n from "i18next";
 import type { ForgotPasswordFormData } from "../../types/FormType";
+import type { ApiErrorResponse } from "../../types/ApiType";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
   try {
     await api.post("/api/auth/password/reset/request", data);
     return { success: true };
-  } catch (err: any) {
-    return { error: err.response.data.message };
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
+    return { error: apiError?.message || "An error occurred" };
   }
 }
 

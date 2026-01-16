@@ -1,6 +1,7 @@
 import type { ApiErrorResponse } from "../../types/ApiType";
 import { api } from "../../services/auth";
 import { type ClientActionFunctionArgs } from "react-router";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -11,8 +12,9 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
   try {
     await api.put(`/api/users/${data.id}/password`, data);
     return { success: true };
-  } catch (err: any) {
-    const apiError = err.response?.data as ApiErrorResponse;
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
     if (apiError?.details) {
       const firstError = Object.values(apiError.details)[0];
       return { error: firstError?.[0] || true };

@@ -15,6 +15,8 @@ import { api, setAccessToken } from "../../services/auth";
 import Toast from "../../components/Toast";
 import i18n from "i18next";
 import type { LoginFormData } from "../../types/FormType";
+import type { ApiErrorResponse } from "../../types/ApiType";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -26,8 +28,10 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
 
     setAccessToken(res.data.token);
     return { success: true };
-  } catch (err: any) {
-    return { error: err.response.data.message };
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
+    return { error: apiError?.message || "An unexpected error occurred" };
   }
 }
 
@@ -82,7 +86,7 @@ export default function Login() {
       searchParams.delete("success");
       setSearchParams(searchParams);
     }
-  }, [fetcher.data, navigate, searchParams, setSearchParams]);
+  }, [fetcher.data, navigate, searchParams, setSearchParams, lang, reset]);
 
   const togglePasswordVisibility = (): void => {
     setPasswordVisible((prev) => !prev);

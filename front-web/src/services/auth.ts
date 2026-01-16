@@ -74,7 +74,7 @@ export async function isAuth(): Promise<boolean> {
       const res = await api.post("/api/auth/token/refresh", { client_type: "web" });
       setAccessToken(res.data.token);
       return true;
-    } catch (e) {
+    } catch {
       setAccessToken(null);
       return false;
     } finally {

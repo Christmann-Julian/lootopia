@@ -27,7 +27,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (lang && i18n.language !== lang) {
       i18n.changeLanguage(lang);
     }
-  }, [lang, i18n]);
+  }, [lang]);
 
   return (
     <html lang={lang}>

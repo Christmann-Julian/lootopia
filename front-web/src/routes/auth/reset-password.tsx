@@ -16,6 +16,7 @@ import { api } from "../../services/auth";
 import type { ResetPasswordFormData } from "../../types/FormType";
 import type { ApiErrorResponse } from "../../types/ApiType";
 import i18n from "i18next";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -23,13 +24,14 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
   try {
     await api.post("/api/auth/password/reset", data);
     return { success: true };
-  } catch (err: any) {
-    const apiError = err.response?.data as ApiErrorResponse;
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
     if (apiError?.details) {
       const firstError = Object.values(apiError.details)[0];
       return { error: firstError?.[0] || apiError.message };
     }
-    return { error: apiError.message };
+    return { error: apiError?.message || "An unexpected error occurred" };
   }
 }
 
@@ -84,7 +86,7 @@ export default function ResetPassword() {
         type: "error",
       });
     }
-  }, [fetcher.data, navigate, t]);
+  }, [fetcher.data, navigate, t, lang]);
 
   const onSubmit: SubmitHandler<ResetPasswordFormData> = (data) => {
     if (!token) {

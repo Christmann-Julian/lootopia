@@ -17,6 +17,7 @@ import type { EditUserFormData } from "../../types/FormType";
 import type { ApiErrorResponse } from "../../types/ApiType";
 import { api, setAccessToken } from "../../services/auth";
 import ChangePassword from "../../components/ChangePassword";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -28,8 +29,9 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
   try {
     await api.put(`/api/users/${data.id}`, data);
     return { success: true };
-  } catch (err: any) {
-    const apiError = err.response?.data as ApiErrorResponse;
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
     if (apiError?.details) {
       const firstError = Object.values(apiError.details)[0];
       return { error: firstError?.[0] || true };
@@ -42,10 +44,11 @@ export async function clientLoader(): Promise<EditUserFormData | { error: string
   try {
     const response = await api.get("/api/auth/me");
     return response.data;
-  } catch (err: any) {
-    const apiError = err.response?.data as ApiErrorResponse;
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
 
-    return { error: apiError.message };
+    return { error: apiError?.message || "An unexpected error occurred" };
   }
 }
 
@@ -102,13 +105,13 @@ export default function Settings({
     } else if (fetcher.data?.error) {
       setToast({
         message:
-          fetcher.data.error == true
+          fetcher.data.error === true
             ? t("internalServerError", { ns: "common" })
             : fetcher.data.error,
         type: "error",
       });
     }
-  }, [fetcher.data, navigate, lang]);
+  }, [fetcher.data, navigate, t, lang]);
 
   useEffect(() => {
     if ("error" in loaderData) {

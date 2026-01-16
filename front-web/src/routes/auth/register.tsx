@@ -15,18 +15,22 @@ import {
 } from "react-router";
 import i18n from "i18next";
 import { api } from "../../services/auth";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
   try {
     await api.post("/api/auth/register", data);
     return { success: true };
-  } catch (err: any) {
-    const apiError = err.response?.data as ApiErrorResponse;
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
+
     if (apiError?.details) {
       const firstError = Object.values(apiError.details)[0];
       return { error: firstError?.[0] || true };
     }
+
     return { error: true };
   }
 }
@@ -70,13 +74,13 @@ export default function Register() {
     } else if (fetcher.data?.error) {
       setToast({
         message:
-          fetcher.data.error == true
+          fetcher.data.error === true
             ? t("internalServerError", { ns: "common" })
             : fetcher.data.error,
         type: "error",
       });
     }
-  }, [fetcher.data, t, navigate]);
+  }, [fetcher.data, t, navigate, lang]);
 
   const evaluatePasswordStrength = (password: string): string => {
     let strength = 0;
