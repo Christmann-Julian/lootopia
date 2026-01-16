@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
@@ -16,10 +18,11 @@ class EmailVerifier
         private VerifyEmailHelperInterface $verifyEmailHelper,
         private MailerInterface $mailer,
         private EntityManagerInterface $entityManager,
+        private TranslatorInterface $translator,
     ) {
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
+    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, string $locale): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
@@ -28,13 +31,19 @@ class EmailVerifier
             ['email' => $user->getEmail()]
         );
 
-        $context = $email->getContext();
-        $context['user'] = $user;
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
-        $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
-        $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
-
-        $email->context($context);
+        $email = (new TemplatedEmail())
+            ->from(new Address('no-reply@example.com'))
+            ->to(new Address((string) $user->getEmail()))
+            ->subject($this->translator->trans('email.confirm.subject', [], 'emails', $locale))
+            ->htmlTemplate('emails/confirm_email.html.twig')
+            ->locale($locale)
+            ->context([
+                'locale' => $locale,
+                'user' => $user,
+                'signedUrl' => $signatureComponents->getSignedUrl(),
+                'expiresAtMessageKey' => $signatureComponents->getExpirationMessageKey(),
+                'expiresAtMessageData' => $signatureComponents->getExpirationMessageData(),
+            ]);
 
         $this->mailer->send($email);
     }

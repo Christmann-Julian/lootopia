@@ -18,6 +18,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use OpenApi\Attributes as OA;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/api/auth', name: 'app_auth_')]
 final class AuthController extends AbstractController
 {
+    public function __construct(
+        #[Autowire('%env(FRONTEND_URL)%')]
+        private readonly string $frontendUrl,
+    ) {
+    }
+
     #[OA\Post(
         summary: 'User login',
         description: 'Allows a user to log in and receive a JWT + Refresh Token.',
@@ -278,7 +285,6 @@ final class AuthController extends AbstractController
         EntityManagerInterface $entityManager,
         DtoValidator $dtoValidator,
         EmailVerifier $emailVerifier,
-        TranslatorInterface $translator,
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
@@ -304,15 +310,7 @@ final class AuthController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $email = (new TemplatedEmail())
-            ->from(new Address('no-reply@example.com'))
-            ->to(new Address((string) $user->getEmail()))
-            ->subject($translator->trans('email.confirm.subject', [], 'emails'))
-            ->htmlTemplate('emails/confirm_email.html.twig')
-            ->locale($request->getLocale())
-            ->context(['locale' => $request->getLocale()]);
-
-        $emailVerifier->sendEmailConfirmation('app_auth_verify_email', $user, $email);
+        $emailVerifier->sendEmailConfirmation('app_auth_verify_email', $user, $request->getLocale());
 
         return new JsonResponse([
             'email' => $user->getEmail(),
@@ -353,15 +351,7 @@ final class AuthController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, $translator->trans('auth.email_address_already_verified', [], 'messages'));
         }
 
-        $email = (new TemplatedEmail())
-            ->from(new Address('no-reply@example.com'))
-            ->to(new Address($user->getEmail()))
-            ->subject($translator->trans('email.confirm.subject', [], 'emails'))
-            ->htmlTemplate('emails/confirm_email.html.twig')
-            ->locale($request->getLocale())
-            ->context(['locale' => $request->getLocale()]);
-
-        $emailVerifier->sendEmailConfirmation('app_auth_verify_email', $user, $email);
+        $emailVerifier->sendEmailConfirmation('app_auth_verify_email', $user, $request->getLocale());
 
         return new JsonResponse(null, Response::HTTP_ACCEPTED);
     }
@@ -402,7 +392,7 @@ final class AuthController extends AbstractController
             $message = '?error='.urlencode($translator->trans('auth.signed_url_invalid', [], 'messages'));
         }
 
-        return $this->redirect('http://localhost:5173/'.$message);
+        return $this->redirect($this->frontendUrl.'/'.$message);
     }
 
     #[OA\Post(
@@ -449,7 +439,7 @@ final class AuthController extends AbstractController
         $entityManager->persist($resetToken);
         $entityManager->flush();
 
-        $resetUrl = sprintf('http://localhost:5173/%s/reset-password?token=%s&email=%s', $request->getLocale(), $tokenString, urlencode((string) $user->getEmail()));
+        $resetUrl = sprintf('%s/%s/reset-password?token=%s&email=%s', $this->frontendUrl, $request->getLocale(), $tokenString, urlencode((string) $user->getEmail()));
 
         $emailMessage = (new TemplatedEmail())
             ->from(new Address('no-reply@example.com'))

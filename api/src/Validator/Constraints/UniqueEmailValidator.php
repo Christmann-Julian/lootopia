@@ -9,7 +9,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 class UniqueEmailValidator extends ConstraintValidator
 {
     public function __construct(private UserRepository $userRepository)
-    { 
+    {
     }
 
     /**

@@ -13,12 +13,10 @@ use App\Validator\DtoValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use OpenApi\Attributes as OA;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -242,7 +240,6 @@ final class UserController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         DtoValidator $dtoValidator,
         EmailVerifier $emailVerifier,
-        TranslatorInterface $translator,
     ): JsonResponse {
         $data = json_decode((string) $request->getContent(), true);
 
@@ -268,15 +265,7 @@ final class UserController extends AbstractController
             ->setPassword($passwordHasher->hashPassword($user, $dto->getPassword()));
 
         if (!$user->isVerified()) {
-            $email = (new TemplatedEmail())
-                ->from(new Address('no-reply@example.com'))
-                ->to(new Address((string) $user->getEmail()))
-                ->subject($translator->trans('email.confirm.subject', [], 'emails'))
-                ->htmlTemplate('emails/confirm_email.html.twig')
-                ->locale($request->getLocale())
-                ->context(['locale' => $request->getLocale()]);
-
-            $emailVerifier->sendEmailConfirmation('app_auth_verify_email', $user, $email);
+            $emailVerifier->sendEmailConfirmation('app_auth_verify_email', $user, $request->getLocale());
         }
 
         $em->persist($user);
@@ -375,15 +364,7 @@ final class UserController extends AbstractController
         }
 
         if (!$user->isVerified()) {
-            $email = (new TemplatedEmail())
-                ->from(new Address('no-reply@example.com'))
-                ->to(new Address((string) $user->getEmail()))
-                ->subject($translator->trans('email.confirm.subject', [], 'emails'))
-                ->htmlTemplate('emails/confirm_email.html.twig')
-                ->locale($request->getLocale())
-                ->context(['locale' => $request->getLocale()]);
-
-            $emailVerifier->sendEmailConfirmation('app_auth_verify_email', $user, $email);
+            $emailVerifier->sendEmailConfirmation('app_auth_verify_email', $user, $request->getLocale());
         }
 
         $em->flush();
