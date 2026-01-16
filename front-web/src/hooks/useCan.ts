@@ -1,4 +1,4 @@
-import { getPermissions } from "../services/auth/auth";
+import { getPermissions } from "../services/auth";
 
 export function useCan() {
   const permissions = getPermissions();

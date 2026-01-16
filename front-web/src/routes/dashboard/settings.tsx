@@ -15,7 +15,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import i18n from "i18next";
 import type { EditUserFormData } from "../../types/FormType";
 import type { ApiErrorResponse } from "../../types/ApiType";
-import { api, setAccessToken } from "../../services/auth/auth";
+import { api, setAccessToken } from "../../services/auth";
 import ChangePassword from "../../components/ChangePassword";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {

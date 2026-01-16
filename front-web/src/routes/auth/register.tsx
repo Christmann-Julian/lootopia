@@ -14,7 +14,7 @@ import {
   type ClientActionFunctionArgs,
 } from "react-router";
 import i18n from "i18next";
-import { api } from "../../services/auth/auth";
+import { api } from "../../services/auth";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();

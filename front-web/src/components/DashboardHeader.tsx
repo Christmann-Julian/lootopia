@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, Link, useLocation, useParams } from "react-router";
-import { api, setAccessToken } from "../services/auth/auth";
+import { api, setAccessToken } from "../services/auth";
 import { locales, type Locale } from "../types/LocaleType";
 import Toast from "./Toast";
 

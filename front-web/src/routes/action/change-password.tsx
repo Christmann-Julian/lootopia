@@ -1,5 +1,5 @@
 import type { ApiErrorResponse } from "../../types/ApiType";
-import { api } from "../../services/auth/auth";
+import { api } from "../../services/auth";
 import { type ClientActionFunctionArgs } from "react-router";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {

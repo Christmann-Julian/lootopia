@@ -11,7 +11,7 @@ import {
   type MetaFunction,
 } from "react-router";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { api, setAccessToken } from "../../services/auth/auth";
+import { api, setAccessToken } from "../../services/auth";
 import Toast from "../../components/Toast";
 import i18n from "i18next";
 import type { LoginFormData } from "../../types/FormType";

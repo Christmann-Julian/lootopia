@@ -10,7 +10,7 @@ import {
   type MetaFunction,
 } from "react-router";
 import Toast from "../../components/Toast";
-import { api } from "../../services/auth/auth";
+import { api } from "../../services/auth";
 import i18n from "i18next";
 import type { ForgotPasswordFormData } from "../../types/FormType";
 

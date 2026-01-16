@@ -12,7 +12,7 @@ import {
   useParams,
 } from "react-router";
 import Toast from "../../components/Toast";
-import { api } from "../../services/auth/auth";
+import { api } from "../../services/auth";
 import type { ResetPasswordFormData } from "../../types/FormType";
 import type { ApiErrorResponse } from "../../types/ApiType";
 import i18n from "i18next";
