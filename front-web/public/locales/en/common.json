@@ -1,6 +1,12 @@
 {
     "welcome": "Welcome to our application !",
     "appName": "Lootopia",
+    "metaTitle": "{{title}} | Lootopia",
     "internalServerError": "Internal server error. Please try again later.",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "error404": {
+        "title": "Page not found",
+        "description": "Sorry, we couldn't find the page you are looking for. It may have been moved or deleted.",
+        "goHome": "Go back home"
+    }
 }

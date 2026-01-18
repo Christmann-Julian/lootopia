@@ -1,21 +1,34 @@
 import { useTranslation } from "react-i18next";
+import type { MetaFunction, LinksFunction } from "react-router";
 import SideBar from "../../components/SideBar";
 import DashboardHeader from "../../components/DashboardHeader";
 import StatCard from "../../components/StatsCard";
-import Table from "../../components/Table";
+import i18n from "i18next";
 
-export function meta() {
-  return [{ title: "Tableau de bord | Lootopia" }];
-}
+export const meta: MetaFunction = () => [
+  {
+    title: i18n.t("metaTitle", { title: i18n.t("dashboard", { ns: "navigation" }), ns: "common" }),
+  },
+];
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/assets/css/ui/dashboard-header.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/sidebar.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/button.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/table.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/stats-card.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/pagination.css" },
+];
 
 export default function Dashboard() {
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation(["navigation", "common"]);
 
   return (
     <div className="container">
       <SideBar />
       <main className="main-content">
-        <DashboardHeader title="Dashboard" />
+        <DashboardHeader title={t("dashboard", { ns: "navigation" })} />
         <div className="stats-grid">
           <StatCard
             icon={
@@ -100,7 +113,6 @@ export default function Dashboard() {
             classDescription="trend-positive"
           />
         </div>
-        <Table />
       </main>
     </div>
   );

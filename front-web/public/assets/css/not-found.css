@@ -1,0 +1,87 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.error-container {
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.error-container .error-number {
+  font-size: 120px;
+  font-weight: 900;
+  color: hsl(var(--muted));
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+.error-container .error-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  margin-bottom: 12px;
+}
+
+.error-container .error-description {
+  font-size: 15px;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.error-container .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  padding: 0 24px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.error-container .button-primary {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.error-container .button-primary:hover {
+  opacity: 0.9;
+}
+
+.error-container .button-outline {
+  border: 1px solid hsl(var(--border));
+  background: transparent;
+  color: hsl(var(--foreground));
+  margin-left: 12px;
+}
+
+.error-container .button-outline:hover {
+  background: hsl(var(--muted));
+}
+
+@media (max-width: 480px) {
+  .error-container .error-number {
+    font-size: 80px;
+  }
+
+  .error-container .error-title {
+    font-size: 24px;
+  }
+
+  .error-container .button {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-bottom: 12px;
+  }
+}

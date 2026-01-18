@@ -1,14 +1,15 @@
-import "../../assets/css/success.css";
-import { Link } from "react-router";
-import { getLanguage } from "../../utils/i18nUtils";
+import { Link, useParams, type LinksFunction, type MetaFunction } from "react-router";
 import { useTranslation, Trans } from "react-i18next";
+import i18n from "i18next";
 
-export function meta() {
-  const { t } = useTranslation("auth");
-  return [{ title: t("registerSuccess.metaTitle", { ns: "auth" }) }];
-}
+export const meta: MetaFunction = () => [
+  { title: i18n.t("registerSuccess.metaTitle", { ns: "auth" }) },
+];
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: "/assets/css/success.css" }];
 
 export default function RegisterSuccess() {
+  const { lang } = useParams();
   const { t } = useTranslation("auth");
   return (
     <div className="success-container">
@@ -64,7 +65,7 @@ export default function RegisterSuccess() {
           </div>
         </div>
 
-        <Link to={`/${getLanguage()}`} className="button button-primary">
+        <Link to={`/${lang}`} className="button button-primary">
           <svg
             width="16"
             height="16"

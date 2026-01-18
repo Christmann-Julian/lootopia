@@ -1,29 +1,44 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Link, useFetcher, type ClientActionFunctionArgs } from "react-router";
-import { getLanguage } from "../../utils/i18nUtils";
+import {
+  Link,
+  useFetcher,
+  useParams,
+  type ClientActionFunctionArgs,
+  type LinksFunction,
+  type MetaFunction,
+} from "react-router";
 import Toast from "../../components/Toast";
-import { api } from "../../services/auth/auth";
+import { api } from "../../services/auth";
+import i18n from "i18next";
 import type { ForgotPasswordFormData } from "../../types/FormType";
-import "../../assets/css/forgot-password.css";
+import type { ApiErrorResponse } from "../../types/ApiType";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
   try {
     await api.post("/api/auth/password/reset/request", data);
     return { success: true };
-  } catch (err: any) {
-    return { error: err.response.data.message };
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
+    return { error: apiError?.message || "An error occurred" };
   }
 }
 
-export function meta() {
-  const { t } = useTranslation("auth");
-  return [{ title: t("forgotPassword.metaTitle", { ns: "auth" }) }];
-}
+export const meta: MetaFunction = () => [
+  { title: i18n.t("forgotPassword.metaTitle", { ns: "auth" }) },
+];
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/assets/css/forgot-password.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
+];
 
 export default function ForgotPassword() {
+  const { lang } = useParams();
   const { t } = useTranslation(["auth", "validation", "common"]);
   const fetcher = useFetcher();
   const [toast, setToast] = useState<{
@@ -64,9 +79,8 @@ export default function ForgotPassword() {
         <div className="card-header">
           <div className="icon-wrapper">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
           </div>
           <h1 className="card-title">{t("forgotPassword.title", { ns: "auth" })}</h1>
@@ -151,7 +165,7 @@ export default function ForgotPassword() {
 
         <div className="card-footer">
           <p className="footer-text">
-            <Link to={`/${getLanguage()}`} className="link">
+            <Link to={`/${lang}`} className="link">
               <svg
                 width="14"
                 height="14"

@@ -4,28 +4,36 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  type LinksFunction,
   isRouteErrorResponse,
   useRouteError,
   useParams,
-  Navigate,
+  redirect,
+  type LoaderFunctionArgs,
+  useNavigation,
 } from "react-router";
-import React, { useEffect } from "react";
-import "./services/i18n";
-import "./assets/css/style.css";
-import { getLanguage, getAvailableLanguages } from "./utils/i18nUtils";
-import { useTranslation } from "react-i18next";
+import i18n from "i18next";
+import i18nConfig from "./services/i18n";
+import Loading from "./components/Loading";
+import { Navigate } from "react-router";
+import { useLanguageSync } from "./hooks/useLanguageSync";
+
+export const links: LinksFunction = () => [
+  { rel: "icon", type: "image/x-icon", href: "/assets/images/favicon.ico" },
+  { rel: "stylesheet", href: "/assets/css/style.css" },
+];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    document.documentElement.lang = getLanguage();
-  }, []);
+  const { lang } = useParams();
+
+  useLanguageSync(lang);
 
   return (
-    <html lang="en">
+    <html lang={lang}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>My App</title>
+        <title>{i18n.t("appName", { ns: "common" })}</title>
         <Meta />
         <Links />
       </head>
@@ -39,23 +47,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export function HydrateFallback() {
-  const { t } = useTranslation(["common"]);
-  return (
-    <div className="loading-container">
-      <div className="spinner"></div>
-      <div className="loading-text">{t("loading")}</div>
-    </div>
-  );
+  return <Loading />;
 }
 
 export default function Root() {
-  const { locale } = useParams();
+  const navigation = useNavigation();
+  const isNavigating = Boolean(navigation.location);
 
-  if (locale && !getAvailableLanguages().includes(locale)) {
-    return <Navigate to={`/${getLanguage()}/not-found`} />;
+  return <>{isNavigating ? <Loading /> : <Outlet />}</>;
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+
+  if (url.pathname === "/") {
+    return null;
   }
 
-  return <Outlet />;
+  const segments = url.pathname.split("/");
+  const lang = segments[1];
+
+  if (!lang || lang === "") {
+    return redirect(`/${i18nConfig.fallbackLng}`);
+  }
+
+  if (!i18nConfig.supportedLngs.includes(lang)) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  return { lang };
 }
 
 export function ErrorBoundary() {
@@ -65,9 +85,11 @@ export function ErrorBoundary() {
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404 ? "The requested page could not be found." : error.statusText || details;
+    if (error.status === 404) {
+      return <Navigate to={`/${i18n.language}/not-found`} />;
+    }
+    message = "Error";
+    details = error.statusText || details;
   } else if (error && error instanceof Error) {
     details = error.message;
     stack = error.stack;

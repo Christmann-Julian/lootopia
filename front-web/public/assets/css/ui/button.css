@@ -1,0 +1,154 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  padding: 0 16px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.button-primary {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.button-primary:hover {
+  opacity: 0.9;
+}
+
+.button-secondary {
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.button-secondary:hover {
+  background: hsl(var(--secondary));
+  opacity: 0.8;
+}
+
+.button-outline {
+  border: 1px solid hsl(var(--input));
+  background: transparent;
+  color: hsl(var(--foreground));
+}
+
+.button-outline:hover {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.button-ghost {
+  background: transparent;
+  color: hsl(var(--foreground));
+}
+
+.button-ghost:hover {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.button-destructive {
+  background: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+.button-destructive:hover {
+  opacity: 0.9;
+}
+
+.button-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.button-add {
+  width: 100%;
+  border: 2px dashed hsl(var(--border));
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+  margin-top: 12px;
+}
+
+.button-add:hover {
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary));
+  background: transparent;
+}
+
+/* Dropdown */
+.dropdown,
+.dropdown-button {
+  position: relative;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  opacity: 0; /* Initial opacity */
+  transform: translateY(-20px); /* Initial position */
+}
+
+.dropdown-menu-right {
+  right: 0;
+}
+
+.dropdown-menu.active {
+  display: block;
+  animation: dropdownFadeIn 0.3s ease forwards; /* Animation ajoutée */
+}
+
+.dropdown-menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+}
+
+.dropdown-menu li.li-icon {
+  height: 100%;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dropdown-menu li.li-icon a {
+  color: inherit;
+  text-decoration: inherit;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: inherit;
+  width: 100%;
+  height: 100%;
+}
+
+.dropdown-menu li:hover {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}

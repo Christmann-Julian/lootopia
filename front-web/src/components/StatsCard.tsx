@@ -1,5 +1,4 @@
 import React from "react";
-import "../assets/css/ui/stats-card.css";
 
 type StatsCardProps = {
   icon: React.ReactNode;

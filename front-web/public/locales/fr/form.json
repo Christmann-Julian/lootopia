@@ -1,0 +1,38 @@
+{
+  "title": {
+    "editUser": "Modifier l'utilisateur",
+    "createUser": "Créer un utilisateur",
+    "changePassword": "Changer le mot de passe",
+    "profile": "Mon compte"
+  },
+  "description": {
+    "editUser": "Modifiez les informations de l'utilisateur ci-dessous.",
+    "createUser": "Remplissez les informations de l'utilisateur ci-dessous.",
+    "changePassword": "Modifiez le mot de passe de mon compte ci-dessous.",
+    "profile": "Modifiez les informations de votre compte ci-dessous."
+  },
+  "toast": {
+    "userUpdated": "Utilisateur mis à jour avec succès.",
+    "userCreated": "Utilisateur créé avec succès.",
+    "passwordChanged": "Mot de passe modifié avec succès."
+  },
+  "firstName": "Prénom",
+  "firstNamePlaceholder": "Jean",
+  "lastName": "Nom de famille",
+  "lastNamePlaceholder": "Dupont",
+  "email": "Email",
+  "emailPlaceholder": "jean.dupont@example.com",
+  "company": "Entreprise",
+  "companyPlaceholder": "Lootopia Inc.",
+  "password": "Mot de passe",
+  "passwordConfirmation": "Confirmation du mot de passe",
+  "currentPassword": "Mot de passe actuel",
+  "newPassword": "Nouveau mot de passe",
+  "confirmNewPassword": "Confirmer le nouveau mot de passe",
+  "roles": "Rôles",
+  "rolesHelp": "Sélectionnez un ou plusieurs rôles pour cet utilisateur.",
+  "isVerified": "Vérifié",
+  "isVerifiedHelper": "Indiquez si l'email a été vérifié.",
+  "save": "Enregistrer",
+  "cancel": "Annuler"
+}

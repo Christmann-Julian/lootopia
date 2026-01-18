@@ -1,11 +1,8 @@
-import "../assets/css/ui/dashboard-header.css";
-import "../assets/css/ui/button.css";
 import React, { useState, useEffect } from "react";
-import { locales, changeLanguage, getCurrentLocale } from "../utils/i18nUtils";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
-import { api, setAccessToken } from "../services/auth/auth";
-import Cookies from "js-cookie";
+import { useNavigate, Link, useLocation, useParams } from "react-router";
+import { api, setAccessToken } from "../services/auth";
+import { locales, type Locale } from "../types/LocaleType";
 import Toast from "./Toast";
 
 type DashboardHeaderProps = {
@@ -13,39 +10,47 @@ type DashboardHeaderProps = {
 };
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
+  const { lang } = useParams();
   const { t } = useTranslation(["auth", "common"]);
   const navigate = useNavigate();
+  const location = useLocation();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info" | "warning";
   } | null>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
 
-  const toggleDropdown = (dropdown: string) => {
+  const toggleDropdown = (dropdown: string): void => {
     setOpenDropdown((prev) => (prev === dropdown ? null : dropdown));
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = (event: MouseEvent): void => {
     const target = event.target as HTMLElement;
     if (!target.closest(".dropdown")) {
       setOpenDropdown(null);
     }
   };
 
-  const handleLanguageChange = async (langCode: string) => {
-    await changeLanguage(langCode);
-    setOpenDropdown(null);
+  const getNewPath = (targetLang: string): string => {
+    const segments = location.pathname.split("/");
+    segments[1] = targetLang;
+    return segments.join("/") + location.search;
   };
 
-  const handleLogout = async () => {
+  const getLocaleByCode = (code: string): Locale | null =>
+    locales.find((locale) => locale.code === code) || null;
+
+  const handleLogout = async (): Promise<void> => {
+    setIsLoggingOut(true);
     try {
       await api.post("/api/auth/logout");
-    } catch (error) {
+    } catch {
       setToast({ message: t("internalServerError", { ns: "common" }), type: "error" });
     } finally {
       setAccessToken(null);
-      Cookies.remove("REFRESH_TOKEN", { path: "/" });
-      navigate(`/${getCurrentLocale().code}`);
+      navigate(`/${lang}`);
+      setIsLoggingOut(false);
     }
   };
 
@@ -72,7 +77,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
             onClick={() => toggleDropdown("first")}
           >
             <img
-              src={`https://flagcdn.com/w40/${getCurrentLocale().country_code.toLowerCase()}.webp`}
+              src={`https://flagcdn.com/w40/${getLocaleByCode(lang!)?.country_code.toLowerCase()}.webp`}
               width="30"
             />
           </button>
@@ -82,16 +87,14 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
             }`}
           >
             {locales.map((locale) => (
-              <li
-                key={locale.code}
-                className="li-icon"
-                onClick={() => handleLanguageChange(locale.code)}
-              >
-                <img
-                  src={`https://flagcdn.com/w20/${locale.country_code.toLowerCase()}.webp`}
-                  width="20"
-                />
-                {locale.name}
+              <li key={locale.code} className="li-icon">
+                <Link to={getNewPath(locale.code)} onClick={() => setOpenDropdown(null)}>
+                  <img
+                    src={`https://flagcdn.com/w20/${locale.country_code.toLowerCase()}.webp`}
+                    width="20"
+                  />
+                  {locale.name}
+                </Link>
               </li>
             ))}
           </ul>
@@ -136,8 +139,24 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title }) => {
               <button
                 style={{ border: "none", background: "none", cursor: "pointer" }}
                 onClick={handleLogout}
+                disabled={isLoggingOut}
               >
-                {t("logout.logoutButton")}
+                {isLoggingOut ? (
+                  <svg
+                    className="spinner-btn"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                    <path d="M12 2a10 10 0 0 1 10 10" />
+                  </svg>
+                ) : (
+                  t("logout.logoutButton")
+                )}
               </button>
             </li>
           </ul>

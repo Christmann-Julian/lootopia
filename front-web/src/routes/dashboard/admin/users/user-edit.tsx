@@ -1,0 +1,376 @@
+import { useState, useEffect } from "react";
+import Toast from "../../../../components/Toast";
+import SideBar from "../../../../components/SideBar";
+import DashboardHeader from "../../../../components/DashboardHeader";
+import { useTranslation } from "react-i18next";
+import {
+  useFetcher,
+  useParams,
+  type MetaFunction,
+  type LinksFunction,
+  type ClientActionFunctionArgs,
+  Link,
+} from "react-router";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import i18n from "i18next";
+import type { EditUserFormData } from "../../../../types/FormType";
+import type { ApiErrorResponse } from "../../../../types/ApiType";
+import { api } from "../../../../services/auth";
+import type { AxiosError } from "axios";
+
+export async function clientAction({ request }: ClientActionFunctionArgs) {
+  const data = await request.json();
+
+  if (!data.id) {
+    return { error: true };
+  }
+
+  try {
+    await api.put(`/api/users/${data.id}`, data);
+    return { success: true };
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
+    if (apiError?.details) {
+      const firstError = Object.values(apiError.details)[0];
+      return { error: firstError?.[0] || true };
+    }
+    return { error: true };
+  }
+}
+
+export async function clientLoader({
+  params,
+}: {
+  params: { id: string };
+}): Promise<EditUserFormData | { error: string }> {
+  try {
+    const { id } = params;
+    const response = await api.get(`/api/users/${id}`);
+    return response.data;
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
+
+    return { error: apiError?.message || "An unexpected error occurred" };
+  }
+}
+
+export const meta: MetaFunction = () => [
+  { title: i18n.t("metaTitle", { title: i18n.t("users", { ns: "navigation" }), ns: "common" }) },
+];
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/assets/css/ui/dashboard-header.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/sidebar.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/button.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/form.css" },
+];
+
+export default function UserEdit({
+  loaderData,
+}: {
+  loaderData: EditUserFormData | { error: string };
+}) {
+  const { t } = useTranslation(["form", "validation", "navigation", "common"]);
+  const { lang } = useParams();
+  const fetcher = useFetcher();
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error" | "info" | "warning";
+  } | null>(null);
+  const [tags, setTags] = useState(
+    "error" in loaderData
+      ? []
+      : [
+          {
+            value: "ROLE_USER",
+            label: "ROLE_USER",
+            active: loaderData.roles?.includes("ROLE_USER") || false,
+          },
+          {
+            value: "ROLE_ADMIN",
+            label: "ROLE_ADMIN",
+            active: loaderData.roles?.includes("ROLE_ADMIN") || false,
+          },
+        ]
+  );
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<EditUserFormData>({
+    defaultValues: "error" in loaderData ? undefined : loaderData,
+  });
+
+  const toggleTag = (value: string) => {
+    setTags((prevTags) =>
+      prevTags.map((tag) => (tag.value === value ? { ...tag, active: !tag.active } : tag))
+    );
+  };
+
+  useEffect(() => {
+    const selectedRoles = tags.filter((tag) => tag.active).map((tag) => tag.value);
+    setValue("roles", selectedRoles);
+  }, [tags, setValue]);
+
+  const onSubmit: SubmitHandler<EditUserFormData> = (data: EditUserFormData) => {
+    const dataWithId = {
+      ...data,
+      id: "id" in loaderData ? loaderData.id : null,
+    };
+
+    fetcher.submit(dataWithId, {
+      method: "post",
+      encType: "application/json",
+    });
+  };
+
+  useEffect(() => {
+    if (fetcher.data?.success) {
+      setToast({
+        message: t("toast.userUpdated", { ns: "form" }),
+        type: "success",
+      });
+    } else if (fetcher.data?.error) {
+      setToast({
+        message:
+          fetcher.data.error === true
+            ? t("internalServerError", { ns: "common" })
+            : fetcher.data.error,
+        type: "error",
+      });
+    }
+  }, [fetcher.data, t, lang]);
+
+  useEffect(() => {
+    if ("error" in loaderData) {
+      setToast({
+        message: loaderData.error,
+        type: "error",
+      });
+    }
+  }, [loaderData]);
+
+  return (
+    <div className="container">
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <SideBar />
+      <main className="main-content">
+        <DashboardHeader title={t("users", { ns: "navigation" })} />
+        <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+          <div className="card">
+            <div className="card-header">
+              <h2 className="card-title">{t("title.editUser", { ns: "form" })}</h2>
+              <p className="card-description">{t("description.editUser", { ns: "form" })}</p>
+            </div>
+            <div className="card-content">
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="label label-required" htmlFor="firstName">
+                    {t("firstName", { ns: "form" })}
+                  </label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    className="input"
+                    placeholder={t("firstNamePlaceholder", { ns: "form" })}
+                    {...register("firstname", {
+                      required: t("required", { ns: "validation" }),
+                      minLength: {
+                        value: 2,
+                        message: t("minLength", { min: 2, ns: "validation" }),
+                      },
+                      maxLength: {
+                        value: 100,
+                        message: t("maxLength", { max: 100, ns: "validation" }),
+                      },
+                    })}
+                  />
+                  {errors.firstname && (
+                    <div className="input-feedback error" id="firstnameError">
+                      {errors.firstname.message}
+                    </div>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label className="label label-required" htmlFor="lastName">
+                    {t("lastName", { ns: "form" })}
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    className="input"
+                    placeholder={t("lastNamePlaceholder", { ns: "form" })}
+                    {...register("lastname", {
+                      required: t("required", { ns: "validation" }),
+                      minLength: {
+                        value: 2,
+                        message: t("minLength", { min: 2, ns: "validation" }),
+                      },
+                      maxLength: {
+                        value: 100,
+                        message: t("maxLength", { max: 100, ns: "validation" }),
+                      },
+                    })}
+                  />
+                  {errors.lastname && (
+                    <div className="input-feedback error" id="lastnameError">
+                      {errors.lastname.message}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="label label-required" htmlFor="email">
+                  {t("email", { ns: "form" })}
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="input"
+                  placeholder={t("emailPlaceholder", { ns: "form" })}
+                  {...register("email", {
+                    required: t("required", { ns: "validation" }),
+                    pattern: {
+                      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                      message: t("invalidEmail", { ns: "validation" }),
+                    },
+                  })}
+                />
+                {errors.email && (
+                  <div className="input-feedback error" id="emailError">
+                    {errors.email.message}
+                  </div>
+                )}
+              </div>
+              <div className="form-group">
+                <label className="label label-required" htmlFor="company">
+                  {t("company", { ns: "form" })}
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  className="input"
+                  placeholder={t("companyPlaceholder", { ns: "form" })}
+                  {...register("company", {
+                    required: t("required", { ns: "validation" }),
+                    maxLength: {
+                      value: 255,
+                      message: t("maxLength", { max: 255, ns: "validation" }),
+                    },
+                  })}
+                />
+              </div>
+              {errors.company && (
+                <div className="input-feedback error" id="companyError">
+                  {errors.company.message}
+                </div>
+              )}
+              <div className="form-group">
+                <label className="label" htmlFor="roles">
+                  {t("roles", { ns: "form" })}
+                </label>
+                <div className="tags-container" id="tagsContainer">
+                  {tags.map((tag) => (
+                    <div
+                      key={tag.value}
+                      className={`tag-item ${tag.active ? "" : "inactive"}`}
+                      data-value={tag.value}
+                      onClick={() => toggleTag(tag.value)}
+                    >
+                      <svg
+                        className="tag-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        {tag.active ? (
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        ) : (
+                          <>
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                          </>
+                        )}
+                      </svg>
+                      {tag.label}
+                    </div>
+                  ))}
+                </div>
+                <input
+                  type="hidden"
+                  id="selectedTags"
+                  {...register("roles")}
+                  value={tags
+                    .filter((tag) => tag.active)
+                    .map((tag) => tag.value)
+                    .join(",")}
+                />
+                <p className="helper-text">{t("rolesHelp", { ns: "form" })}</p>
+              </div>
+              <div className="form-group">
+                <label className="label label-required">{t("isVerified", { ns: "form" })}</label>
+                <div className="toggle-wrapper">
+                  <label className="toggle">
+                    <input type="checkbox" id="isVerified" {...register("isVerified")} />
+                    <span className="toggle-slider"></span>
+                  </label>
+                  <label htmlFor="isVerified" className="toggle-label">
+                    {t("isVerifiedHelper", { ns: "form" })}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="form-actions">
+              <button
+                type="submit"
+                className="button button-primary"
+                disabled={fetcher.state === "submitting"}
+              >
+                {fetcher.state === "submitting" ? (
+                  <svg
+                    className="spinner-btn"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                    <path d="M12 2a10 10 0 0 1 10 10" />
+                  </svg>
+                ) : (
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                )}
+                {t("save", { ns: "form" })}
+              </button>
+              <Link
+                to={`/${lang}/dashboard/admin/users`}
+                className="button button-outline"
+                id="cancelBtn"
+              >
+                {t("cancel", { ns: "form" })}
+              </Link>
+            </div>
+          </div>
+        </form>
+      </main>
+    </div>
+  );
+}

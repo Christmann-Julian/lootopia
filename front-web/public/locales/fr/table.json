@@ -1,0 +1,23 @@
+{
+    "deleteSuccess": "Élément supprimé avec succès.",
+    "deleteMultipleSuccess": "{{count}} éléments supprimés avec succès.",
+    "deleteError": "Erreur lors de la suppression.",
+    "searchPlaceholder": "Rechercher...",
+    "exportBtn": "Exporter",
+    "exportMultipleBtn": "Exporter la sélection",
+    "addBtn": "Ajouter",
+    "deleteBtn": "Supprimer",
+    "columnActions": "Actions",
+    "tableLoading": "Chargement en cours...",
+    "noResults": "Aucun résultat trouvé.",
+    "alertInfoSelected": "{{count}} ligne(s) sélectionnée(s)",
+    "pagination": {
+        "displayingResults": "Affichage de <strong>{{startItem}}</strong> à <strong>{{endItem}}</strong> sur <strong>{{totalItems}}</strong> résultats"
+    },
+    "confirmDelete": {
+        "messageMultiple": "Êtes-vous sûr de vouloir supprimer les {{count}} éléments sélectionnés ?",
+        "message": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+        "confirmButton": "Confirmer",
+        "cancelButton": "Annuler"
+    }
+}

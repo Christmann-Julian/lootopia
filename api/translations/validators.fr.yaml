@@ -170,3 +170,4 @@ Error: Erreur
 'Please select a valid range.': 'Veuillez sélectionner une plage valide.'
 'Please enter a valid week.': 'Veuillez entrer une semaine valide.'
 'user_already_exists': "Un utilisateur existe déjà avec cet email."
+'invalid_current_password': "Le mot de passe actuel est incorrect."

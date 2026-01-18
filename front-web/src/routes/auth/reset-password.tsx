@@ -7,13 +7,16 @@ import {
   useSearchParams,
   useFetcher,
   type ClientActionFunctionArgs,
+  type LinksFunction,
+  type MetaFunction,
+  useParams,
 } from "react-router";
-import { getLanguage } from "../../utils/i18nUtils";
 import Toast from "../../components/Toast";
-import { api } from "../../services/auth/auth";
+import { api } from "../../services/auth";
 import type { ResetPasswordFormData } from "../../types/FormType";
 import type { ApiErrorResponse } from "../../types/ApiType";
-import "../../assets/css/reset-password.css";
+import i18n from "i18next";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -21,22 +24,28 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
   try {
     await api.post("/api/auth/password/reset", data);
     return { success: true };
-  } catch (err: any) {
-    const apiError = err.response?.data as ApiErrorResponse;
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
     if (apiError?.details) {
       const firstError = Object.values(apiError.details)[0];
       return { error: firstError?.[0] || apiError.message };
     }
-    return { error: apiError.message };
+    return { error: apiError?.message || "An unexpected error occurred" };
   }
 }
 
-export function meta() {
-  const { t } = useTranslation("auth");
-  return [{ title: t("resetPassword.metaTitle", { ns: "auth" }) }];
-}
+export const meta: MetaFunction = () => [
+  { title: i18n.t("resetPassword.metaTitle", { ns: "auth" }) },
+];
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/assets/css/reset-password.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
+];
 
 export default function ResetPassword() {
+  const { lang } = useParams();
   const { t } = useTranslation(["auth", "validation", "common"]);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -66,7 +75,7 @@ export default function ResetPassword() {
         type: "success",
       });
       setTimeout(() => {
-        navigate(`/${getLanguage()}`);
+        navigate(`/${lang}`);
       }, 2000);
     } else if (fetcher.data?.error) {
       setToast({
@@ -77,7 +86,7 @@ export default function ResetPassword() {
         type: "error",
       });
     }
-  }, [fetcher.data, navigate, t]);
+  }, [fetcher.data, navigate, t, lang]);
 
   const onSubmit: SubmitHandler<ResetPasswordFormData> = (data) => {
     if (!token) {
@@ -285,7 +294,7 @@ export default function ResetPassword() {
 
         <div className="card-footer">
           <p className="footer-text">
-            <Link to={`/${getLanguage()}`} className="link">
+            <Link to={`/${lang}`} className="link">
               <svg
                 width="14"
                 height="14"

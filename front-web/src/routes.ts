@@ -1,7 +1,8 @@
 import { type RouteConfig, index, prefix, route } from "@react-router/dev/routes";
 
 export default [
-  ...prefix(":locale?", [
+  index("routes/redirect.tsx"),
+  ...prefix(":lang", [
     route(undefined, "./routes/auth/guest-layout.tsx", [
       index("./routes/auth/login.tsx"),
       route("register", "./routes/auth/register.tsx"),
@@ -12,6 +13,18 @@ export default [
 
     route("dashboard", "./routes/auth/auth-layout.tsx", [
       index("./routes/dashboard/dashboard.tsx"),
+      route("treasure-hunts", "./routes/dashboard/treasure-hunts.tsx"),
+      route("settings", "./routes/dashboard/settings.tsx"),
+      route("admin", "./routes/auth/admin-layout.tsx", [
+        route("users", "./routes/dashboard/admin/users/user-list.tsx"),
+        route("users/create", "./routes/dashboard/admin/users/user-create.tsx"),
+        route("users/:id/edit", "./routes/dashboard/admin/users/user-edit.tsx"),
+        route("users/:id/show", "./routes/dashboard/admin/users/user-show.tsx"),
+      ]),
     ]),
+
+    ...prefix("action", [route("change-password", "./routes/action/change-password.tsx")]),
+
+    route("*", "./routes/not-found.tsx"),
   ]),
 ] satisfies RouteConfig;

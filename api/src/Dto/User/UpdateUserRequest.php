@@ -2,7 +2,7 @@
 
 namespace App\Dto\User;
 
-use App\Validator\Constraints\UniqueEmail;
+use App\Enum\RolesEnum;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UpdateUserRequest
@@ -20,11 +20,12 @@ final class UpdateUserRequest
 
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[UniqueEmail]
     private string $email;
 
     /** @var array<string> */
-    #[Assert\All(new Assert\Type('string'))]
+    #[Assert\All(
+        new Assert\Choice(choices: RolesEnum::VALUES)
+    )]
     private array $roles = [];
 
     private bool $isVerified = false;

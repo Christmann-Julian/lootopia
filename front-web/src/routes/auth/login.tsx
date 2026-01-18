@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import "../../assets/css/login.css";
 import {
   useFetcher,
   Link,
   useNavigate,
   useSearchParams,
+  useParams,
+  type LinksFunction,
   type ClientActionFunctionArgs,
+  type MetaFunction,
 } from "react-router";
-import { useForm } from "react-hook-form";
-import { api, setAccessToken } from "../../services/auth/auth";
-import { getLanguage } from "../../utils/i18nUtils";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { api, setAccessToken } from "../../services/auth";
 import Toast from "../../components/Toast";
+import i18n from "i18next";
+import type { LoginFormData } from "../../types/FormType";
+import type { ApiErrorResponse } from "../../types/ApiType";
+import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -23,24 +28,29 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
 
     setAccessToken(res.data.token);
     return { success: true };
-  } catch (err: any) {
-    return { error: err.response.data.message };
+  } catch (err: unknown) {
+    const axiosError = err as AxiosError<ApiErrorResponse>;
+    const apiError = axiosError.response?.data;
+    return { error: apiError?.message || "An unexpected error occurred" };
   }
 }
 
-export function meta() {
-  const { t } = useTranslation("auth");
-  return [
-    { title: t("login.metaTitle") },
-    {
-      name: "description",
-      content: t("login.metaDescription"),
-    },
-  ];
-}
+export const meta: MetaFunction = () => [
+  { title: i18n.t("login.metaTitle", { ns: "auth" }) },
+  {
+    name: "description",
+    content: i18n.t("login.metaDescription", { ns: "auth" }),
+  },
+];
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: "/assets/css/login.css" },
+  { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
+];
 
 export default function Login() {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const { lang } = useParams();
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const { t } = useTranslation(["auth", "common"]);
   const [searchParams, setSearchParams] = useSearchParams();
   const fetcher = useFetcher();
@@ -50,20 +60,20 @@ export default function Login() {
     type: "success" | "error" | "info" | "warning";
   } | null>(null);
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<LoginFormData>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<LoginFormData> = (data: LoginFormData) => {
     fetcher.submit(data, {
       method: "post",
       encType: "application/json",
     });
-    reset();
   };
 
   useEffect(() => {
     if (fetcher.data?.success) {
-      navigate(`/${getLanguage()}/dashboard`);
+      navigate(`/${lang}/dashboard`);
     } else if (fetcher.data?.error) {
+      reset();
       setToast({ message: fetcher.data.error, type: "error" });
     }
 
@@ -76,9 +86,9 @@ export default function Login() {
       searchParams.delete("success");
       setSearchParams(searchParams);
     }
-  }, [fetcher.data, navigate, searchParams, setSearchParams]);
+  }, [fetcher.data, navigate, searchParams, setSearchParams, lang, reset]);
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = (): void => {
     setPasswordVisible((prev) => !prev);
   };
 
@@ -86,10 +96,12 @@ export default function Login() {
     <div className="login-container">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <div className="logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
+        <img
+          src="/assets/images/logo_circle_256x256.png"
+          width={48}
+          height={48}
+          alt="Lootopia Logo"
+        />
         <span className="logo-text">{t("appName", { ns: "common" })}</span>
       </div>
 
@@ -176,7 +188,7 @@ export default function Login() {
                 {t("login.rememberMe")}
               </label>
             </div> */}
-            <Link to={`/${getLanguage()}/forgot-password`} className="link">
+            <Link to={`/${lang}/forgot-password`} className="link">
               {t("login.forgotPassword")}
             </Link>
           </div>
@@ -213,14 +225,16 @@ export default function Login() {
                 <line x1="15" y1="12" x2="3" y2="12"></line>
               </svg>
             )}
-            {fetcher.state === "submitting" ? t("common:loading") : t("login.loginButton")}
+            {fetcher.state === "submitting"
+              ? t("loading", { ns: "common" })
+              : t("login.loginButton")}
           </button>
         </form>
 
         <div className="card-footer">
           <p className="footer-text">
             {t("login.noAccount")} &nbsp;
-            <Link to={`/${getLanguage()}/register`} className="link">
+            <Link to={`/${lang}/register`} className="link">
               {t("login.createAccount")}
             </Link>
           </p>
