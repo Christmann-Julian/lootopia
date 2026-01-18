@@ -17,8 +17,8 @@
 
 .logo {
   padding: 0 12px 32px;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 25px;
+  font-weight: bold;
   color: hsl(var(--foreground));
   display: flex;
   align-items: center;

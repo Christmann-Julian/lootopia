@@ -104,10 +104,12 @@ export default function Register() {
     <div className="register-container">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <div className="logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
+        <img
+          src="/assets/images/logo_circle_256x256.png"
+          width={48}
+          height={48}
+          alt="Lootopia Logo"
+        />
         <span className="logo-text">{t("appName", { ns: "common" })}</span>
       </div>
 
@@ -270,15 +272,6 @@ export default function Register() {
               </div>
             )}
           </div>
-
-          {/* <div className="form-group">
-                    <label className="label" htmlFor="role">Rôle</label>
-                    <select id="role" className="select" required>
-                        <option value="">Sélectionnez un rôle</option>
-                        <option value="manager">Manager</option>
-                        <option value="user">Utilisateur</option>
-                    </select>
-                </div> */}
 
           <div className="form-group">
             <label className="label" htmlFor="password">

@@ -18,7 +18,10 @@ import Loading from "./components/Loading";
 import { Navigate } from "react-router";
 import { useLanguageSync } from "./hooks/useLanguageSync";
 
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: "/assets/css/style.css" }];
+export const links: LinksFunction = () => [
+  { rel: "icon", type: "image/x-icon", href: "/assets/images/favicon.ico" },
+  { rel: "stylesheet", href: "/assets/css/style.css" },
+];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { lang } = useParams();

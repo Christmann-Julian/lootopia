@@ -10,18 +10,12 @@ export default function SideBar() {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <svg
-          className="icon"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
+        <img
+          src="/assets/images/logo_circle_256x256.png"
+          width={48}
+          height={48}
+          alt="Lootopia Logo"
+        />
         <span>{t("appName", { ns: "common" })}</span>
       </div>
 
