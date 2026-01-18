@@ -2,6 +2,7 @@
 
 namespace App\Dto\User;
 
+use App\Enum\RolesEnum;
 use App\Validator\Constraints\UniqueEmail;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\PasswordStrength;
@@ -31,7 +32,9 @@ final class CreateUserRequest
     private string $password;
 
     /** @var array<string> */
-    #[Assert\All(new Assert\Type('string'))]
+    #[Assert\All(
+        new Assert\Choice(choices: RolesEnum::VALUES)
+    )]
     private array $roles = ['ROLE_USER'];
 
     private bool $isVerified = false;

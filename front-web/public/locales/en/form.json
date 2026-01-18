@@ -1,0 +1,38 @@
+{
+  "title": {
+    "editUser": "Edit user",
+    "createUser": "Create user",
+    "changePassword": "Change Password",
+    "profile": "My Account"
+  },
+  "description": {
+    "editUser": "Edit the user's information below.",
+    "createUser": "Fill in the user's information below.",
+    "changePassword": "Change my account password below.",
+    "profile": "Edit your account information below."
+  },
+  "toast": {
+    "userUpdated": "User updated successfully.",
+    "userCreated": "User created successfully.",
+    "passwordChanged": "Password changed successfully."
+  },
+  "firstName": "First Name",
+  "firstNamePlaceholder": "John",
+  "lastName": "Last Name",
+  "lastNamePlaceholder": "Doe",
+  "email": "Email",
+  "emailPlaceholder": "john.doe@example.com",
+  "company": "Company",
+  "companyPlaceholder": "Lootopia Inc.",
+  "password": "Password",
+  "passwordConfirmation": "Password Confirmation",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+  "roles": "Roles",
+  "rolesHelp": "Select one or more roles for this user.",
+  "isVerified": "Verified",
+  "isVerifiedHelper": "Indicate whether the email has been verified.",
+  "save": "Save",
+  "cancel": "Cancel"
+}

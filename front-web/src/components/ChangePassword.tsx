@@ -12,7 +12,7 @@ type ChangePasswordProps = {
 export default function ChangePassword({ userId }: ChangePasswordProps) {
   const { lang } = useParams();
   const fetcher = useFetcher();
-  const { t } = useTranslation(["settings", "validation"]);
+  const { t } = useTranslation(["form", "validation"]);
   const [passwordStrength, setPasswordStrength] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [toast, setToast] = useState<{
@@ -48,7 +48,7 @@ export default function ChangePassword({ userId }: ChangePasswordProps) {
       setPasswordStrength("");
       setPasswordVisible(false);
       setToast({
-        message: t("changePassword.success", { ns: "settings" }),
+        message: t("toast.passwordChanged", { ns: "form" }),
         type: "success",
       });
     } else if (fetcher.data?.error) {
@@ -86,15 +86,13 @@ export default function ChangePassword({ userId }: ChangePasswordProps) {
       <form className="form-container" onSubmit={handleSubmit(onSubmitChangePassword)}>
         <div className="card">
           <div className="card-header">
-            <h2 className="card-title">{t("changePassword.title", { ns: "settings" })}</h2>
-            <p className="card-description">
-              {t("changePassword.description", { ns: "settings" })}
-            </p>
+            <h2 className="card-title">{t("title.changePassword", { ns: "form" })}</h2>
+            <p className="card-description">{t("description.changePassword", { ns: "form" })}</p>
           </div>
           <div className="card-content">
             <div className="form-group">
               <label className="label label-required" htmlFor="currentPassword">
-                {t("changePassword.currentPassword", { ns: "settings" })}
+                {t("currentPassword", { ns: "form" })}
               </label>
               <div className="input-wrapper">
                 <svg
@@ -137,7 +135,7 @@ export default function ChangePassword({ userId }: ChangePasswordProps) {
             </div>
             <div className="form-group">
               <label className="label label-required" htmlFor="newPassword">
-                {t("changePassword.newPassword", { ns: "settings" })}
+                {t("newPassword", { ns: "form" })}
               </label>
               <div className="input-wrapper">
                 <svg
@@ -233,7 +231,7 @@ export default function ChangePassword({ userId }: ChangePasswordProps) {
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
               )}
-              {t("save", { ns: "settings" })}
+              {t("save", { ns: "form" })}
             </button>
           </div>
         </div>

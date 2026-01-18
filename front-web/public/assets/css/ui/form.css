@@ -148,7 +148,7 @@
 }
 
 .form-container .input.success {
-  border-color: #10b981;
+  border-color: hsl(var(--success));
 }
 
 .form-container .input-icon {
@@ -164,6 +164,104 @@
 
 .form-container .input-with-icon {
   padding-left: 40px !important;
+}
+
+.form-container .tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--background));
+  min-height: 65px;
+}
+
+.form-container .tag-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: calc(var(--radius) - 2px);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.form-container .tag-item:hover {
+  opacity: 0.9;
+}
+
+.form-container .tag-item.inactive {
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+.form-container .tag-item .tag-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.form-container .toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-container .toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.form-container .toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.form-container .toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: hsl(var(--input));
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.form-container .toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.form-container .toggle input:checked + .toggle-slider {
+  background-color: hsl(var(--primary));
+}
+
+.form-container .toggle input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+.form-container .toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  cursor: pointer;
 }
 
 .form-container .password-toggle {
@@ -194,7 +292,7 @@
 }
 
 .form-container .input-feedback.success {
-  color: #10b981;
+  color: hsl(var(--success));
   display: block;
 }
 
@@ -219,17 +317,17 @@
 
 .form-container .strength-fill.weak {
   width: 33%;
-  background: #ef4444;
+  background: hsl(var(--destructive));
 }
 
 .form-container .strength-fill.medium {
   width: 66%;
-  background: #f59e0b;
+  background: hsl(var(--warning));
 }
 
 .form-container .strength-fill.strong {
   width: 100%;
-  background: #10b981;
+  background: hsl(var(--success));
 }
 
 .form-container .strength-text {
@@ -250,7 +348,7 @@
 .alert-warning {
   background: hsl(47.9 95.8% 53.1% / 0.1);
   border-color: hsl(47.9 95.8% 53.1% / 0.2);
-  color: #b45309;
+  color: hsl(var(--warning));
 }
 
 .alert-icon {

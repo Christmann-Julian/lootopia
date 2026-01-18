@@ -1,0 +1,24 @@
+{
+    "title": {
+        "userDetails": "Détails de l'utilisateur"
+    },
+    "action": {
+        "title": "Actions",
+        "edit": "Éditer",
+        "delete": "Supprimer",
+        "back": "Annuler"
+    },
+    "badge": {
+        "true": "Oui",
+        "false": "Non"
+    },
+    "id": "ID",
+    "lastname": "Nom",
+    "firstname": "Prénom",
+    "email": "Email",
+    "company": "Entreprise",
+    "roles": "Rôles",
+    "isVerified": "Vérifié",
+    "createdAt": "Créé le",
+    "updatedAt": "Mis à jour le"
+}

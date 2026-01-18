@@ -173,6 +173,8 @@ final class UserController extends AbstractController
                         new OA\Property(property: 'email', type: 'string'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'isVerified', type: 'boolean'),
+                        new OA\Property(property: 'createdAt', type: 'string'),
+                        new OA\Property(property: 'updatedAt', type: 'string'),
                     ],
                     type: 'object'
                 )
@@ -191,7 +193,7 @@ final class UserController extends AbstractController
             throw new ApiException(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        return new JsonResponse($user->__serialize());
+        return new JsonResponse($user->toArray());
     }
 
     #[OA\Post(
@@ -224,6 +226,8 @@ final class UserController extends AbstractController
                         new OA\Property(property: 'email', type: 'string'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'isVerified', type: 'boolean'),
+                        new OA\Property(property: 'createdAt', type: 'string'),
+                        new OA\Property(property: 'updatedAt', type: 'string'),
                     ],
                     type: 'object'
                 )
@@ -271,7 +275,7 @@ final class UserController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        return new JsonResponse($user->__serialize(), Response::HTTP_CREATED);
+        return new JsonResponse($user->toArray(), Response::HTTP_CREATED);
     }
 
     #[OA\Put(
@@ -306,6 +310,8 @@ final class UserController extends AbstractController
                         new OA\Property(property: 'email', type: 'string'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'isVerified', type: 'boolean'),
+                        new OA\Property(property: 'createdAt', type: 'string'),
+                        new OA\Property(property: 'updatedAt', type: 'string'),
                     ],
                     type: 'object'
                 )
@@ -347,7 +353,7 @@ final class UserController extends AbstractController
         $dtoValidator->validate($dto);
 
         $existingUser = $userRepository->findOneBy(['email' => $dto->getEmail()]);
-        if ($existingUser && $existingUser->getId() !== $currentUser->getId()) {
+        if ($existingUser && $existingUser->getId() !== $user->getId()) {
             throw new ApiException(Response::HTTP_BAD_REQUEST, 'Validation failed', ['email' => [$translator->trans('user_already_exists', [], 'validators')]]);
         }
 
@@ -369,7 +375,7 @@ final class UserController extends AbstractController
 
         $em->flush();
 
-        $response = new JsonResponse($user->__serialize());
+        $response = new JsonResponse($user->toArray());
         if ($currentUser->getId() === $user->getId()) {
             $response->headers->clearCookie('REFRESH_TOKEN');
         }

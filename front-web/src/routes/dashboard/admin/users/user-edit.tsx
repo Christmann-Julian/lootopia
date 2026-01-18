@@ -1,22 +1,21 @@
 import { useState, useEffect } from "react";
-import Toast from "../../components/Toast";
-import SideBar from "../../components/SideBar";
-import DashboardHeader from "../../components/DashboardHeader";
+import Toast from "../../../../components/Toast";
+import SideBar from "../../../../components/SideBar";
+import DashboardHeader from "../../../../components/DashboardHeader";
 import { useTranslation } from "react-i18next";
 import {
   useFetcher,
-  useNavigate,
   useParams,
   type MetaFunction,
   type LinksFunction,
   type ClientActionFunctionArgs,
+  Link,
 } from "react-router";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import i18n from "i18next";
-import type { EditSettingsFormData } from "../../types/FormType";
-import type { ApiErrorResponse } from "../../types/ApiType";
-import { api, setAccessToken } from "../../services/auth";
-import ChangePassword from "../../components/ChangePassword";
+import type { EditUserFormData } from "../../../../types/FormType";
+import type { ApiErrorResponse } from "../../../../types/ApiType";
+import { api } from "../../../../services/auth";
 import type { AxiosError } from "axios";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
@@ -40,9 +39,14 @@ export async function clientAction({ request }: ClientActionFunctionArgs) {
   }
 }
 
-export async function clientLoader(): Promise<EditSettingsFormData | { error: string }> {
+export async function clientLoader({
+  params,
+}: {
+  params: { id: string };
+}): Promise<EditUserFormData | { error: string }> {
   try {
-    const response = await api.get("/api/auth/me");
+    const { id } = params;
+    const response = await api.get(`/api/users/${id}`);
     return response.data;
   } catch (err: unknown) {
     const axiosError = err as AxiosError<ApiErrorResponse>;
@@ -53,7 +57,7 @@ export async function clientLoader(): Promise<EditSettingsFormData | { error: st
 }
 
 export const meta: MetaFunction = () => [
-  { title: i18n.t("metaTitle", { title: i18n.t("settings", { ns: "navigation" }), ns: "common" }) },
+  { title: i18n.t("metaTitle", { title: i18n.t("users", { ns: "navigation" }), ns: "common" }) },
 ];
 
 export const links: LinksFunction = () => [
@@ -64,29 +68,56 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "/assets/css/ui/form.css" },
 ];
 
-export default function Settings({
+export default function UserEdit({
   loaderData,
 }: {
-  loaderData: EditSettingsFormData | { error: string };
+  loaderData: EditUserFormData | { error: string };
 }) {
   const { t } = useTranslation(["form", "validation", "navigation", "common"]);
-  const navigate = useNavigate();
   const { lang } = useParams();
   const fetcher = useFetcher();
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info" | "warning";
   } | null>(null);
+  const [tags, setTags] = useState(
+    "error" in loaderData
+      ? []
+      : [
+          {
+            value: "ROLE_USER",
+            label: "ROLE_USER",
+            active: loaderData.roles?.includes("ROLE_USER") || false,
+          },
+          {
+            value: "ROLE_ADMIN",
+            label: "ROLE_ADMIN",
+            active: loaderData.roles?.includes("ROLE_ADMIN") || false,
+          },
+        ]
+  );
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-  } = useForm<EditSettingsFormData>({
+  } = useForm<EditUserFormData>({
     defaultValues: "error" in loaderData ? undefined : loaderData,
   });
 
-  const onSubmit: SubmitHandler<EditSettingsFormData> = (data: EditSettingsFormData) => {
+  const toggleTag = (value: string) => {
+    setTags((prevTags) =>
+      prevTags.map((tag) => (tag.value === value ? { ...tag, active: !tag.active } : tag))
+    );
+  };
+
+  useEffect(() => {
+    const selectedRoles = tags.filter((tag) => tag.active).map((tag) => tag.value);
+    setValue("roles", selectedRoles);
+  }, [tags, setValue]);
+
+  const onSubmit: SubmitHandler<EditUserFormData> = (data: EditUserFormData) => {
     const dataWithId = {
       ...data,
       id: "id" in loaderData ? loaderData.id : null,
@@ -100,8 +131,10 @@ export default function Settings({
 
   useEffect(() => {
     if (fetcher.data?.success) {
-      setAccessToken(null);
-      navigate(`/${lang}`);
+      setToast({
+        message: t("toast.userUpdated", { ns: "form" }),
+        type: "success",
+      });
     } else if (fetcher.data?.error) {
       setToast({
         message:
@@ -111,7 +144,7 @@ export default function Settings({
         type: "error",
       });
     }
-  }, [fetcher.data, navigate, t, lang]);
+  }, [fetcher.data, t, lang]);
 
   useEffect(() => {
     if ("error" in loaderData) {
@@ -127,12 +160,12 @@ export default function Settings({
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <SideBar />
       <main className="main-content">
-        <DashboardHeader title={t("settings", { ns: "navigation" })} />
+        <DashboardHeader title={t("users", { ns: "navigation" })} />
         <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
           <div className="card">
             <div className="card-header">
-              <h2 className="card-title">{t("title.profile", { ns: "form" })}</h2>
-              <p className="card-description">{t("description.profile", { ns: "form" })}</p>
+              <h2 className="card-title">{t("title.editUser", { ns: "form" })}</h2>
+              <p className="card-description">{t("description.editUser", { ns: "form" })}</p>
             </div>
             <div className="card-content">
               <div className="form-row">
@@ -238,6 +271,61 @@ export default function Settings({
                   {errors.company.message}
                 </div>
               )}
+              <div className="form-group">
+                <label className="label" htmlFor="roles">
+                  {t("roles", { ns: "form" })}
+                </label>
+                <div className="tags-container" id="tagsContainer">
+                  {tags.map((tag) => (
+                    <div
+                      key={tag.value}
+                      className={`tag-item ${tag.active ? "" : "inactive"}`}
+                      data-value={tag.value}
+                      onClick={() => toggleTag(tag.value)}
+                    >
+                      <svg
+                        className="tag-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        {tag.active ? (
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        ) : (
+                          <>
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                          </>
+                        )}
+                      </svg>
+                      {tag.label}
+                    </div>
+                  ))}
+                </div>
+                <input
+                  type="hidden"
+                  id="selectedTags"
+                  {...register("roles")}
+                  value={tags
+                    .filter((tag) => tag.active)
+                    .map((tag) => tag.value)
+                    .join(",")}
+                />
+                <p className="helper-text">{t("rolesHelp", { ns: "form" })}</p>
+              </div>
+              <div className="form-group">
+                <label className="label label-required">{t("isVerified", { ns: "form" })}</label>
+                <div className="toggle-wrapper">
+                  <label className="toggle">
+                    <input type="checkbox" id="isVerified" {...register("isVerified")} />
+                    <span className="toggle-slider"></span>
+                  </label>
+                  <label htmlFor="isVerified" className="toggle-label">
+                    {t("isVerifiedHelper", { ns: "form" })}
+                  </label>
+                </div>
+              </div>
             </div>
             <div className="form-actions">
               <button
@@ -272,10 +360,16 @@ export default function Settings({
                 )}
                 {t("save", { ns: "form" })}
               </button>
+              <Link
+                to={`/${lang}/dashboard/admin/users`}
+                className="button button-outline"
+                id="cancelBtn"
+              >
+                {t("cancel", { ns: "form" })}
+              </Link>
             </div>
           </div>
         </form>
-        <ChangePassword userId={"id" in loaderData ? loaderData.id : null} />
       </main>
     </div>
   );

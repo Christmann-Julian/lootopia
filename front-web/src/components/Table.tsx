@@ -1,4 +1,3 @@
-import type { JSX } from "react/jsx-dev-runtime";
 import { Link } from "react-router";
 import { useState, useEffect, useCallback } from "react";
 import Pagination from "./Pagination";
@@ -6,32 +5,7 @@ import ConfirmationDialog from "./ConfirmationDialog";
 import Toast from "./Toast";
 import { api } from "../services/auth";
 import { useTranslation } from "react-i18next";
-
-export type MetaData = {
-  page: number;
-  limit: number;
-  total: number;
-  sort: string;
-  direction: "asc" | "desc";
-};
-
-export type Column<T = Record<string, unknown>> = {
-  key: string;
-  label: string;
-  sortable?: boolean;
-  render?: (value: T[keyof T], row: T) => JSX.Element | string;
-};
-
-type TableRow = {
-  id: number;
-  [key: string]: unknown;
-};
-
-type TableProps = {
-  title: string;
-  columns: Column[];
-  apiEndpoint: string;
-};
+import type { TableProps, TableRow, MetaData } from "../types/TableType";
 
 export default function Table({ title, columns, apiEndpoint }: TableProps) {
   const { t } = useTranslation(["table", "common"]);
@@ -253,7 +227,7 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
             </svg>
             {t("exportBtn", { ns: "table" })}
           </button>
-          <Link to="add" className="button button-primary">
+          <Link to="create" className="button button-primary">
             <svg
               width="16"
               height="16"

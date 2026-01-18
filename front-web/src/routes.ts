@@ -15,7 +15,12 @@ export default [
       index("./routes/dashboard/dashboard.tsx"),
       route("treasure-hunts", "./routes/dashboard/treasure-hunts.tsx"),
       route("settings", "./routes/dashboard/settings.tsx"),
-      route("admin/users", "./routes/dashboard/users.tsx"),
+      route("admin", "./routes/auth/admin-layout.tsx", [
+        route("users", "./routes/dashboard/admin/users/user-list.tsx"),
+        route("users/create", "./routes/dashboard/admin/users/user-create.tsx"),
+        route("users/:id/edit", "./routes/dashboard/admin/users/user-edit.tsx"),
+        route("users/:id/show", "./routes/dashboard/admin/users/user-show.tsx"),
+      ]),
     ]),
 
     ...prefix("action", [route("change-password", "./routes/action/change-password.tsx")]),
