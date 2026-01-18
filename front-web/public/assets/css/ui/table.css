@@ -189,12 +189,12 @@
 }
 
 .table-container .badge-success {
-  background: hsl(142.1 76.2% 36.3% / 0.15);
+  background: hsl(var(--success) / 0.15);
   color: #15803d;
 }
 
 .table-container .badge-warning {
-  background: hsl(47.9 95.8% 53.1% / 0.15);
+  background: hsl(var(--warning) / 0.15);
   color: #b45309;
 }
 

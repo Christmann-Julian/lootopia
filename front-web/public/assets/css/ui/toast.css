@@ -15,19 +15,19 @@
 }
 
 .toast-success {
-  background-color: #4caf50;
+  background-color: hsl(var(--success));
 }
 
 .toast-error {
-  background-color: #f44336;
+  background-color: hsl(var(--destructive));
 }
 
 .toast-info {
-  background-color: #2196f3;
+  background-color: hsl(var(--info));
 }
 
 .toast-warning {
-  background-color: #ff9800;
+  background-color: hsl(var(--warning));
 }
 
 .toast-close {

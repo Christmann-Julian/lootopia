@@ -104,7 +104,7 @@ body {
 }
 
 .input.success {
-  border-color: #10b981;
+  border-color: hsl(var(--success));
 }
 
 .input-icon {
@@ -150,7 +150,7 @@ body {
 }
 
 .input-feedback.success {
-  color: #10b981;
+  color: hsl(var(--success));
   display: block;
 }
 
@@ -175,17 +175,17 @@ body {
 
 .strength-fill.weak {
   width: 33%;
-  background: #ef4444;
+  background: hsl(var(--destructive));
 }
 
 .strength-fill.medium {
   width: 66%;
-  background: #f59e0b;
+  background: hsl(var(--warning));
 }
 
 .strength-fill.strong {
   width: 100%;
-  background: #10b981;
+  background: hsl(var(--success));
 }
 
 .strength-text {

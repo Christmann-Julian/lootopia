@@ -51,9 +51,9 @@
 }
 
 .stats-grid .trend-positive {
-  color: #10b981;
+  color: hsl(var(--success));
 }
 
 .stats-grid .trend-negative {
-  color: #ef4444;
+  color: hsl(var(--destructive));
 }

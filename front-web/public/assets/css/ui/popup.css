@@ -12,7 +12,7 @@
 }
 
 .popup-content {
-  background: #fff;
+  background: hsl(var(--background));
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@
 .popup-content p {
   margin: 0 0 20px;
   font-size: 16px;
-  color: #333;
+  color: hsl(var(--foreground));
 }
 
 .popup-actions {
