@@ -1,7 +1,9 @@
 services:
   # Base de données MariaDB
   db:
-    image: mariadb:10.4.32
+    build:
+      context: ./database
+      dockerfile: Dockerfile
     container_name: lootopia_db
     environment:
       MYSQL_ROOT_PASSWORD: root
