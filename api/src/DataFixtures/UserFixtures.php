@@ -34,10 +34,16 @@ class UserFixtures extends Fixture
             $lastname = $faker->lastName();
             $company = $faker->boolean(66) ? $faker->company() : null;
 
+            $email = sprintf(
+                '%s.%s@user.fr',
+                $this->normalizeForEmail($firstname),
+                $this->normalizeForEmail($lastname),
+            );
+
             $user = new User();
             $user->setFirstname($firstname);
             $user->setLastname($lastname);
-            $user->setEmail(strtolower($firstname.'.'.$lastname.'@user.com'));
+            $user->setEmail($email);
             $user->setCompany($company);
             $user->setPassword($this->passwordHasher->hashPassword($user, 'user'));
             $user->setRoles(['ROLE_USER']);
@@ -47,5 +53,18 @@ class UserFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    private function normalizeForEmail(string $text): string
+    {
+        $text = str_replace(' ', '', $text);
+
+        $text = strtolower($text);
+
+        $text = iconv('UTF-8', 'ASCII//TRANSLIT', $text);
+
+        $text = preg_replace('/[^a-z0-9]/', '', (string) $text);
+
+        return (string) $text;
     }
 }
