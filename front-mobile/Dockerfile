@@ -6,4 +6,4 @@ WORKDIR /app
 
 EXPOSE 19000 19001 19002
 
-CMD ["tail", "-f", "/dev/null"]
+CMD ["sh", "-c", "npm install && tail -f /dev/null"]

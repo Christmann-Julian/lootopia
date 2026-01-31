@@ -16,8 +16,11 @@ timeout /t 45 /nobreak >nul
 echo.
 echo   Configuration de la base de données Symfony...
 
-REM Créer la base de données
+REM Créer la base de données et la base de données de test
 docker exec -it lootopia_api php bin/console doctrine:database:create --if-not-exists
+docker exec -it lootopia_api php bin/console --env=test doctrine:database:drop --force --if-exists
+docker exec -it lootopia_api php bin/console --env=test doctrine:database:create 
+docker exec -it lootopia_api php bin/console --env=test doctrine:schema:create 
 
 REM Exécuter les migrations
 docker exec -it lootopia_api php bin/console doctrine:migrations:migrate --no-interaction
