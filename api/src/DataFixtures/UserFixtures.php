@@ -27,6 +27,17 @@ class UserFixtures extends Fixture
 
         $manager->persist($adminUser);
 
+        $userTest = new User();
+        $userTest->setFirstname('User Firstname');
+        $userTest->setLastname('User Lastname');
+        $userTest->setEmail('user@lootopia.fr');
+        $userTest->setCompany('Lootopia');
+        $userTest->setPassword($this->passwordHasher->hashPassword($userTest, 'user'));
+        $userTest->setRoles(['ROLE_USER']);
+        $userTest->setIsVerified(true);
+
+        $manager->persist($userTest);
+
         $faker = Factory::create('fr_FR');
 
         for ($i = 0; $i < 35; ++$i) {
