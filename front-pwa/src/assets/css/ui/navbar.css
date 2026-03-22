@@ -1,0 +1,47 @@
+.nav-bar {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  max-width: 500px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.75rem;
+  z-index: 100;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+  scale: 1.1;
+}
+
+.nav-link.active {
+  color: var(--gold);
+}
+
+.notification-dot {
+  position: absolute;
+  top: 0px;
+  right: 12px;
+  background: var(--danger);
+  color: white;
+  font-size: 0.55rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  border: 2px solid #0f172a;
+}

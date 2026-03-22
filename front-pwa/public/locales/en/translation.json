@@ -1,0 +1,48 @@
+{
+    "navbar": {
+        "home": "Home",
+        "profile": "Profile",
+        "radar": "Radar",
+        "rewards": "Rewards"
+    },
+    "profile": {
+        "stats": {
+            "hunts": "Hunts",
+            "rewards": "Rewards"
+        },
+        "badges": {
+            "title": "Unlocked Achievements"
+        },
+        "preferences": {
+            "title": "Language Preferences",
+            "language": "Available Languages"
+        },
+        "info": {
+            "title": "Personal Information"
+        },
+        "security": {
+            "title": "Password and Security"
+        },
+        "actions": {
+            "edit": "Save Changes",
+            "delete": "Delete My Account"
+        },
+        "delete": {
+            "title": "Critical Zone",
+            "notice": "Deleting your account is permanent. Your unused rewards will be removed from the server."
+        }
+    },
+    "input": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "pseudo": "Pseudo",
+        "email": "Email Address",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "oldPassword": "Old Password",
+        "newPassword": "New Password"
+    },
+    "error": {
+        "invalidEmail": "Invalid email address"
+    }
+}
