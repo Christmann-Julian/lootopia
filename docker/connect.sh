@@ -19,7 +19,7 @@ show_help() {
     echo -e "${YELLOW}Services disponibles:${NC}"
     echo -e "  ${GREEN}api${NC}           - Se connecter au conteneur API (Symfony)"
     echo -e "  ${GREEN}web${NC}           - Se connecter au conteneur Front Web (Vite)"
-    echo -e "  ${GREEN}mobile${NC}        - Se connecter au conteneur Front Mobile (Expo)"
+    echo -e "  ${GREEN}pwa${NC}           - Se connecter au conteneur Front PWA (Vite)"
     echo -e "  ${GREEN}db${NC}            - Se connecter à la base de données MariaDB"
     echo ""
     echo -e "${YELLOW}Exemples:${NC}"
