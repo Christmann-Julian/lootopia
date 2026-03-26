@@ -13,7 +13,7 @@ set SERVICE=%1
 
 if "%SERVICE%"=="api" goto connect_api
 if "%SERVICE%"=="web" goto connect_web
-if "%SERVICE%"=="mobile" goto connect_mobile
+if "%SERVICE%"=="pwa" goto connect_pwa
 if "%SERVICE%"=="db" goto connect_db
 
 echo Service inconnu: %SERVICE%
@@ -32,10 +32,10 @@ echo.
 docker exec -it lootopia_front_web sh
 goto end
 
-:connect_mobile
-echo Connexion au conteneur Front Mobile...
+:connect_pwa
+echo Connexion au conteneur Front PWA...
 echo.
-docker exec -it lootopia_front_mobile bash
+docker exec -it lootopia_front_pwa sh
 goto end
 
 :connect_db
@@ -50,7 +50,7 @@ echo.
 echo Services disponibles:
 echo   api           - Se connecter au conteneur API (Symfony)
 echo   web           - Se connecter au conteneur Front Web (Vite)
-echo   mobile        - Se connecter au conteneur Front Mobile (Expo)
+echo   pwa           - Se connecter au conteneur Front PWA (Expo)
 echo   db            - Se connecter à la base de données MariaDB
 echo.
 echo Exemples:

@@ -5,6 +5,7 @@
 ```
 lootopia/
 ├── docker/
+│   ├── database/
 │   ├── docker-compose.yml
 │   ├── setup.sh / setup.bat      ← Installation initiale
 │   ├── start.sh / start.bat      ← Démarrage
@@ -15,16 +16,17 @@ lootopia/
 │   └── [fichiers Symfony]
 ├── front-web/
 │   └── [fichiers Vite/React]
-└── front-mobile/
-    └── [fichiers Expo/React Native]
+└── front-pwa/
+    └── [fichiers Vite/React]
 ```
 
 ## Services disponibles
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| API Symfony | http://localhost:8000/api/doc | Backend API |
+| API Symfony | https://localhost:8000/api/doc | Backend API |
 | Front Web | http://localhost:5173 | Application web React |
+| Front PWA | https://localhost:5174 | Progressive Web App |
 | phpMyAdmin | http://localhost:8080 | Gestion de base de données |
 | Mailpit | http://localhost:8025 | Interface de test des emails |
 | MariaDB | localhost:3306 | Base de données |
@@ -38,7 +40,7 @@ DATABASE_URL="mysql://lootopia:lootopia@db:3306/lootopia?serverVersion=mariadb-1
 MAILER_DSN=smtp://mailpit:1025
 ```
 
-### 2. Configuration Vite (front-web/.env)
+### 2. Configuration Vite (front-web/.env et front-pwa/.env)
 
 ```env
 VITE_API_URL=http://localhost:8000
@@ -64,16 +66,6 @@ Ce script va :
 - Exécuter les fixtures
 - Créer les clés public/privée
 
-Pour expo, il faut se connecter sur le container mobile pour lancer le serveur.
-
-```bash
-# Linux / macOS
-./connect.sh mobile
-
-# Windows
-connect.bat mobile
-```
-
 Pour recevoir les mails :
 
 ```bash
@@ -90,7 +82,7 @@ docker exec -it lootopia_api php bin/console messenger:consume async
 start.bat
 ```
 
-Pour expo et les mails, c'est le même process que pour l'installation.
+Pour les mails, c'est le même process que pour l'installation.
 
 ### 4. Commandes utiles
 
@@ -124,7 +116,7 @@ docker exec -it lootopia_api php bin/console doctrine:migrations:migrate
 # Installer des dépendances
 docker exec -it lootopia_api composer install
 docker exec -it lootopia_front_web npm install
-docker exec -it lootopia_front_mobile npm install
+docker exec -it lootopia_front_pwa npm install
 ```
 
 ## Identifiants par défaut
@@ -149,6 +141,6 @@ docker exec -it lootopia_front_mobile npm install
 ## Notes importantes
 
 1. **Volumes**: Les fichiers sont montés en volumes, les modifications sont synchronisées en temps réel
-2. **Expo**: Pour le front mobile, vous devrez peut-être scanner le QR code depuis votre téléphone avec l'app Expo Go
+2. **PWA**: Pour le front pwa, vous devrez peut-être confirmer à votre navigateur que la page est sûr (C'est dû au certificat ssl local que les navigateurs bloquent par sécurité)
 3. **Hot reload**: Activé par défaut pour Symfony et Vite
 

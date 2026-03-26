@@ -47,10 +47,10 @@ case $SERVICE in
         echo ""
         docker exec -it lootopia_front_web sh
         ;;
-    mobile)
-        echo -e "${GREEN}Connexion au conteneur Front Mobile...${NC}"
+    pwa)
+        echo -e "${GREEN}Connexion au conteneur Front PWA...${NC}"
         echo ""
-        docker exec -it lootopia_front_mobile bash
+        docker exec -it lootopia_front_pwa sh
         ;;
     db)
         echo -e "${GREEN}Connexion à la base de données MariaDB...${NC}"

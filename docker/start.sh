@@ -35,6 +35,7 @@ if [ $? -eq 0 ]; then
     echo -e "${BLUE}Services disponibles :${NC}"
     echo -e "  ${GREEN}-${NC} API Symfony      : ${YELLOW}http://localhost:8000/api/doc${NC} (30s pour le démarrage)"
     echo -e "  ${GREEN}-${NC} Front Web        : ${YELLOW}http://localhost:5173${NC}"
+    echo -e "  ${GREEN}-${NC} Front PWA        : ${YELLOW}https://localhost:5174${NC}"
     echo -e "  ${GREEN}-${NC} phpMyAdmin       : ${YELLOW}http://localhost:8080${NC}"
     echo -e "  ${GREEN}-${NC} Mailpit          : ${YELLOW}http://localhost:8025${NC}"
     echo ""
