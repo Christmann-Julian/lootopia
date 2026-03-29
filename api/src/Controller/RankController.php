@@ -1,0 +1,306 @@
+<?php
+
+namespace App\Controller;
+
+use App\Dto\Rank\CreateRankRequest;
+use App\Dto\Rank\UpdateRankRequest;
+use App\Entity\Rank;
+use App\Entity\RankTranslation;
+use App\Repository\RankRepository;
+use App\Validator\DtoValidator;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use OpenApi\Attributes as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+#[OA\Parameter(
+    name: 'locale',
+    in: 'query',
+    required: false,
+    description: 'Optional locale (ex: fr, en) to get specific translation. If empty, returns all translations.',
+    schema: new OA\Schema(type: 'string', example: 'fr')
+)]
+#[OA\Tag(name: 'rank', description: 'Rank management endpoints')]
+#[Route('/api/ranks', name: 'app_rank_')]
+final class RankController extends AbstractController
+{
+    #[OA\Get(
+        summary: 'List ranks',
+        description: 'Returns a list of all ranks.',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'List of ranks',
+                content: new OA\JsonContent(type: 'array', items: new OA\Items(type: 'object'))
+            ),
+        ]
+    )]
+    #[IsGranted('ROLE_USER')]
+    #[Route('', name: 'list', methods: ['GET'])]
+    public function list(RankRepository $rankRepository, Request $request): JsonResponse
+    {
+        $locale = (string) $request->query->get('locale');
+        $ranks = $rankRepository->findBy([], ['level' => 'ASC']);
+
+        $data = array_map(fn (Rank $r) => $r->toArray($locale), $ranks);
+
+        return new JsonResponse(['data' => $data]);
+    }
+
+    #[OA\Get(
+        summary: 'List ranks (Admin)',
+        description: 'Returns a paginated list of ranks for administration.',
+        parameters: [
+            new OA\Parameter(name: 'page', in: 'query', description: 'Page number', schema: new OA\Schema(type: 'integer', default: 1, minimum: 1)),
+            new OA\Parameter(name: 'limit', in: 'query', description: 'Items per page', schema: new OA\Schema(type: 'integer', default: 10, minimum: 5, maximum: 100)),
+            new OA\Parameter(name: 'q', in: 'query', description: 'Search term (translation name)', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'sort', in: 'query', description: 'Column to sort by', schema: new OA\Schema(type: 'string', enum: ['id', 'level', 'experienceMin', 'experienceMax', 'name'], default: 'level')),
+            new OA\Parameter(name: 'direction', in: 'query', description: 'Sort direction', schema: new OA\Schema(type: 'string', enum: ['asc', 'desc'], default: 'asc')),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Paginated list of ranks',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object')),
+                        new OA\Property(property: 'meta', type: 'object'),
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(response: 403, description: 'Forbidden'),
+        ]
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/admin', name: 'admin_list', methods: ['GET'])]
+    public function adminList(RankRepository $rankRepository, Request $request, PaginatorInterface $paginator): JsonResponse
+    {
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = (int) max(5, min(100, $request->query->getInt('limit', 10)));
+
+        $search = $request->query->get('q');
+        $search = is_string($search) ? $search : null;
+
+        $sort = (string) $request->query->get('sort', 'level');
+        $direction = (string) $request->query->get('direction', 'asc');
+        $locale = (string) $request->query->get('locale');
+
+        if ($search) {
+            $sort = 'relevance';
+            $direction = 'asc';
+        }
+
+        $queryBuilder = $rankRepository->createSearchQueryBuilder($search, $sort, $direction);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $page,
+            $limit,
+            [
+                'sortFieldParameterName' => null,
+                'sortDirectionParameterName' => null,
+                'distinct' => true,
+            ]
+        );
+
+        $ranksData = array_map(fn (Rank $r) => $r->toArray($locale), iterator_to_array($pagination->getItems()));
+
+        return new JsonResponse([
+            'data' => $ranksData,
+            'meta' => [
+                'page' => $pagination->getCurrentPageNumber(),
+                'limit' => $pagination->getItemNumberPerPage(),
+                'total' => $pagination->getTotalItemCount(),
+                'sort' => $sort,
+                'direction' => $direction,
+            ],
+        ]);
+    }
+
+    #[OA\Get(
+        summary: 'Get rank details',
+        description: 'Returns details of a specific rank.',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Rank details'),
+            new OA\Response(response: 404, description: 'Rank not found'),
+        ]
+    )]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/{id}', name: 'details', methods: ['GET'])]
+    public function getDetails(Rank $rank, Request $request): JsonResponse
+    {
+        $locale = (string) $request->query->get('locale');
+
+        return new JsonResponse($rank->toArray($locale));
+    }
+
+    #[OA\Post(
+        summary: 'Create a new rank',
+        description: 'Create a rank (Admin only).',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'experienceMin', type: 'integer', example: 0),
+                    new OA\Property(property: 'experienceMax', type: 'integer', example: 99),
+                    new OA\Property(property: 'level', type: 'integer', example: 1),
+                    new OA\Property(
+                        property: 'translations',
+                        properties: [
+                            new OA\Property(property: 'fr', type: 'string', example: 'Débutant'),
+                            new OA\Property(property: 'en', type: 'string', example: 'Beginner'),
+                        ],
+                        type: 'object'
+                    ),
+                ],
+                type: 'object'
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: 'Rank created'),
+            new OA\Response(response: 400, description: 'Validation error'),
+            new OA\Response(response: 403, description: 'Forbidden'),
+        ]
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('', name: 'create', methods: ['POST'])]
+    public function create(
+        Request $request,
+        EntityManagerInterface $em,
+        DtoValidator $dtoValidator,
+    ): JsonResponse {
+        $data = json_decode((string) $request->getContent(), true) ?? [];
+
+        $dto = new CreateRankRequest(
+            $data['experienceMin'] ?? 0,
+            $data['experienceMax'] ?? 0,
+            $data['level'] ?? 1,
+            $data['translations'] ?? []
+        );
+
+        $dtoValidator->validate($dto);
+
+        $rank = new Rank();
+        $rank->setExperienceMin($dto->getExperienceMin())
+             ->setExperienceMax($dto->getExperienceMax())
+             ->setLevel($dto->getLevel());
+
+        foreach ($dto->getTranslations() as $locale => $name) {
+            $translation = new RankTranslation();
+            $translation->setLocale((string) $locale)
+                ->setName($name);
+            $rank->addRankTranslation($translation);
+            $em->persist($translation);
+        }
+
+        $em->persist($rank);
+        $em->flush();
+
+        return new JsonResponse($rank->toArray(), Response::HTTP_CREATED);
+    }
+
+    #[OA\Put(
+        summary: 'Update a rank',
+        description: 'Update rank data (Admin only).',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'experienceMin', type: 'integer', example: 100),
+                    new OA\Property(property: 'experienceMax', type: 'integer', example: 299),
+                    new OA\Property(property: 'level', type: 'integer', example: 2),
+                    new OA\Property(
+                        property: 'translations',
+                        properties: [
+                            new OA\Property(property: 'fr', type: 'string', example: 'Initié'),
+                            new OA\Property(property: 'en', type: 'string', example: 'Initiate'),
+                        ],
+                        type: 'object'
+                    ),
+                ],
+                type: 'object'
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: 'Rank updated'),
+            new OA\Response(response: 400, description: 'Validation error'),
+            new OA\Response(response: 403, description: 'Forbidden'),
+            new OA\Response(response: 404, description: 'Rank not found'),
+        ]
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id}', name: 'update', methods: ['PUT'])]
+    public function update(
+        Rank $rank,
+        Request $request,
+        EntityManagerInterface $em,
+        DtoValidator $dtoValidator,
+    ): JsonResponse {
+        $data = json_decode((string) $request->getContent(), true) ?? [];
+
+        $dto = new UpdateRankRequest(
+            $data['experienceMin'] ?? $rank->getExperienceMin(),
+            $data['experienceMax'] ?? $rank->getExperienceMax(),
+            $data['level'] ?? $rank->getLevel(),
+            $data['translations'] ?? []
+        );
+
+        $dtoValidator->validate($dto);
+
+        $rank->setExperienceMin($dto->getExperienceMin())
+             ->setExperienceMax($dto->getExperienceMax())
+             ->setLevel($dto->getLevel());
+
+        foreach ($dto->getTranslations() as $locale => $name) {
+            $translation = $rank->getTranslation((string) $locale);
+
+            if ($translation) {
+                $translation->setName($name);
+            } else {
+                $translation = new RankTranslation();
+                $translation->setLocale((string) $locale)
+                    ->setName($name);
+                $rank->addRankTranslation($translation);
+                $em->persist($translation);
+            }
+        }
+
+        $em->flush();
+
+        return new JsonResponse($rank->toArray());
+    }
+
+    #[OA\Delete(
+        summary: 'Delete a rank',
+        description: 'Delete a rank and its translations (Admin only).',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+        ],
+        responses: [
+            new OA\Response(response: 204, description: 'Rank deleted'),
+            new OA\Response(response: 403, description: 'Forbidden'),
+            new OA\Response(response: 404, description: 'Rank not found'),
+        ]
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(Rank $rank, EntityManagerInterface $em): JsonResponse
+    {
+        $em->remove($rank);
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
+}

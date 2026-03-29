@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Company;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -16,26 +17,33 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $adminCompany = new Company();
+        $adminCompany->setName('Lootopia');
+
+        $manager->persist($adminCompany);
+
         $adminUser = new User();
         $adminUser->setFirstname('Admin Firstname');
         $adminUser->setLastname('Admin Lastname');
         $adminUser->setEmail('admin@lootopia.fr');
-        $adminUser->setCompany('Lootopia');
         $adminUser->setPassword($this->passwordHasher->hashPassword($adminUser, 'admin'));
         $adminUser->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
         $adminUser->setIsVerified(true);
-
+        $adminUser->setCompany($adminCompany);
         $manager->persist($adminUser);
+
+        $userCompany = new Company();
+        $userCompany->setName('User Company');
+        $manager->persist($userCompany);
 
         $userTest = new User();
         $userTest->setFirstname('User Firstname');
         $userTest->setLastname('User Lastname');
         $userTest->setEmail('user@lootopia.fr');
-        $userTest->setCompany('Lootopia');
         $userTest->setPassword($this->passwordHasher->hashPassword($userTest, 'user'));
         $userTest->setRoles(['ROLE_USER']);
         $userTest->setIsVerified(true);
-
+        $userTest->setCompany($userCompany);
         $manager->persist($userTest);
 
         $faker = Factory::create('fr_FR');
@@ -55,7 +63,6 @@ class UserFixtures extends Fixture
             $user->setFirstname($firstname);
             $user->setLastname($lastname);
             $user->setEmail($email);
-            $user->setCompany($company);
             $user->setPassword($this->passwordHasher->hashPassword($user, 'user'));
             $user->setRoles(['ROLE_USER']);
             $user->setIsVerified(true);

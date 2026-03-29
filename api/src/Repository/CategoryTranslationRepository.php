@@ -2,17 +2,17 @@
 
 namespace App\Repository;
 
-use App\Entity\PasswordResetToken;
+use App\Entity\CategoryTranslation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<PasswordResetToken>
+ * @extends ServiceEntityRepository<CategoryTranslation>
  */
-class PasswordResetTokenRepository extends ServiceEntityRepository
+class CategoryTranslationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, PasswordResetToken::class);
+        parent::__construct($registry, CategoryTranslation::class);
     }
 }
