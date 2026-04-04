@@ -40,7 +40,7 @@ class BadgeControllerTest extends TestCase
     {
         $badge = new Badge();
         $badge->setIcon($icon);
-        
+
         $reflection = new \ReflectionClass($badge);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
@@ -52,9 +52,9 @@ class BadgeControllerTest extends TestCase
     public function testList(): void
     {
         $request = new Request(['locale' => 'fr']);
-        
+
         $badge = clone $this->createBadgeMock(1, 'fa-star');
-        
+
         $this->badgeRepository->expects($this->once())
             ->method('findAll')
             ->willReturn([$badge]);
@@ -62,7 +62,7 @@ class BadgeControllerTest extends TestCase
         $response = $this->controller->list($this->badgeRepository, $request);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertArrayHasKey('data', $content);
         $this->assertCount(1, $content['data']);
     }
@@ -79,7 +79,7 @@ class BadgeControllerTest extends TestCase
             ->willReturn($queryBuilder);
 
         $pagination->method('getItems')->willReturn([
-            $this->createBadgeMock(1, 'fa-star')
+            $this->createBadgeMock(1, 'fa-star'),
         ]);
         $pagination->method('getCurrentPageNumber')->willReturn(1);
         $pagination->method('getItemNumberPerPage')->willReturn(10);
@@ -92,7 +92,7 @@ class BadgeControllerTest extends TestCase
         $response = $this->controller->adminList($this->badgeRepository, $request, $this->paginator);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertArrayHasKey('meta', $content);
         $this->assertEquals(1, $content['meta']['total']);
     }
@@ -105,7 +105,7 @@ class BadgeControllerTest extends TestCase
         $response = $this->controller->getDetails($badge, $request);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertEquals('fa-medal', $content['icon']);
     }
 
@@ -113,14 +113,14 @@ class BadgeControllerTest extends TestCase
     {
         $request = new Request([], [], [], [], [], [], (string) json_encode([
             'icon' => 'fa-trophy',
-            'translations' => ['fr' => 'Trophée']
+            'translations' => ['fr' => 'Trophée'],
         ]));
 
         $this->dtoValidator->expects($this->once())
             ->method('validate')
             ->with($this->isInstanceOf(CreateBadgeRequest::class));
 
-        $this->entityManager->expects($this->exactly(2))->method('persist'); 
+        $this->entityManager->expects($this->exactly(2))->method('persist');
         $this->entityManager->expects($this->once())->method('flush');
 
         $response = $this->controller->create($request, $this->entityManager, $this->dtoValidator);
@@ -139,8 +139,8 @@ class BadgeControllerTest extends TestCase
             'icon' => 'fa-new',
             'translations' => [
                 'fr' => 'Nouveau nom',
-                'en' => 'New name'
-            ]
+                'en' => 'New name',
+            ],
         ]));
 
         $this->dtoValidator->expects($this->once())
@@ -155,7 +155,7 @@ class BadgeControllerTest extends TestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals('fa-new', $badge->getIcon());
 
-        $this->assertEquals('Nouveau nom', $badge->getTranslation('fr')->getName());
+        $this->assertEquals('Nouveau nom', $badge->getTranslation('fr')?->getName());
     }
 
     public function testDeleteSuccess(): void
@@ -165,7 +165,7 @@ class BadgeControllerTest extends TestCase
         $this->entityManager->expects($this->once())
             ->method('remove')
             ->with($badge);
-        
+
         $this->entityManager->expects($this->once())
             ->method('flush');
 

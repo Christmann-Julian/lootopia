@@ -37,7 +37,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Badge Fondateur',
                     'reward_en' => 'Founder Badge',
                     'reward_code' => 'LOOTOPIA-ORIGIN',
-                ]
+                ],
             ],
             'Burger King' => [
                 [
@@ -58,7 +58,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Menu Whopper Offert',
                     'reward_en' => 'Free Whopper Meal',
                     'reward_code' => 'BK-DEFENSE-1',
-                ]
+                ],
             ],
             'Red Bull' => [
                 [
@@ -79,7 +79,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Un an de Red Bull',
                     'reward_en' => 'One Year of Red Bull',
                     'reward_code' => 'WINGS-DEFENSE-99',
-                ]
+                ],
             ],
             'Danone' => [
                 [
@@ -100,7 +100,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => '1 Mois de desserts',
                     'reward_en' => '1 Month of desserts',
                     'reward_code' => 'DANONE-MIAM',
-                ]
+                ],
             ],
             'Paul' => [
                 [
@@ -121,7 +121,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Café & Croissant offerts',
                     'reward_en' => 'Free Coffee & Croissant',
                     'reward_code' => 'PAUL-MORNING',
-                ]
+                ],
             ],
             'L\'Oréal' => [
                 [
@@ -142,7 +142,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Coffret Soin Prestige',
                     'reward_en' => 'Prestige Skincare Box',
                     'reward_code' => 'LOREAL-VIP',
-                ]
+                ],
             ],
             'Chanel' => [
                 [
@@ -163,7 +163,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Flacon N°5 Gravé',
                     'reward_en' => 'Engraved N°5 Bottle',
                     'reward_code' => 'CHANEL-NO5',
-                ]
+                ],
             ],
             'Sephora' => [
                 [
@@ -184,7 +184,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Carte Cadeau 50€',
                     'reward_en' => '50€ Gift Card',
                     'reward_code' => 'SEPHO-BEAUTY50',
-                ]
+                ],
             ],
             'Yves Rocher' => [
                 [
@@ -205,7 +205,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Trousse Nature',
                     'reward_en' => 'Nature Pouch',
                     'reward_code' => 'YR-PLANT',
-                ]
+                ],
             ],
             'Carrefour' => [
                 [
@@ -226,7 +226,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => '100€ sur la carte de fidélité',
                     'reward_en' => '100€ loyalty bonus',
                     'reward_code' => 'CARREFOUR-1963',
-                ]
+                ],
             ],
             'E.Leclerc' => [
                 [
@@ -247,7 +247,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Bon d\'achat 20€',
                     'reward_en' => '20€ Voucher',
                     'reward_code' => 'LECLERC-20',
-                ]
+                ],
             ],
             'Fnac' => [
                 [
@@ -268,7 +268,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Livre de poche offert',
                     'reward_en' => 'Free paperback book',
                     'reward_code' => 'FNAC-READ',
-                ]
+                ],
             ],
             'Auchan' => [
                 [
@@ -289,7 +289,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Livraison offerte',
                     'reward_en' => 'Free delivery',
                     'reward_code' => 'AUCHAN-FREE',
-                ]
+                ],
             ],
             'Decathlon' => [
                 [
@@ -310,7 +310,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Tente 2 secondes offerte',
                     'reward_en' => 'Free 2-second tent',
                     'reward_code' => 'DECA-TENT',
-                ]
+                ],
             ],
             'Salomon' => [
                 [
@@ -331,7 +331,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => '-30% sur chaussures de Trail',
                     'reward_en' => '-30% on Trail shoes',
                     'reward_code' => 'SALOMON-RUN',
-                ]
+                ],
             ],
             'Rossignol' => [
                 [
@@ -352,7 +352,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Bonnet de ski en laine',
                     'reward_en' => 'Wool ski beanie',
                     'reward_code' => 'ROSS-SNOW',
-                ]
+                ],
             ],
             'Le Coq Sportif' => [
                 [
@@ -373,7 +373,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Maillot Officiel de l\'Équipe de France',
                     'reward_en' => 'Official National Team Jersey',
                     'reward_code' => 'COQ-VICTOIRE',
-                ]
+                ],
             ],
             'Orange' => [
                 [
@@ -394,7 +394,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => '50 Go d\'internet offerts',
                     'reward_en' => '50 GB of free data',
                     'reward_code' => 'ORANGE-50G',
-                ]
+                ],
             ],
             'Free' => [
                 [
@@ -415,7 +415,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Abonnement Freebox 6 mois',
                     'reward_en' => '6-month Freebox subscription',
                     'reward_code' => 'FREE-HACKER',
-                ]
+                ],
             ],
             'Boulanger' => [
                 [
@@ -436,7 +436,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Carte cadeau 30€',
                     'reward_en' => '30€ Gift Card',
                     'reward_code' => 'BOULANGER-TECH',
-                ]
+                ],
             ],
             'LDLC' => [
                 [
@@ -457,7 +457,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Souris Gamer Offerte',
                     'reward_en' => 'Free Gaming Mouse',
                     'reward_code' => 'LDLC-GAMER',
-                ]
+                ],
             ],
             'Pathé' => [
                 [
@@ -478,7 +478,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => '2 Places de Cinéma',
                     'reward_en' => '2 Movie Tickets',
                     'reward_code' => 'PATHE-MOVIE',
-                ]
+                ],
             ],
             'Parc Astérix' => [
                 [
@@ -499,7 +499,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Entrée Parc Astérix',
                     'reward_en' => 'Parc Asterix Ticket',
                     'reward_code' => 'ASTERIX-GAULOIS',
-                ]
+                ],
             ],
             'Puy du Fou' => [
                 [
@@ -520,7 +520,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Pass Séjour Puy du Fou',
                     'reward_en' => 'Puy du Fou Stay Pass',
                     'reward_code' => 'PUY-HISTOIRE',
-                ]
+                ],
             ],
             'Gaumont' => [
                 [
@@ -541,7 +541,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Affiche de film collector',
                     'reward_en' => 'Collector movie poster',
                     'reward_code' => 'GAUMONT-POSTER',
-                ]
+                ],
             ],
             'Air France' => [
                 [
@@ -562,7 +562,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Billet Aller-Retour Europe',
                     'reward_en' => 'Round-trip Ticket Europe',
                     'reward_code' => 'AIRFR-FLY',
-                ]
+                ],
             ],
             'SNCF' => [
                 [
@@ -583,7 +583,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Carte Avantage Adulte',
                     'reward_en' => 'Adult Discount Card',
                     'reward_code' => 'SNCF-TGV',
-                ]
+                ],
             ],
             'Club Med' => [
                 [
@@ -604,7 +604,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Bon Cadeau Séjour de 500€',
                     'reward_en' => '500€ Stay Voucher',
                     'reward_code' => 'CLUBMED-SUN',
-                ]
+                ],
             ],
             'Accor' => [
                 [
@@ -625,7 +625,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Nuit d\'hôtel offerte',
                     'reward_en' => 'Free Hotel Night',
                     'reward_code' => 'ACCOR-NIGHT',
-                ]
+                ],
             ],
             'Les Restos du Cœur' => [
                 [
@@ -646,7 +646,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Pin\'s Solidaire & Diplôme',
                     'reward_en' => 'Solidarity Pin & Diploma',
                     'reward_code' => 'RESTOS-HEART',
-                ]
+                ],
             ],
             'Secours Populaire' => [
                 [
@@ -667,7 +667,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'T-shirt Solidaire',
                     'reward_en' => 'Solidarity T-shirt',
                     'reward_code' => 'SPF-DON',
-                ]
+                ],
             ],
             'Emmaüs' => [
                 [
@@ -688,7 +688,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Bon de 50€ en boutique',
                     'reward_en' => '50€ Shop Voucher',
                     'reward_code' => 'EMMAUS-LIFE',
-                ]
+                ],
             ],
             'Croix-Rouge' => [
                 [
@@ -709,7 +709,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Formation PSC1 Offerte',
                     'reward_en' => 'Free First Aid Training',
                     'reward_code' => 'CROIX-R-PSC1',
-                ]
+                ],
             ],
 
             'Le Louvre' => [
@@ -731,7 +731,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Billet coupe-file',
                     'reward_en' => 'Skip-the-line ticket',
                     'reward_code' => 'LOUVRE-VIP-1',
-                ]
+                ],
             ],
             'Musée d\'Orsay' => [
                 [
@@ -752,7 +752,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Pass Annuel Duo',
                     'reward_en' => 'Annual Duo Pass',
                     'reward_code' => 'ORSAY-TIME',
-                ]
+                ],
             ],
             'Château de Versailles' => [
                 [
@@ -773,7 +773,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Visite Privée du Trianon',
                     'reward_en' => 'Private Tour of Trianon',
                     'reward_code' => 'VERSAILLES-SUN',
-                ]
+                ],
             ],
             'Centre Pompidou' => [
                 [
@@ -794,7 +794,7 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
                     'reward_fr' => 'Affiche Expo Temporaire',
                     'reward_en' => 'Temporary Expo Poster',
                     'reward_code' => 'BEAUBOURG-ART',
-                ]
+                ],
             ],
         ];
 
@@ -808,15 +808,8 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
             }
 
             foreach ($hunts as $data) {
-                $categoryReference = $this->getReference(CategoryFixtures::CATEGORY_REFERENCE_PREFIX . $data['category'], Category::class);
-                if (!$categoryReference) {
-                    throw new \RuntimeException(sprintf('Invalid category reference: %s', $data['category']));
-                }
-
-                $rarityReference = $this->getReference(RarityFixtures::RARITY_REFERENCE_PREFIX . $data['rarity'], Rarity::class);
-                if (!$rarityReference) {
-                    throw new \RuntimeException(sprintf('Invalid rarity reference: %s', $data['rarity']));
-                }
+                $categoryReference = $this->getReference(CategoryFixtures::CATEGORY_REFERENCE_PREFIX.$data['category'], Category::class);
+                $rarityReference = $this->getReference(RarityFixtures::RARITY_REFERENCE_PREFIX.$data['rarity'], Rarity::class);
 
                 $hunt = new Hunt();
                 $hunt->setCompany($company);
@@ -850,18 +843,18 @@ class HuntFixtures extends Fixture implements DependentFixtureInterface
 
                 $reward = new Reward();
                 $reward->setCode($data['reward_code']);
-                $cleanCompanyName = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $companyName));
-                $reward->setLink('https://' . $cleanCompanyName . '.com');
+                $cleanCompanyName = strtolower((string) preg_replace('/[^a-zA-Z0-9]/', '', $companyName));
+                $reward->setLink('https://'.$cleanCompanyName.'.com');
                 $reward->setEndDate((new \DateTime())->modify('+3 months'));
                 $hunt->setReward($reward);
 
                 $rewardTranslationFr = new RewardTranslation();
                 $rewardTranslationFr->setLocale('fr');
-                $rewardTranslationFr->setTitle($data['reward_fr']);
+                $rewardTranslationFr->setTitle((string) $data['reward_fr']);
 
                 $rewardTranslationEn = new RewardTranslation();
                 $rewardTranslationEn->setLocale('en');
-                $rewardTranslationEn->setTitle($data['reward_en']);
+                $rewardTranslationEn->setTitle((string) $data['reward_en']);
 
                 $reward->addRewardTranslation($rewardTranslationFr);
                 $reward->addRewardTranslation($rewardTranslationEn);

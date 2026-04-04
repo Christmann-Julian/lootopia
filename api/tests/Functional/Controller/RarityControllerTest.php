@@ -2,8 +2,8 @@
 
 namespace App\Tests\Functional\Controller;
 
-use App\DataFixtures\UserFixtures;
 use App\DataFixtures\RarityFixtures;
+use App\DataFixtures\UserFixtures;
 use App\Entity\Rarity;
 use App\Tests\Trait\FixtureAwareTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -39,7 +39,7 @@ class RarityControllerTest extends WebTestCase
         $this->client->request('GET', '/api/rarities', [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        
+
         $content = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertArrayHasKey('data', $content);
     }
@@ -90,8 +90,8 @@ class RarityControllerTest extends WebTestCase
                 'experienceGain' => 50,
                 'translations' => [
                     'fr' => 'Légendaire',
-                    'en' => 'Legendary'
-                ]
+                    'en' => 'Legendary',
+                ],
             ])
         );
 
@@ -106,7 +106,7 @@ class RarityControllerTest extends WebTestCase
     public function testUpdateRarityAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $rarity = $this->getRepository(Rarity::class)->findOneBy([]);
         if (!$rarity) {
             throw new \RuntimeException('No rarity found in database for testing.');
@@ -126,8 +126,8 @@ class RarityControllerTest extends WebTestCase
                 'experienceGain' => 100,
                 'translations' => [
                     'fr' => 'Mythique',
-                    'en' => 'Mythic'
-                ]
+                    'en' => 'Mythic',
+                ],
             ])
         );
 
@@ -144,7 +144,7 @@ class RarityControllerTest extends WebTestCase
     public function testDeleteRarityAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $rarity = $this->getRepository(Rarity::class)->findOneBy([]);
         if (!$rarity) {
             throw new \RuntimeException('No rarity found in database for testing.');

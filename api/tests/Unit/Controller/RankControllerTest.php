@@ -42,7 +42,7 @@ class RankControllerTest extends TestCase
         $rank->setLevel($level);
         $rank->setExperienceMin(0);
         $rank->setExperienceMax(100);
-        
+
         $reflection = new \ReflectionClass($rank);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
@@ -54,9 +54,9 @@ class RankControllerTest extends TestCase
     public function testList(): void
     {
         $request = new Request(['locale' => 'fr']);
-        
+
         $rank = clone $this->createRankMock(1, 1);
-        
+
         $this->rankRepository->expects($this->once())
             ->method('findBy')
             ->with([], ['level' => 'ASC'])
@@ -65,7 +65,7 @@ class RankControllerTest extends TestCase
         $response = $this->controller->list($this->rankRepository, $request);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertArrayHasKey('data', $content);
         $this->assertCount(1, $content['data']);
     }
@@ -82,7 +82,7 @@ class RankControllerTest extends TestCase
             ->willReturn($queryBuilder);
 
         $pagination->method('getItems')->willReturn([
-            $this->createRankMock(1, 1)
+            $this->createRankMock(1, 1),
         ]);
         $pagination->method('getCurrentPageNumber')->willReturn(1);
         $pagination->method('getItemNumberPerPage')->willReturn(10);
@@ -95,7 +95,7 @@ class RankControllerTest extends TestCase
         $response = $this->controller->adminList($this->rankRepository, $request, $this->paginator);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertArrayHasKey('meta', $content);
         $this->assertEquals(1, $content['meta']['total']);
     }
@@ -116,14 +116,14 @@ class RankControllerTest extends TestCase
             'experienceMin' => 0,
             'experienceMax' => 99,
             'level' => 1,
-            'translations' => ['fr' => 'Débutant', 'en' => 'Beginner']
+            'translations' => ['fr' => 'Débutant', 'en' => 'Beginner'],
         ]));
 
         $this->dtoValidator->expects($this->once())
             ->method('validate')
             ->with($this->isInstanceOf(CreateRankRequest::class));
 
-        $this->entityManager->expects($this->exactly(3))->method('persist'); 
+        $this->entityManager->expects($this->exactly(3))->method('persist');
         $this->entityManager->expects($this->once())->method('flush');
 
         $response = $this->controller->create($request, $this->entityManager, $this->dtoValidator);
@@ -144,8 +144,8 @@ class RankControllerTest extends TestCase
             'level' => 2,
             'translations' => [
                 'fr' => 'Nouveau rang fr',
-                'en' => 'New rank en'
-            ]
+                'en' => 'New rank en',
+            ],
         ]));
 
         $this->dtoValidator->expects($this->once())
@@ -159,7 +159,7 @@ class RankControllerTest extends TestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals(2, $rank->getLevel());
-        $this->assertEquals('Nouveau rang fr', $rank->getTranslation('fr')->getName());
+        $this->assertEquals('Nouveau rang fr', $rank->getTranslation('fr')?->getName());
     }
 
     public function testDeleteSuccess(): void
@@ -169,7 +169,7 @@ class RankControllerTest extends TestCase
         $this->entityManager->expects($this->once())
             ->method('remove')
             ->with($rank);
-        
+
         $this->entityManager->expects($this->once())
             ->method('flush');
 

@@ -5,6 +5,7 @@ namespace App\Tests\Unit\Controller;
 use App\Controller\UserController;
 use App\Entity\User;
 use App\Exception\ApiException;
+use App\Repository\CompanyRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Validator\DtoValidator;
@@ -22,7 +23,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use App\Repository\CompanyRepository;
 
 class UserControllerTest extends TestCase
 {

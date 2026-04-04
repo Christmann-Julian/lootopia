@@ -396,7 +396,7 @@ final class UserController extends AbstractController
 
         if ($dto->getCompany()) {
             $company = $user->getCompany();
-            
+
             if ($company) {
                 $company->setName($dto->getCompany());
             } else {

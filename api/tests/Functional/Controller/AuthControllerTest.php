@@ -27,7 +27,7 @@ class AuthControllerTest extends WebTestCase
         $hasher = self::getContainer()->get('security.user_password_hasher');
         $this->hasher = $hasher;
 
-        $this->addFixture(new UserFixtures($this->hasher));
+        $this->addFixture(UserFixtures::class);
         $this->executeFixtures();
     }
 
@@ -114,7 +114,6 @@ class AuthControllerTest extends WebTestCase
                 'company' => 'Test Corp',
                 'email' => $email,
                 'password' => 'Password123!',
-                'company' => 'Test Corp',
             ])
         );
 

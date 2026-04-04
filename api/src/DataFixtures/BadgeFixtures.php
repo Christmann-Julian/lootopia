@@ -15,76 +15,76 @@ class BadgeFixtures extends Fixture
     {
         $badgesData = [
             [
-                'ref'  => 'hunt_1',
+                'ref' => 'hunt_1',
                 'icon' => 'icon-hunt-beginner',
-                'fr'   => 'Chasseur débutant',
-                'en'   => 'Beginner Hunter',
+                'fr' => 'Chasseur débutant',
+                'en' => 'Beginner Hunter',
             ],
             [
-                'ref'  => 'hunt_10',
+                'ref' => 'hunt_10',
                 'icon' => 'icon-hunt-expert',
-                'fr'   => 'Chasseur expert',
-                'en'   => 'Expert Hunter',
+                'fr' => 'Chasseur expert',
+                'en' => 'Expert Hunter',
             ],
             [
-                'ref'  => 'hunt_50',
+                'ref' => 'hunt_50',
                 'icon' => 'icon-hunt-legendary',
-                'fr'   => 'Chasseur légendaire',
-                'en'   => 'Legendary Hunter',
+                'fr' => 'Chasseur légendaire',
+                'en' => 'Legendary Hunter',
             ],
             [
-                'ref'  => 'hunt_100',
+                'ref' => 'hunt_100',
                 'icon' => 'icon-hunt-mythic',
-                'fr'   => 'Chasseur mythique',
-                'en'   => 'Mythic Hunter',
+                'fr' => 'Chasseur mythique',
+                'en' => 'Mythic Hunter',
             ],
             [
-                'ref'  => 'reward_1',
+                'ref' => 'reward_1',
                 'icon' => 'icon-reward-first',
-                'fr'   => 'Premier butin',
-                'en'   => 'First Loot',
+                'fr' => 'Premier butin',
+                'en' => 'First Loot',
             ],
             [
-                'ref'  => 'reward_10',
+                'ref' => 'reward_10',
                 'icon' => 'icon-reward-treasure',
-                'fr'   => 'Chasseur de trésors',
-                'en'   => 'Treasure Hunter',
+                'fr' => 'Chasseur de trésors',
+                'en' => 'Treasure Hunter',
             ],
             [
-                'ref'  => 'reward_50',
+                'ref' => 'reward_50',
                 'icon' => 'icon-reward-relic',
-                'fr'   => 'Collectionneur de reliques',
-                'en'   => 'Relic Collector',
+                'fr' => 'Collectionneur de reliques',
+                'en' => 'Relic Collector',
             ],
             [
-                'ref'  => 'reward_100',
+                'ref' => 'reward_100',
                 'icon' => 'icon-reward-master',
-                'fr'   => 'Maître des butins',
-                'en'   => 'Loot Master',
+                'fr' => 'Maître des butins',
+                'en' => 'Loot Master',
             ],
             [
-                'ref'  => 'time_1w',
+                'ref' => 'time_1w',
                 'icon' => 'icon-time-week',
-                'fr'   => 'Survivant d\'1 semaine',
-                'en'   => '1 Week Survivor',
+                'fr' => 'Survivant d\'1 semaine',
+                'en' => '1 Week Survivor',
             ],
             [
-                'ref'  => 'time_1m',
+                'ref' => 'time_1m',
                 'icon' => 'icon-time-month',
-                'fr'   => 'Explorateur d\'1 mois',
-                'en'   => '1 Month Explorer',
+                'fr' => 'Explorateur d\'1 mois',
+                'en' => '1 Month Explorer',
             ],
             [
-                'ref'  => 'time_1y',
+                'ref' => 'time_1y',
                 'icon' => 'icon-time-year',
-                'fr'   => 'Vétéran d\'1 an',
-                'en'   => '1 Year Veteran',
+                'fr' => 'Vétéran d\'1 an',
+                'en' => '1 Year Veteran',
             ],
             [
-                'ref'  => 'time_5y',
+                'ref' => 'time_5y',
                 'icon' => 'icon-time-legend',
-                'fr'   => 'Ancien de 5 ans',
-                'en'   => '5 Years Elder',
+                'fr' => 'Ancien de 5 ans',
+                'en' => '5 Years Elder',
             ],
         ];
 
@@ -107,7 +107,7 @@ class BadgeFixtures extends Fixture
             $manager->persist($translationEn);
             $manager->persist($badge);
 
-            $this->addReference(self::BADGE_REFERENCE_PREFIX . $data['ref'], $badge);
+            $this->addReference(self::BADGE_REFERENCE_PREFIX.$data['ref'], $badge);
         }
 
         $manager->flush();

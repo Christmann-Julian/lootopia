@@ -21,6 +21,11 @@ trait FixtureAwareTrait
             $fixture = static::getContainer()->get($fixture);
         }
 
+        // On garantit à l'analyseur statique et à PHP que $fixture est bien une FixtureInterface
+        if (!$fixture instanceof FixtureInterface) {
+            throw new \InvalidArgumentException(sprintf('The service "%s" must implement Doctrine\\Common\\DataFixtures\\FixtureInterface.', get_debug_type($fixture)));
+        }
+
         $this->getFixtureLoader()->addFixture($fixture);
     }
 
@@ -46,13 +51,21 @@ trait FixtureAwareTrait
     {
         if (!$this->fixtureLoader) {
             $container = static::getContainer();
-            
+
             $this->fixtureLoader = new class($container) extends Loader {
-                public function __construct(private ContainerInterface $container) {}
+                public function __construct(private ContainerInterface $container)
+                {
+                }
 
                 protected function createFixture(string $class): FixtureInterface
                 {
-                    return $this->container->get($class);
+                    $fixture = $this->container->get($class);
+
+                    if (!$fixture instanceof FixtureInterface) {
+                        throw new \InvalidArgumentException(sprintf('The class "%s" must implement Doctrine\\Common\\DataFixtures\\FixtureInterface.', $class));
+                    }
+
+                    return $fixture;
                 }
             };
         }

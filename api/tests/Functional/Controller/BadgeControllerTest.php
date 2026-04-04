@@ -2,10 +2,9 @@
 
 namespace App\Tests\Functional\Controller;
 
+use App\DataFixtures\BadgeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Badge;
-use App\Entity\User;
-use App\DataFixtures\BadgeFixtures;
 use App\Tests\Trait\FixtureAwareTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -40,7 +39,7 @@ class BadgeControllerTest extends WebTestCase
         $this->client->request('GET', '/api/badges', [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        
+
         $content = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertArrayHasKey('data', $content);
     }
@@ -90,8 +89,8 @@ class BadgeControllerTest extends WebTestCase
                 'icon' => 'fa-star',
                 'translations' => [
                     'fr' => 'Étoile',
-                    'en' => 'Star'
-                ]
+                    'en' => 'Star',
+                ],
             ])
         );
 
@@ -124,8 +123,8 @@ class BadgeControllerTest extends WebTestCase
                 'icon' => 'fa-updated',
                 'translations' => [
                     'fr' => 'Mis à jour',
-                    'en' => 'Updated'
-                ]
+                    'en' => 'Updated',
+                ],
             ])
         );
 
@@ -141,7 +140,7 @@ class BadgeControllerTest extends WebTestCase
     public function testDeleteBadgeAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $badge = $this->getRepository(Badge::class)->findOneBy([]);
         if (!$badge) {
             throw new \RuntimeException('No badge found in database for testing.');

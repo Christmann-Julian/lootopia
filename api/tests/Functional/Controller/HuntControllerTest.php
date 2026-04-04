@@ -13,14 +13,12 @@ use App\Tests\Trait\FixtureAwareTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class HuntControllerTest extends WebTestCase
 {
     use FixtureAwareTrait;
 
     private KernelBrowser $client;
-    private UserPasswordHasherInterface $hasher;
 
     protected function setUp(): void
     {
@@ -28,12 +26,12 @@ class HuntControllerTest extends WebTestCase
         $this->client = self::createClient();
 
         $container = self::getContainer();
-        
-        $this->addFixture($container->get(UserFixtures::class));
-        $this->addFixture($container->get(CategoryFixtures::class));
-        $this->addFixture($container->get(RarityFixtures::class));
-        $this->addFixture($container->get(HuntFixtures::class));
-        
+
+        $this->addFixture(UserFixtures::class);
+        $this->addFixture(CategoryFixtures::class);
+        $this->addFixture(RarityFixtures::class);
+        $this->addFixture(HuntFixtures::class);
+
         $this->executeFixtures();
     }
 
@@ -44,7 +42,7 @@ class HuntControllerTest extends WebTestCase
         $this->client->request('GET', '/api/hunts', [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        
+
         $content = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertArrayHasKey('data', $content);
     }
@@ -71,17 +69,17 @@ class HuntControllerTest extends WebTestCase
     public function testGetHuntDetails(): void
     {
         $token = $this->getJwtToken('user@lootopia.fr', 'user');
-        
+
         $hunt = $this->getRepository(Hunt::class)->findOneBy([]);
         if (!$hunt) {
             $this->markTestSkipped('No hunt found in database for testing.');
         }
 
         $this->client->request(
-            'GET', 
-            '/api/hunts/'.$hunt->getId(), 
-            [], 
-            [], 
+            'GET',
+            '/api/hunts/'.$hunt->getId(),
+            [],
+            [],
             ['HTTP_AUTHORIZATION' => 'Bearer '.$token]
         );
 
@@ -119,15 +117,15 @@ class HuntControllerTest extends WebTestCase
                         'description' => 'Description test',
                         'question' => 'Question ?',
                         'answer' => 'Réponse',
-                        'location' => 'Paris'
+                        'location' => 'Paris',
                     ],
                     'en' => [
                         'title' => 'Test Hunt',
                         'description' => 'Test description',
                         'question' => 'Question?',
                         'answer' => 'Answer',
-                        'location' => 'Paris'
-                    ]
+                        'location' => 'Paris',
+                    ],
                 ],
                 'reward' => [
                     'code' => 'TESTPROMO',
@@ -135,9 +133,9 @@ class HuntControllerTest extends WebTestCase
                     'endDate' => '2026-12-31 23:59:59',
                     'translations' => [
                         'fr' => 'Récompense Test',
-                        'en' => 'Test Reward'
-                    ]
-                ]
+                        'en' => 'Test Reward',
+                    ],
+                ],
             ])
         );
 
@@ -147,10 +145,10 @@ class HuntControllerTest extends WebTestCase
     public function testUpdateHuntAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $hunt = $this->getRepository(Hunt::class)->findOneBy([]);
         $rarity = $this->getRepository(Rarity::class)->findOneBy([]);
-        
+
         if (!$hunt || !$rarity) {
             $this->markTestSkipped('No hunt or rarity found in database for testing.');
         }
@@ -174,16 +172,16 @@ class HuntControllerTest extends WebTestCase
                         'description' => 'Modifié',
                         'question' => 'Q?',
                         'answer' => 'R',
-                        'location' => 'Lyon'
+                        'location' => 'Lyon',
                     ],
                     'en' => [
                         'title' => 'Modified Hunt',
                         'description' => 'Modified',
                         'question' => 'Q?',
                         'answer' => 'A',
-                        'location' => 'Lyon'
-                    ]
-                ]
+                        'location' => 'Lyon',
+                    ],
+                ],
             ])
         );
 
@@ -199,7 +197,7 @@ class HuntControllerTest extends WebTestCase
     public function testDeleteHuntAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $hunt = $this->getRepository(Hunt::class)->findOneBy([]);
         if (!$hunt) {
             $this->markTestSkipped('No hunt found in database for testing.');

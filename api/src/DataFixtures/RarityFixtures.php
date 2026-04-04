@@ -64,7 +64,7 @@ class RarityFixtures extends Fixture
             $manager->persist($translationEn);
             $manager->persist($rarity);
 
-            $this->addReference(self::RARITY_REFERENCE_PREFIX . $data['ref'], $rarity);
+            $this->addReference(self::RARITY_REFERENCE_PREFIX.$data['ref'], $rarity);
         }
 
         $manager->flush();

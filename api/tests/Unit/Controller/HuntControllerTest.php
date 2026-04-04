@@ -77,7 +77,7 @@ class HuntControllerTest extends TestCase
         $hunt = new Hunt();
         $hunt->setLat(48.0);
         $hunt->setLon(2.0);
-        
+
         $reflection = new \ReflectionClass($hunt);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
@@ -127,7 +127,7 @@ class HuntControllerTest extends TestCase
         $response = $this->controller->listAdmin($this->huntRepository, $request, $this->paginator);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertArrayHasKey('meta', $content);
     }
 
@@ -161,7 +161,7 @@ class HuntControllerTest extends TestCase
         $this->rarityRepository->method('find')->willReturn(null);
 
         $this->expectException(ApiException::class);
-        
+
         $this->controller->create(
             $request,
             $this->entityManager,
@@ -188,7 +188,7 @@ class HuntControllerTest extends TestCase
                     'description' => 'Trouvez le trésor caché en répondant à la question.',
                     'question' => 'Question ?',
                     'answer' => 'Réponse',
-                    'location' => 'Paris'
+                    'location' => 'Paris',
                 ],
 
                 'en' => [
@@ -196,16 +196,16 @@ class HuntControllerTest extends TestCase
                     'description' => 'Desc',
                     'question' => 'Q',
                     'answer' => 'A',
-                    'location' => 'Loc'
-                ]
+                    'location' => 'Loc',
+                ],
             ],
             'reward' => [
                 'code' => 'CODE',
                 'translations' => [
                     'fr' => 'Récompense Test',
-                    'en' => 'Test Reward'
-                ]
-            ]
+                    'en' => 'Test Reward',
+                ],
+            ],
         ]));
 
         $rarity = new Rarity();
@@ -273,16 +273,16 @@ class HuntControllerTest extends TestCase
                     'description' => 'Trouvez le trésor caché en répondant à la question.',
                     'question' => 'Question ?',
                     'answer' => 'Réponse',
-                    'location' => 'Lyon'
+                    'location' => 'Lyon',
                 ],
                 'en' => [
                     'title' => 'New Title',
                     'description' => 'New Desc',
                     'question' => 'New Q',
                     'answer' => 'New A',
-                    'location' => 'New Loc'
-                ]
-            ]
+                    'location' => 'New Loc',
+                ],
+            ],
         ]));
 
         $this->rarityRepository->method('find')->willReturn(new Rarity());

@@ -15,58 +15,58 @@ class CategoryFixtures extends Fixture
     {
         $categoriesData = [
             [
-                'ref'  => 'food_bev',
+                'ref' => 'food_bev',
                 'icon' => 'icon-food-bev',
-                'fr'   => 'Restauration',
-                'en'   => 'Food',
+                'fr' => 'Restauration',
+                'en' => 'Food',
             ],
             [
-                'ref'  => 'fashion_beauty',
+                'ref' => 'fashion_beauty',
                 'icon' => 'icon-fashion-beauty',
-                'fr'   => 'Mode & Beauté',
-                'en'   => 'Fashion & Beauty',
+                'fr' => 'Mode & Beauté',
+                'en' => 'Fashion & Beauty',
             ],
             [
-                'ref'  => 'retail',
+                'ref' => 'retail',
                 'icon' => 'icon-retail',
-                'fr'   => 'Commerce',
-                'en'   => 'Retail',
+                'fr' => 'Commerce',
+                'en' => 'Retail',
             ],
             [
-                'ref'  => 'sport_outdoor',
+                'ref' => 'sport_outdoor',
                 'icon' => 'icon-sport-outdoor',
-                'fr'   => 'Sport & Plein air',
-                'en'   => 'Sports & Outdoors',
+                'fr' => 'Sport & Plein air',
+                'en' => 'Sports & Outdoors',
             ],
             [
-                'ref'  => 'tech',
+                'ref' => 'tech',
                 'icon' => 'icon-tech',
-                'fr'   => 'Technologie',
-                'en'   => 'Tech',
+                'fr' => 'Technologie',
+                'en' => 'Tech',
             ],
             [
-                'ref'  => 'entertainment',
+                'ref' => 'entertainment',
                 'icon' => 'icon-entertainment',
-                'fr'   => 'Loisirs',
-                'en'   => 'Entertainment',
+                'fr' => 'Loisirs',
+                'en' => 'Entertainment',
             ],
             [
-                'ref'  => 'tourism',
+                'ref' => 'tourism',
                 'icon' => 'icon-tourism',
-                'fr'   => 'Tourisme',
-                'en'   => 'Tourism',
+                'fr' => 'Tourisme',
+                'en' => 'Tourism',
             ],
             [
-                'ref'  => 'charity',
+                'ref' => 'charity',
                 'icon' => 'icon-charity',
-                'fr'   => 'Associations & ONG',
-                'en'   => 'Charity & NGOs',
+                'fr' => 'Associations & ONG',
+                'en' => 'Charity & NGOs',
             ],
             [
-                'ref'  => 'culture',
+                'ref' => 'culture',
                 'icon' => 'icon-culture',
-                'fr'   => 'Culture & Arts',
-                'en'   => 'Culture & Arts',
+                'fr' => 'Culture & Arts',
+                'en' => 'Culture & Arts',
             ],
         ];
 
@@ -89,7 +89,7 @@ class CategoryFixtures extends Fixture
             $manager->persist($translationEn);
             $manager->persist($category);
 
-            $this->addReference(self::CATEGORY_REFERENCE_PREFIX . $data['ref'], $category);
+            $this->addReference(self::CATEGORY_REFERENCE_PREFIX.$data['ref'], $category);
         }
 
         $manager->flush();

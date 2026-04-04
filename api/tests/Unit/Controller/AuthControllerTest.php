@@ -4,6 +4,7 @@ namespace App\Tests\Unit\Controller;
 
 use App\Controller\AuthController;
 use App\Dto\User\RegisterUserRequest;
+use App\Entity\Company;
 use App\Entity\RefreshToken;
 use App\Entity\User;
 use App\Exception\ApiException;
@@ -21,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use App\Entity\Company;
 
 class AuthControllerTest extends TestCase
 {
@@ -184,11 +184,12 @@ class AuthControllerTest extends TestCase
             ->method('persist')
             ->with($this->callback(function ($entity) {
                 if ($entity instanceof User) {
-                    return $entity->getEmail() === 'john@doe.com';
+                    return 'john@doe.com' === $entity->getEmail();
                 }
                 if ($entity instanceof Company) {
-                    return $entity->getName() === 'Corp';
+                    return 'Corp' === $entity->getName();
                 }
+
                 return false;
             }));
 

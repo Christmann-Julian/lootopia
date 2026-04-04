@@ -2,11 +2,10 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Badge;
 use App\Entity\Company;
-use App\Entity\Category;
 use App\Entity\Rank;
 use App\Entity\User;
-use App\Entity\Badge;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -21,19 +20,19 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $rankLevel1 = $this->getReference(RankFixtures::RANK_REFERENCE_PREFIX . '1', Rank::class);
-        $rankLevel4 = $this->getReference(RankFixtures::RANK_REFERENCE_PREFIX . '4', Rank::class);
-        $rankMax = $this->getReference(RankFixtures::RANK_REFERENCE_PREFIX . '10', Rank::class);
+        $rankLevel1 = $this->getReference(RankFixtures::RANK_REFERENCE_PREFIX.'1', Rank::class);
+        $rankLevel4 = $this->getReference(RankFixtures::RANK_REFERENCE_PREFIX.'4', Rank::class);
+        $rankMax = $this->getReference(RankFixtures::RANK_REFERENCE_PREFIX.'10', Rank::class);
 
         $allBadgeRefs = [
             'hunt_1', 'hunt_10', 'hunt_50', 'hunt_100',
             'reward_1', 'reward_10', 'reward_50', 'reward_100',
             'time_1w', 'time_1m', 'time_1y', 'time_5y',
         ];
-        
+
         $badges = [];
         foreach ($allBadgeRefs as $ref) {
-            $badges[$ref] = $this->getReference(BadgeFixtures::BADGE_REFERENCE_PREFIX . $ref, Badge::class);
+            $badges[$ref] = $this->getReference(BadgeFixtures::BADGE_REFERENCE_PREFIX.$ref, Badge::class);
         }
 
         $adminCompany = new Company();
@@ -86,15 +85,15 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($userTest);
 
         $brandsByCategory = [
-            'food_bev'       => ['Danone', 'Paul', 'Burger King', 'Red Bull'],
+            'food_bev' => ['Danone', 'Paul', 'Burger King', 'Red Bull'],
             'fashion_beauty' => ['L\'Oréal', 'Chanel', 'Sephora', 'Yves Rocher'],
-            'retail'         => ['Carrefour', 'E.Leclerc', 'Fnac', 'Auchan'],
-            'sport_outdoor'  => ['Decathlon', 'Salomon', 'Rossignol', 'Le Coq Sportif'],
-            'tech'           => ['Orange', 'Free', 'Boulanger', 'LDLC'],
-            'entertainment'  => ['Pathé', 'Parc Astérix', 'Puy du Fou', 'Gaumont'],
-            'tourism'        => ['Air France', 'SNCF', 'Club Med', 'Accor'],
-            'charity'        => ['Les Restos du Cœur', 'Secours Populaire', 'Emmaüs', 'Croix-Rouge'],
-            'culture'        => ['Le Louvre', 'Musée d\'Orsay', 'Château de Versailles', 'Centre Pompidou'],
+            'retail' => ['Carrefour', 'E.Leclerc', 'Fnac', 'Auchan'],
+            'sport_outdoor' => ['Decathlon', 'Salomon', 'Rossignol', 'Le Coq Sportif'],
+            'tech' => ['Orange', 'Free', 'Boulanger', 'LDLC'],
+            'entertainment' => ['Pathé', 'Parc Astérix', 'Puy du Fou', 'Gaumont'],
+            'tourism' => ['Air France', 'SNCF', 'Club Med', 'Accor'],
+            'charity' => ['Les Restos du Cœur', 'Secours Populaire', 'Emmaüs', 'Croix-Rouge'],
+            'culture' => ['Le Louvre', 'Musée d\'Orsay', 'Château de Versailles', 'Centre Pompidou'],
         ];
 
         foreach ($brandsByCategory as $brands) {
@@ -106,7 +105,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
                 $user = new User();
                 $user->setFirstname('Contact');
                 $user->setLastname($brandName);
-                
+
                 $email = sprintf('contact@%s.fr', $this->normalizeForEmail($brandName));
                 $user->setEmail($email);
                 $user->setPseudo($brandName);
@@ -118,7 +117,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
                 $user->setIsVerified(true);
                 $user->setCompany($company);
                 $user->setRank($rankLevel1);
-                
+
                 $manager->persist($user);
             }
         }
@@ -164,7 +163,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     private function normalizeForEmail(string $text): string
     {
         $text = iconv('UTF-8', 'ASCII//TRANSLIT', $text);
-        $text = strtolower($text);
+        $text = strtolower((string) $text);
         $text = preg_replace('/[^a-z0-9]/', '', (string) $text);
 
         return (string) $text;

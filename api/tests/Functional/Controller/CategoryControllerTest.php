@@ -2,8 +2,8 @@
 
 namespace App\Tests\Functional\Controller;
 
-use App\DataFixtures\UserFixtures;
 use App\DataFixtures\CategoryFixtures;
+use App\DataFixtures\UserFixtures;
 use App\Entity\Category;
 use App\Tests\Trait\FixtureAwareTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -39,7 +39,7 @@ class CategoryControllerTest extends WebTestCase
         $this->client->request('GET', '/api/categories', [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        
+
         $content = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertArrayHasKey('data', $content);
     }
@@ -89,8 +89,8 @@ class CategoryControllerTest extends WebTestCase
                 'icon' => 'fa-shield',
                 'translations' => [
                     'fr' => 'Bouclier',
-                    'en' => 'Shield'
-                ]
+                    'en' => 'Shield',
+                ],
             ])
         );
 
@@ -104,7 +104,7 @@ class CategoryControllerTest extends WebTestCase
     public function testUpdateCategoryAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $category = $this->getRepository(Category::class)->findOneBy([]);
         if (!$category) {
             throw new \RuntimeException('No category found in database for testing.');
@@ -123,8 +123,8 @@ class CategoryControllerTest extends WebTestCase
                 'icon' => 'fa-sword',
                 'translations' => [
                     'fr' => 'Épée',
-                    'en' => 'Sword'
-                ]
+                    'en' => 'Sword',
+                ],
             ])
         );
 
@@ -140,7 +140,7 @@ class CategoryControllerTest extends WebTestCase
     public function testDeleteCategoryAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $category = $this->getRepository(Category::class)->findOneBy([]);
         if (!$category) {
             throw new \RuntimeException('No category found in database for testing.');

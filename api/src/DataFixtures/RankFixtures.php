@@ -107,7 +107,7 @@ class RankFixtures extends Fixture
             $manager->persist($translationEn);
             $manager->persist($rank);
 
-            $this->addReference(self::RANK_REFERENCE_PREFIX . $data['level'], $rank);
+            $this->addReference(self::RANK_REFERENCE_PREFIX.$data['level'], $rank);
         }
 
         $manager->flush();

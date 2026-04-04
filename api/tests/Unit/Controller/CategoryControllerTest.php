@@ -40,7 +40,7 @@ class CategoryControllerTest extends TestCase
     {
         $category = new Category();
         $category->setIcon($icon);
-        
+
         $reflection = new \ReflectionClass($category);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
@@ -52,9 +52,9 @@ class CategoryControllerTest extends TestCase
     public function testList(): void
     {
         $request = new Request(['locale' => 'fr']);
-        
+
         $category = clone $this->createCategoryMock(1, 'fa-shield');
-        
+
         $this->categoryRepository->expects($this->once())
             ->method('findAll')
             ->willReturn([$category]);
@@ -62,7 +62,7 @@ class CategoryControllerTest extends TestCase
         $response = $this->controller->list($this->categoryRepository, $request);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertArrayHasKey('data', $content);
         $this->assertCount(1, $content['data']);
     }
@@ -79,7 +79,7 @@ class CategoryControllerTest extends TestCase
             ->willReturn($queryBuilder);
 
         $pagination->method('getItems')->willReturn([
-            $this->createCategoryMock(1, 'fa-shield')
+            $this->createCategoryMock(1, 'fa-shield'),
         ]);
         $pagination->method('getCurrentPageNumber')->willReturn(1);
         $pagination->method('getItemNumberPerPage')->willReturn(10);
@@ -92,7 +92,7 @@ class CategoryControllerTest extends TestCase
         $response = $this->controller->adminList($this->categoryRepository, $request, $this->paginator);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertArrayHasKey('meta', $content);
         $this->assertEquals(1, $content['meta']['total']);
     }
@@ -105,20 +105,22 @@ class CategoryControllerTest extends TestCase
         $response = $this->controller->getDetails($category, $request);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $content = json_decode((string) $response->getContent(), true);
+        $this->assertEquals('fa-sword', $content['icon']);
     }
 
     public function testCreateSuccess(): void
     {
         $request = new Request([], [], [], [], [], [], (string) json_encode([
             'icon' => 'fa-bow',
-            'translations' => ['fr' => 'Arc']
+            'translations' => ['fr' => 'Arc'],
         ]));
 
         $this->dtoValidator->expects($this->once())
             ->method('validate')
             ->with($this->isInstanceOf(CreateCategoryRequest::class));
 
-        $this->entityManager->expects($this->exactly(2))->method('persist'); 
+        $this->entityManager->expects($this->exactly(2))->method('persist');
         $this->entityManager->expects($this->once())->method('flush');
 
         $response = $this->controller->create($request, $this->entityManager, $this->dtoValidator);
@@ -137,8 +139,8 @@ class CategoryControllerTest extends TestCase
             'icon' => 'fa-new',
             'translations' => [
                 'fr' => 'New name',
-                'en' => 'New name EN'
-            ]
+                'en' => 'New name EN',
+            ],
         ]));
 
         $this->dtoValidator->expects($this->once())
@@ -152,7 +154,7 @@ class CategoryControllerTest extends TestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals('fa-new', $category->getIcon());
-        $this->assertEquals('New name', $category->getTranslation('fr')->getName());
+        $this->assertEquals('New name', $category->getTranslation('fr')?->getName());
     }
 
     public function testDeleteSuccess(): void
@@ -162,7 +164,7 @@ class CategoryControllerTest extends TestCase
         $this->entityManager->expects($this->once())
             ->method('remove')
             ->with($category);
-        
+
         $this->entityManager->expects($this->once())
             ->method('flush');
 

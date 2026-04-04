@@ -71,7 +71,7 @@ class RewardControllerTest extends TestCase
     {
         $reward = new Reward();
         $reward->setCode($code);
-        
+
         $reflection = new \ReflectionClass($reward);
         $property = $reflection->getProperty('id');
         $property->setAccessible(true);
@@ -97,7 +97,7 @@ class RewardControllerTest extends TestCase
             ->willReturn($queryBuilder);
 
         $pagination->method('getItems')->willReturn([
-            $this->createRewardMock(1, 'PROMO1')
+            $this->createRewardMock(1, 'PROMO1'),
         ]);
         $pagination->method('getCurrentPageNumber')->willReturn(1);
         $pagination->method('getItemNumberPerPage')->willReturn(10);
@@ -110,7 +110,7 @@ class RewardControllerTest extends TestCase
         $response = $this->controller->list($this->rewardRepository, $request, $this->paginator);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $content = json_decode($response->getContent(), true);
+        $content = json_decode((string) $response->getContent(), true);
         $this->assertArrayHasKey('meta', $content);
     }
 
@@ -155,8 +155,8 @@ class RewardControllerTest extends TestCase
             'code' => 'NEWPROMO',
             'translations' => [
                 'fr' => 'Nouveau titre fr',
-                'en' => 'New title en'
-            ]
+                'en' => 'New title en',
+            ],
         ]));
 
         $this->dtoValidator->expects($this->once())
@@ -170,16 +170,16 @@ class RewardControllerTest extends TestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals('NEWPROMO', $reward->getCode());
-        $this->assertEquals('Nouveau titre fr', $reward->getTranslation('fr')->getTitle());
+        $this->assertEquals('Nouveau titre fr', $reward->getTranslation('fr')?->getTitle());
     }
 
     public function testUpdateSuccessAsCompanyOwner(): void
     {
         $company = new Company();
-        
+
         $user = new User();
         $user->setCompany($company);
-        
+
         $hunt = new Hunt();
         $hunt->setCompany($company);
 
@@ -194,8 +194,8 @@ class RewardControllerTest extends TestCase
             'endDate' => (new \DateTime('+1 day'))->format('Y-m-d\TH:i:sP'),
             'translations' => [
                 'fr' => 'Titre mis à jour',
-                'en' => 'Updated title'
-            ]
+                'en' => 'Updated title',
+            ],
         ]));
 
         $this->dtoValidator->expects($this->once())->method('validate');

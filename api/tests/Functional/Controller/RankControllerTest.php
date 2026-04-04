@@ -2,8 +2,8 @@
 
 namespace App\Tests\Functional\Controller;
 
-use App\DataFixtures\UserFixtures;
 use App\DataFixtures\RankFixtures;
+use App\DataFixtures\UserFixtures;
 use App\Entity\Rank;
 use App\Tests\Trait\FixtureAwareTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -39,7 +39,7 @@ class RankControllerTest extends WebTestCase
         $this->client->request('GET', '/api/ranks', [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        
+
         $content = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertArrayHasKey('data', $content);
     }
@@ -91,8 +91,8 @@ class RankControllerTest extends WebTestCase
                 'level' => 1,
                 'translations' => [
                     'fr' => 'Débutant',
-                    'en' => 'Beginner'
-                ]
+                    'en' => 'Beginner',
+                ],
             ])
         );
 
@@ -107,7 +107,7 @@ class RankControllerTest extends WebTestCase
     public function testUpdateRankAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $rank = $this->getRepository(Rank::class)->findOneBy([]);
         if (!$rank) {
             throw new \RuntimeException('No rank found in database for testing.');
@@ -128,8 +128,8 @@ class RankControllerTest extends WebTestCase
                 'level' => 2,
                 'translations' => [
                     'fr' => 'Initié',
-                    'en' => 'Initiate'
-                ]
+                    'en' => 'Initiate',
+                ],
             ])
         );
 
@@ -146,7 +146,7 @@ class RankControllerTest extends WebTestCase
     public function testDeleteRankAsAdmin(): void
     {
         $token = $this->getJwtToken('admin@lootopia.fr', 'admin');
-        
+
         $rank = $this->getRepository(Rank::class)->findOneBy([]);
         if (!$rank) {
             throw new \RuntimeException('No rank found in database for testing.');
