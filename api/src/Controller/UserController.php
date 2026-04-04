@@ -394,22 +394,27 @@ final class UserController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, 'Validation failed', ['email' => [$translator->trans('user_already_exists', [], 'validators')]]);
         }
 
-        $company = $companyRepository->findOneBy(['name' => $dto->getCompany()]);
-
         if ($dto->getCompany()) {
-            if (null === $company) {
-                $company = new Company();
+            $company = $user->getCompany();
+            
+            if ($company) {
                 $company->setName($dto->getCompany());
-                $em->persist($company);
             } else {
-                $company->setName($dto->getCompany());
+                $company = $companyRepository->findOneBy(['name' => $dto->getCompany()]);
+                if (null === $company) {
+                    $company = new Company();
+                    $company->setName($dto->getCompany());
+                    $em->persist($company);
+                } else {
+                    $company->setName($dto->getCompany());
+                }
+                $user->setCompany($company);
             }
         }
 
         $user->setFirstname($dto->getFirstname())
             ->setLastname($dto->getLastname())
             ->setEmail($dto->getEmail())
-            ->setCompany($company)
             ->setPseudo($dto->getPseudo());
 
         if ($isAdmin) {
