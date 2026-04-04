@@ -119,6 +119,8 @@ class UserControllerTest extends WebTestCase
             (string) json_encode([
                 'firstname' => 'New',
                 'lastname' => 'AdminCreated',
+                'pseudo' => 'AdminCreated',
+                'company' => 'Created Company',
                 'email' => 'created@test.com',
                 'password' => 'Password123!',
                 'roles' => ['ROLE_USER'],
@@ -155,6 +157,8 @@ class UserControllerTest extends WebTestCase
             (string) json_encode([
                 'firstname' => 'UpdatedName',
                 'lastname' => 'UpdatedLast',
+                'pseudo' => 'UpdatedPseudo',
+                'company' => 'Updated Company',
                 'email' => 'user@lootopia.fr',
                 'roles' => ['ROLE_ADMIN'],
                 'isVerified' => true,

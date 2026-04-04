@@ -19,7 +19,7 @@ class RewardTranslation
     #[ORM\Column(length: 5)]
     private ?string $locale = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rewardTranslations')]
+    #[ORM\ManyToOne(inversedBy: 'rewardTranslations', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Reward $reward = null;
 

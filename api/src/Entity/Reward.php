@@ -27,7 +27,7 @@ class Reward
     /**
      * @var Collection<int, RewardTranslation>
      */
-    #[ORM\OneToMany(targetEntity: RewardTranslation::class, mappedBy: 'reward', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: RewardTranslation::class, mappedBy: 'reward', orphanRemoval: true, cascade: ['persist'])]
     private Collection $rewardTranslations;
 
     #[ORM\OneToOne(inversedBy: 'reward', cascade: ['persist', 'remove'])]

@@ -24,7 +24,7 @@ class Hunt
     /**
      * @var Collection<int, HuntTranslation>
      */
-    #[ORM\OneToMany(targetEntity: HuntTranslation::class, mappedBy: 'hunt', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: HuntTranslation::class, mappedBy: 'hunt', orphanRemoval: true, cascade: ['persist'])]
     private Collection $huntTranslations;
 
     #[ORM\ManyToOne(inversedBy: 'hunts')]

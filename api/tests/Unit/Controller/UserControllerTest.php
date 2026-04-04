@@ -22,11 +22,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Repository\CompanyRepository;
 
 class UserControllerTest extends TestCase
 {
     private UserController $controller;
     private UserRepository&MockObject $userRepository;
+    private CompanyRepository&MockObject $companyRepository;
     private EntityManagerInterface&MockObject $entityManager;
     private DtoValidator&MockObject $dtoValidator;
     private EmailVerifier&MockObject $emailVerifier;
@@ -39,6 +41,7 @@ class UserControllerTest extends TestCase
     protected function setUp(): void
     {
         $this->userRepository = $this->createMock(UserRepository::class);
+        $this->companyRepository = $this->createMock(CompanyRepository::class);
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
         $this->dtoValidator = $this->createMock(DtoValidator::class);
         $this->emailVerifier = $this->createMock(EmailVerifier::class);
@@ -140,7 +143,6 @@ class UserControllerTest extends TestCase
     public function testUpdateSelfCannotChangeRoles(): void
     {
         $user = $this->setId(new User(), 1);
-        // CORRECTION 1: On initialise isVerified à true (ou false) pour éviter le TypeError
         $user->setEmail('me@test.com')->setRoles(['ROLE_USER'])->setIsVerified(true);
 
         $this->configureSecurity($user, false);
@@ -160,6 +162,7 @@ class UserControllerTest extends TestCase
             $request,
             $this->entityManager,
             $this->userRepository,
+            $this->companyRepository,
             $this->dtoValidator,
             $this->emailVerifier,
             $this->translator
@@ -190,6 +193,7 @@ class UserControllerTest extends TestCase
             $request,
             $this->entityManager,
             $this->userRepository,
+            $this->companyRepository,
             $this->dtoValidator,
             $this->emailVerifier,
             $this->translator
@@ -221,6 +225,7 @@ class UserControllerTest extends TestCase
             $request,
             $this->entityManager,
             $this->userRepository,
+            $this->companyRepository,
             $this->dtoValidator,
             $this->emailVerifier,
             $this->translator
@@ -255,6 +260,7 @@ class UserControllerTest extends TestCase
                 $request,
                 $this->entityManager,
                 $this->userRepository,
+                $this->companyRepository,
                 $this->dtoValidator,
                 $this->emailVerifier,
                 $this->translator

@@ -110,6 +110,8 @@ class AuthControllerTest extends WebTestCase
             (string) json_encode([
                 'firstname' => 'New',
                 'lastname' => 'User',
+                'pseudo' => 'NewUser',
+                'company' => 'Test Corp',
                 'email' => $email,
                 'password' => 'Password123!',
                 'company' => 'Test Corp',
@@ -127,9 +129,13 @@ class AuthControllerTest extends WebTestCase
     {
         $user = new User();
         $user->setEmail('unverified@test.com')
-             ->setFirstname('John')->setLastname('Doe')
-             ->setPassword($this->hasher->hashPassword($user, 'password'))
-             ->setIsVerified(false);
+            ->setPseudo('UnverifiedUser')
+            ->setExperience(0)
+            ->setHuntCount(0)
+            ->setRewardCount(0)
+            ->setFirstname('John')->setLastname('Doe')
+            ->setPassword($this->hasher->hashPassword($user, 'password'))
+            ->setIsVerified(false);
 
         $em = $this->getEntityManager();
         $em->persist($user);

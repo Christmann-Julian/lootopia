@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Entity\Company;
 
 class AuthControllerTest extends TestCase
 {
@@ -179,7 +180,18 @@ class AuthControllerTest extends TestCase
             ->method('hashPassword')
             ->willReturn('hashed_password');
 
-        $this->entityManager->expects($this->once())->method('persist')->with($this->isInstanceOf(User::class));
+        $this->entityManager->expects($this->exactly(2))
+            ->method('persist')
+            ->with($this->callback(function ($entity) {
+                if ($entity instanceof User) {
+                    return $entity->getEmail() === 'john@doe.com';
+                }
+                if ($entity instanceof Company) {
+                    return $entity->getName() === 'Corp';
+                }
+                return false;
+            }));
+
         $this->entityManager->expects($this->once())->method('flush');
 
         $this->emailVerifier->expects($this->once())

@@ -163,9 +163,9 @@ final class RewardController extends AbstractController
         $data = json_decode((string) $request->getContent(), true) ?? [];
 
         $dto = new UpdateRewardRequest(
-            $data['code'] ?? $reward->getCode(),
-            $data['link'] ?? $reward->getLink(),
-            $data['endDate'] ?? $reward->getEndDate()?->format('Y-m-d\TH:i:sP'),
+            $data['code'] ?? $reward->getCode() ?? '',
+            $data['link'] ?? $reward->getLink() ?? '',
+            $data['endDate'] ?? $reward->getEndDate()?->format('Y-m-d\TH:i:sP') ?? '',
             $data['translations'] ?? []
         );
 

@@ -58,7 +58,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $rewardCount = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Rank::class, inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     private ?Rank $rank = null;
 
     /**
