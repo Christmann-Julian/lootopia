@@ -60,7 +60,48 @@ final class RewardController extends AbstractController
             new OA\Parameter(name: 'direction', in: 'query', schema: new OA\Schema(type: 'string', default: 'asc')),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Paginated list of rewards'),
+            new OA\Response(
+                response: 200,
+                description: 'Paginated list of rewards',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'object',
+                                properties: [
+                                    new OA\Property(property: 'id', type: 'integer'),
+                                    new OA\Property(property: 'code', type: 'string'),
+                                    new OA\Property(property: 'link', type: 'string'),
+                                    new OA\Property(property: 'endDate', type: 'string', format: 'date-time'),
+                                    new OA\Property(property: 'huntId', type: 'integer'),
+                                    new OA\Property(property: 'title', type: 'string', nullable: true),
+                                    new OA\Property(
+                                        property: 'translations',
+                                        properties: [
+                                            new OA\Property(property: 'fr', type: 'string'),
+                                            new OA\Property(property: 'en', type: 'string'),
+                                        ],
+                                        type: 'object'
+                                    ),
+                                ]
+                            )
+                        ),
+                        new OA\Property(
+                            property: 'meta',
+                            properties: [
+                                new OA\Property(property: 'page', type: 'integer'),
+                                new OA\Property(property: 'limit', type: 'integer'),
+                                new OA\Property(property: 'total', type: 'integer'),
+                                new OA\Property(property: 'sort', type: 'string'),
+                                new OA\Property(property: 'direction', type: 'string'),
+                            ],
+                            type: 'object'
+                        ),
+                    ]
+                )
+            ),
             new OA\Response(response: 401, description: 'Unauthorized'),
         ]
     )]
@@ -87,7 +128,11 @@ final class RewardController extends AbstractController
             $queryBuilder,
             $page,
             $limit,
-            ['distinct' => true]
+            [
+                'sortFieldParameterName' => null,
+                'sortDirectionParameterName' => null,
+                'distinct' => true,
+            ]
         );
 
         $rewardsData = array_map(fn (Reward $r) => $r->toArray($locale), iterator_to_array($pagination->getItems()));
@@ -107,7 +152,28 @@ final class RewardController extends AbstractController
     #[OA\Get(
         summary: 'Get reward details',
         responses: [
-            new OA\Response(response: 200, description: 'Reward details'),
+            new OA\Response(
+                response: 200,
+                description: 'Reward details',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer'),
+                        new OA\Property(property: 'code', type: 'string'),
+                        new OA\Property(property: 'link', type: 'string'),
+                        new OA\Property(property: 'endDate', type: 'string', format: 'date-time'),
+                        new OA\Property(property: 'huntId', type: 'integer'),
+                        new OA\Property(property: 'title', type: 'string', nullable: true),
+                        new OA\Property(
+                            property: 'translations',
+                            properties: [
+                                new OA\Property(property: 'fr', type: 'string'),
+                                new OA\Property(property: 'en', type: 'string'),
+                            ],
+                            type: 'object'
+                        ),
+                    ]
+                )
+            ),
             new OA\Response(response: 403, description: 'Forbidden'),
             new OA\Response(response: 404, description: 'Reward not found'),
         ]

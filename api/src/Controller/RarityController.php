@@ -36,7 +36,38 @@ final class RarityController extends AbstractController
             new OA\Response(
                 response: 200,
                 description: 'List of rarities',
-                content: new OA\JsonContent(type: 'array', items: new OA\Items(type: 'object'))
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'object',
+                                properties: [
+                                    new OA\Property(property: 'id', type: 'integer'),
+                                    new OA\Property(property: 'minExperience', type: 'integer'),
+                                    new OA\Property(property: 'experienceGain', type: 'integer'),
+                                    new OA\Property(
+                                        property: 'name',
+                                        type: 'string',
+                                        description: 'Translation name for the requested locale. Null if "locale" is omitted or translation is missing.',
+                                        nullable: true
+                                    ),
+                                    new OA\Property(
+                                        property: 'translations',
+                                        type: 'object',
+                                        description: 'Dictionary of translations (locale => name). Present if "locale" is omitted.',
+                                        properties: [
+                                            new OA\Property(property: 'fr', type: 'string'),
+                                            new OA\Property(property: 'en', type: 'string'),
+                                        ]
+                                    ),
+                                ]
+                            )
+                        ),
+                    ],
+                    type: 'object'
+                )
             ),
         ]
     )]
@@ -68,8 +99,44 @@ final class RarityController extends AbstractController
                 description: 'Paginated list of rarities',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object')),
-                        new OA\Property(property: 'meta', type: 'object'),
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'object',
+                                properties: [
+                                    new OA\Property(property: 'id', type: 'integer'),
+                                    new OA\Property(property: 'minExperience', type: 'integer'),
+                                    new OA\Property(property: 'experienceGain', type: 'integer'),
+                                    new OA\Property(
+                                        property: 'name',
+                                        type: 'string',
+                                        description: 'Translation name for the requested locale. Null if "locale" is omitted or translation is missing.',
+                                        nullable: true
+                                    ),
+                                    new OA\Property(
+                                        property: 'translations',
+                                        type: 'object',
+                                        description: 'Dictionary of translations (locale => name). Present if "locale" is omitted.',
+                                        properties: [
+                                            new OA\Property(property: 'fr', type: 'string'),
+                                            new OA\Property(property: 'en', type: 'string'),
+                                        ]
+                                    ),
+                                ]
+                            )
+                        ),
+                        new OA\Property(
+                            property: 'meta',
+                            properties: [
+                                new OA\Property(property: 'page', type: 'integer'),
+                                new OA\Property(property: 'limit', type: 'integer'),
+                                new OA\Property(property: 'total', type: 'integer'),
+                                new OA\Property(property: 'sort', type: 'string'),
+                                new OA\Property(property: 'direction', type: 'string'),
+                            ],
+                            type: 'object'
+                        ),
                     ],
                     type: 'object'
                 )
@@ -130,7 +197,33 @@ final class RarityController extends AbstractController
             new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Rarity details'),
+            new OA\Response(
+                response: 200,
+                description: 'Rarity details',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer'),
+                        new OA\Property(property: 'minExperience', type: 'integer'),
+                        new OA\Property(property: 'experienceGain', type: 'integer'),
+                        new OA\Property(
+                            property: 'name',
+                            type: 'string',
+                            description: 'Translation name for the requested locale. Null if "locale" is omitted or translation is missing.',
+                            nullable: true
+                        ),
+                        new OA\Property(
+                            property: 'translations',
+                            type: 'object',
+                            description: 'Dictionary of translations (locale => name). Present if "locale" is omitted.',
+                            properties: [
+                                new OA\Property(property: 'fr', type: 'string'),
+                                new OA\Property(property: 'en', type: 'string'),
+                            ]
+                        ),
+                    ],
+                    type: 'object'
+                )
+            ),
             new OA\Response(response: 404, description: 'Rarity not found'),
         ]
     )]

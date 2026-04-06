@@ -55,7 +55,39 @@ final class HuntController extends AbstractController
                 description: 'List of all hunts',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object')),
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'object',
+                                properties: [
+                                    new OA\Property(property: 'id', type: 'integer'),
+                                    new OA\Property(property: 'lat', type: 'number', format: 'float'),
+                                    new OA\Property(property: 'lon', type: 'number', format: 'float'),
+                                    new OA\Property(property: 'category', type: 'string'),
+                                    new OA\Property(property: 'company', type: 'string'),
+                                    new OA\Property(
+                                        property: 'translations',
+                                        type: 'object',
+                                        properties: [
+                                            new OA\Property(property: 'title', type: 'string'),
+                                            new OA\Property(property: 'description', type: 'string'),
+                                            new OA\Property(property: 'question', type: 'string'),
+                                            new OA\Property(property: 'answer', type: 'string'),
+                                            new OA\Property(property: 'location', type: 'string'),
+                                        ]
+                                    ),
+                                    new OA\Property(
+                                        property: 'reward',
+                                        type: 'object',
+                                    ),
+                                    new OA\Property(
+                                        property: 'rarity',
+                                        type: 'object',
+                                    ),
+                                ]
+                            )
+                        ),
                     ],
                     type: 'object'
                 )
@@ -90,13 +122,47 @@ final class HuntController extends AbstractController
                 description: 'Paginated list of hunts',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object')),
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'object',
+                                properties: [
+                                    new OA\Property(property: 'id', type: 'integer'),
+                                    new OA\Property(property: 'lat', type: 'number', format: 'float'),
+                                    new OA\Property(property: 'lon', type: 'number', format: 'float'),
+                                    new OA\Property(property: 'category', type: 'string'),
+                                    new OA\Property(property: 'company', type: 'string'),
+                                    new OA\Property(
+                                        property: 'translations',
+                                        type: 'object',
+                                        properties: [
+                                            new OA\Property(property: 'title', type: 'string'),
+                                            new OA\Property(property: 'description', type: 'string'),
+                                            new OA\Property(property: 'question', type: 'string'),
+                                            new OA\Property(property: 'answer', type: 'string'),
+                                            new OA\Property(property: 'location', type: 'string'),
+                                        ]
+                                    ),
+                                    new OA\Property(
+                                        property: 'reward',
+                                        type: 'object',
+                                    ),
+                                    new OA\Property(
+                                        property: 'rarity',
+                                        type: 'object',
+                                    ),
+                                ]
+                            )
+                        ),
                         new OA\Property(
                             property: 'meta',
                             properties: [
                                 new OA\Property(property: 'page', type: 'integer'),
                                 new OA\Property(property: 'limit', type: 'integer'),
                                 new OA\Property(property: 'total', type: 'integer'),
+                                new OA\Property(property: 'sort', type: 'string'),
+                                new OA\Property(property: 'direction', type: 'string'),
                             ],
                             type: 'object'
                         ),
@@ -125,7 +191,16 @@ final class HuntController extends AbstractController
 
         $queryBuilder = $huntRepository->createSearchQueryBuilder($search, $sort, $direction, $companyId, $isAdmin);
 
-        $pagination = $paginator->paginate($queryBuilder, $page, $limit, ['distinct' => true]);
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $page,
+            $limit,
+            [
+                'sortFieldParameterName' => null,
+                'sortDirectionParameterName' => null,
+                'distinct' => true,
+            ]
+        );
         $huntsData = array_map(fn (Hunt $h) => $h->toArray($locale), iterator_to_array($pagination->getItems()));
 
         return new JsonResponse([
@@ -144,7 +219,39 @@ final class HuntController extends AbstractController
             new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Hunt details'),
+            new OA\Response(
+                response: 200,
+                description: 'Hunt details',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer'),
+                        new OA\Property(property: 'lat', type: 'number', format: 'float'),
+                        new OA\Property(property: 'lon', type: 'number', format: 'float'),
+                        new OA\Property(property: 'category', type: 'string'),
+                        new OA\Property(property: 'company', type: 'string'),
+                        new OA\Property(
+                            property: 'translations',
+                            type: 'object',
+                            properties: [
+                                new OA\Property(property: 'title', type: 'string'),
+                                new OA\Property(property: 'description', type: 'string'),
+                                new OA\Property(property: 'question', type: 'string'),
+                                new OA\Property(property: 'answer', type: 'string'),
+                                new OA\Property(property: 'location', type: 'string'),
+                            ]
+                        ),
+                        new OA\Property(
+                            property: 'reward',
+                            type: 'object',
+                        ),
+                        new OA\Property(
+                            property: 'rarity',
+                            type: 'object',
+                        ),
+                    ],
+                    type: 'object'
+                )
+            ),
             new OA\Response(response: 403, description: 'Forbidden'),
             new OA\Response(response: 404, description: 'Hunt not found'),
         ]

@@ -50,13 +50,26 @@ final class CategoryController extends AbstractController
                             property: 'data',
                             type: 'array',
                             items: new OA\Items(
+                                type: 'object',
                                 properties: [
                                     new OA\Property(property: 'id', type: 'integer'),
                                     new OA\Property(property: 'icon', type: 'string'),
-                                    new OA\Property(property: 'translations', type: 'object', additionalProperties: new OA\AdditionalProperties(type: 'string')),
-                                    new OA\Property(property: 'name', type: 'string', nullable: true),
-                                ],
-                                type: 'object'
+                                    new OA\Property(
+                                        property: 'name',
+                                        type: 'string',
+                                        description: 'Translation name for the requested locale. Null if "locale" is omitted or translation is missing.',
+                                        nullable: true
+                                    ),
+                                    new OA\Property(
+                                        property: 'translations',
+                                        type: 'object',
+                                        description: 'Dictionary of translations (locale => name). Present if "locale" is omitted.',
+                                        properties: [
+                                            new OA\Property(property: 'fr', type: 'string'),
+                                            new OA\Property(property: 'en', type: 'string'),
+                                        ]
+                                    ),
+                                ]
                             )
                         ),
                         new OA\Property(
@@ -130,7 +143,37 @@ final class CategoryController extends AbstractController
             new OA\Response(
                 response: 200,
                 description: 'List of categories',
-                content: new OA\JsonContent(type: 'array', items: new OA\Items(type: 'object'))
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'object',
+                                properties: [
+                                    new OA\Property(property: 'id', type: 'integer'),
+                                    new OA\Property(property: 'icon', type: 'string'),
+                                    new OA\Property(
+                                        property: 'name',
+                                        type: 'string',
+                                        description: 'Translation name for the requested locale. Null if "locale" is omitted or translation is missing.',
+                                        nullable: true
+                                    ),
+                                    new OA\Property(
+                                        property: 'translations',
+                                        type: 'object',
+                                        description: 'Dictionary of translations (locale => name). Present if "locale" is omitted.',
+                                        properties: [
+                                            new OA\Property(property: 'fr', type: 'string'),
+                                            new OA\Property(property: 'en', type: 'string'),
+                                        ]
+                                    ),
+                                ]
+                            )
+                        ),
+                    ],
+                    type: 'object'
+                )
             ),
         ]
     )]
@@ -153,7 +196,32 @@ final class CategoryController extends AbstractController
             new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Category details'),
+            new OA\Response(
+                response: 200,
+                description: 'Category details',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer'),
+                        new OA\Property(property: 'icon', type: 'string'),
+                        new OA\Property(
+                            property: 'name',
+                            type: 'string',
+                            description: 'Translation name for the requested locale. Null if "locale" is omitted or translation is missing.',
+                            nullable: true
+                        ),
+                        new OA\Property(
+                            property: 'translations',
+                            type: 'object',
+                            description: 'Dictionary of translations (locale => name). Present if "locale" is omitted.',
+                            properties: [
+                                new OA\Property(property: 'fr', type: 'string'),
+                                new OA\Property(property: 'en', type: 'string'),
+                            ]
+                        ),
+                    ],
+                    type: 'object'
+                )
+            ),
             new OA\Response(response: 404, description: 'Category not found'),
         ]
     )]
