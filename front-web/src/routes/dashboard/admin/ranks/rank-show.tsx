@@ -3,20 +3,20 @@ import DashboardHeader from "../../../../components/DashboardHeader";
 import { useTranslation } from "react-i18next";
 import { type MetaFunction, type LinksFunction, useParams } from "react-router";
 import i18n from "i18next";
-import type { UserShowData } from "../../../../types/ShowType";
 import type { ApiErrorResponse } from "../../../../types/ApiType";
 import { api } from "../../../../services/auth";
 import type { AxiosError } from "axios";
 import Show from "../../../../components/Show";
+import type { RankShowData } from "../../../../types/ShowType";
 
 export async function clientLoader({
   params,
 }: {
   params: { id: string };
-}): Promise<UserShowData | { error: string }> {
+}): Promise<RankShowData | { error: string }> {
   try {
     const { id } = params;
-    const response = await api.get(`/api/users/${id}`);
+    const response = await api.get(`/api/ranks/${id}`);
     return response.data;
   } catch (err: unknown) {
     const axiosError = err as AxiosError<ApiErrorResponse>;
@@ -27,7 +27,7 @@ export async function clientLoader({
 }
 
 export const meta: MetaFunction = () => [
-  { title: i18n.t("metaTitle", { title: i18n.t("users", { ns: "navigation" }), ns: "common" }) },
+  { title: i18n.t("metaTitle", { title: i18n.t("ranks", { ns: "navigation" }), ns: "common" }) },
 ];
 
 export const links: LinksFunction = () => [
@@ -38,35 +38,22 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "/assets/css/ui/toast.css" },
 ];
 
-export default function UserShow({ loaderData }: { loaderData: UserShowData | { error: string } }) {
+export default function RankShow({ loaderData }: { loaderData: RankShowData | { error: string } }) {
   const { t } = useTranslation(["show", "navigation", "common"]);
   const { lang } = useParams();
-  const data =
-    "roles" in loaderData
-      ? {
-          ...loaderData,
-          roles: loaderData.roles.join(", "),
-          rank: loaderData.rank
-            ? `${loaderData.rank.level} (Exp: ${loaderData.rank.experienceMin}-${loaderData.rank.experienceMax})`
-            : t("empty", { ns: "show" }),
-          badges: loaderData.badges
-            ? loaderData.badges
-                .map((badge) => badge.translations?.[lang || "en"] || badge.icon)
-                .join(", ")
-            : t("empty", { ns: "show" }),
-        }
-      : loaderData;
+
+  const data = "level" in loaderData ? { ...loaderData } : loaderData;
 
   return (
     <div className="container">
       <SideBar />
       <main className="main-content">
-        <DashboardHeader title={t("users", { ns: "navigation" })} />
+        <DashboardHeader title={t("ranks", { ns: "navigation" })} />
         <Show
-          title={t("titleDetails.user", { ns: "show" })}
+          title={t("titleDetails.rank", { ns: "show", defaultValue: "Rank Details" })}
           data={data}
-          backUrl={`/${lang}/dashboard/admin/users`}
-          editUrl={"id" in data ? `/${lang}/dashboard/admin/users/${data.id}/edit` : undefined}
+          backUrl={`/${lang}/dashboard/admin/ranks`}
+          editUrl={"id" in data ? `/${lang}/dashboard/admin/ranks/${data.id}/edit` : undefined}
         />
       </main>
     </div>

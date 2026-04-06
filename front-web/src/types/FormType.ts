@@ -1,6 +1,7 @@
 export type RegisterFormData = {
   firstname: string;
   lastname: string;
+  pseudo: string;
   email: string;
   company?: string;
   role: string;
@@ -27,6 +28,7 @@ export type EditUserFormData = {
   id: number;
   firstname: string;
   lastname: string;
+  pseudo: string;
   email: string;
   company?: string;
   roles: string[];
@@ -37,6 +39,7 @@ export type EditSettingsFormData = {
   id: number;
   firstname: string;
   lastname: string;
+  pseudo: string;
   email: string;
   company?: string;
 };
@@ -44,6 +47,7 @@ export type EditSettingsFormData = {
 export type CreateUserFormData = {
   firstname: string;
   lastname: string;
+  pseudo: string;
   email: string;
   company?: string;
   roles: string[];

@@ -1,6 +1,12 @@
 {
-    "title": {
-        "userDetails": "Détails de l'utilisateur"
+    "titleDetails": {
+        "user": "Détails de l'utilisateur",
+        "rarity": "Détails de la rareté",
+        "rank": "Détails du rang",
+        "badge": "Détails du badge",
+        "category": "Détails de la catégorie",
+        "hunt": "Détails de la chasse",
+        "reward": "Détails de la récompense"
     },
     "action": {
         "title": "Actions",
@@ -15,10 +21,40 @@
     "id": "ID",
     "lastname": "Nom",
     "firstname": "Prénom",
+    "pseudo": "Pseudo",
     "email": "Email",
     "company": "Entreprise",
+    "experience": "Expérience",
+    "huntCount": "Nombre de chasses",
+    "rewardCount": "Nombre de récompenses",
+    "rank": "Rang",
+    "badges": "Badges",
     "roles": "Rôles",
     "isVerified": "Vérifié",
     "createdAt": "Créé le",
-    "updatedAt": "Mis à jour le"
+    "updatedAt": "Mis à jour le",
+    "empty": "Aucun",
+    "icon": "Icône",
+    "name": "Nom",
+    "description": "Description",
+    "title": "Titre",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "minExperience": "XP minimale",
+    "maxExperience": "XP maximale",
+    "experienceMin": "XP minimale",
+    "experienceMax": "XP maximale",
+    "experienceGain": "XP gagnée",
+    "level": "Niveau",
+    "code": "Code",
+    "link": "Lien",
+    "huntId": "ID de la chasse",
+    "question": "Question",
+    "answer": "Réponse",
+    "location": "Emplacement",
+    "lat": "Latitude",
+    "lon": "Longitude",
+    "category": "Catégorie",
+    "reward": "Récompense",
+    "rarity": "Rareté"
 }

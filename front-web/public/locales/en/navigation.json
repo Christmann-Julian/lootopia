@@ -4,5 +4,10 @@
     "users": "Users",
     "settings": "Settings",
     "admin": "Admin",
-    "treasureHunts": "Treasure Hunts"
+    "hunts": "Treasure Hunts",
+    "rewards": "Rewards",
+    "categories": "Categories",
+    "rarities": "Rarities",
+    "badges": "Badges",
+    "ranks": "Ranks"
 }
