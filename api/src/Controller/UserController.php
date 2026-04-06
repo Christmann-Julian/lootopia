@@ -6,6 +6,7 @@ use App\Dto\User\CreateUserRequest;
 use App\Dto\User\UpdateUserPasswordRequest;
 use App\Dto\User\UpdateUserRequest;
 use App\Entity\Company;
+use App\Entity\Rank;
 use App\Entity\User;
 use App\Exception\ApiException;
 use App\Repository\CompanyRepository;
@@ -287,6 +288,8 @@ final class UserController extends AbstractController
             $em->persist($company);
         }
 
+        $rank = $em->getRepository(Rank::class)->findOneBy(['level' => 1]);
+
         $user = new User();
         $user->setFirstname($dto->getFirstname())
             ->setLastname($dto->getLastname())
@@ -296,6 +299,7 @@ final class UserController extends AbstractController
             ->setExperience(0)
             ->setHuntCount(0)
             ->setRewardCount(0)
+            ->setRank($rank)
             ->setRoles(array_values($dto->getRoles()))
             ->setIsVerified($dto->isVerified())
             ->setPassword($passwordHasher->hashPassword($user, $dto->getPassword()));

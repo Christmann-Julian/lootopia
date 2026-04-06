@@ -6,6 +6,7 @@ use App\Dto\User\RegisterUserRequest;
 use App\Dto\User\ResetUserPasswordRequest;
 use App\Entity\Company;
 use App\Entity\PasswordResetToken;
+use App\Entity\Rank;
 use App\Entity\User;
 use App\Exception\ApiException;
 use App\Repository\PasswordResetTokenRepository;
@@ -312,6 +313,8 @@ final class AuthController extends AbstractController
             $entityManager->persist($company);
         }
 
+        $rank = $entityManager->getRepository(Rank::class)->findOneBy(['level' => 1]);
+
         $user = new User();
         $user->setFirstname($registerUserRequest->getFirstname())
             ->setLastname($registerUserRequest->getLastname())
@@ -321,6 +324,7 @@ final class AuthController extends AbstractController
             ->setExperience(0)
             ->setHuntCount(0)
             ->setRewardCount(0)
+            ->setRank($rank)
             ->setIsVerified(false)
             ->setPassword($passwordHasher->hashPassword($user, $registerUserRequest->getPassword()))
             ->setRoles(['ROLE_USER']);
