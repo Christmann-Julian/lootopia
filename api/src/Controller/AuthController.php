@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Dto\User\RegisterUserRequest;
 use App\Dto\User\ResetUserPasswordRequest;
+use App\Entity\Company;
 use App\Entity\PasswordResetToken;
+use App\Entity\Rank;
 use App\Entity\User;
 use App\Exception\ApiException;
 use App\Repository\PasswordResetTokenRepository;
@@ -230,7 +232,10 @@ final class AuthController extends AbstractController
                         new OA\Property(property: 'id', type: 'integer', example: 1),
                         new OA\Property(property: 'firstname', type: 'string', example: 'Jean'),
                         new OA\Property(property: 'lastname', type: 'string', example: 'Dupont'),
+                        new OA\Property(property: 'pseudo', type: 'string', example: 'jdupont'),
                         new OA\Property(property: 'email', type: 'string', example: 'jean.dupont@example.com'),
+                        new OA\Property(property: 'company', type: 'string', example: 'Lootopia', nullable: true),
+                        new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string'), example: ['ROLE_USER', 'ROLE_ADMIN']),
                     ],
                     type: 'object'
                 )
@@ -252,8 +257,9 @@ final class AuthController extends AbstractController
             'id' => $user->getId(),
             'firstname' => $user->getFirstname(),
             'lastname' => $user->getLastname(),
+            'pseudo' => $user->getPseudo(),
             'email' => $user->getEmail(),
-            'company' => $user->getCompany(),
+            'company' => $user->getCompany()?->getName(),
             'roles' => $user->getRoles(),
         ]);
     }
@@ -266,6 +272,7 @@ final class AuthController extends AbstractController
                 properties: [
                     new OA\Property(property: 'firstname', type: 'string', example: 'Jean'),
                     new OA\Property(property: 'lastname', type: 'string', example: 'Dupont'),
+                    new OA\Property(property: 'pseudo', type: 'string', example: 'jdupont'),
                     new OA\Property(property: 'company', type: 'string', example: 'ACME Corp', nullable: true),
                     new OA\Property(property: 'email', type: 'string', example: 'jean.dupont@example.com'),
                     new OA\Property(property: 'password', type: 'string', example: 'Secret123!'),
@@ -291,6 +298,7 @@ final class AuthController extends AbstractController
         $registerUserRequest = new RegisterUserRequest(
             $data['firstname'] ?? '',
             $data['lastname'] ?? '',
+            $data['pseudo'] ?? '',
             $data['company'] ?? null,
             $data['email'] ?? '',
             $data['password'] ?? ''
@@ -298,11 +306,25 @@ final class AuthController extends AbstractController
 
         $dtoValidator->validate($registerUserRequest);
 
+        $company = null;
+        if ($registerUserRequest->getCompany()) {
+            $company = new Company();
+            $company->setName($registerUserRequest->getCompany());
+            $entityManager->persist($company);
+        }
+
+        $rank = $entityManager->getRepository(Rank::class)->findOneBy(['level' => 1]);
+
         $user = new User();
         $user->setFirstname($registerUserRequest->getFirstname())
             ->setLastname($registerUserRequest->getLastname())
+            ->setPseudo($registerUserRequest->getPseudo())
             ->setEmail($registerUserRequest->getEmail())
-            ->setCompany($registerUserRequest->getCompany())
+            ->setCompany($company)
+            ->setExperience(0)
+            ->setHuntCount(0)
+            ->setRewardCount(0)
+            ->setRank($rank)
             ->setIsVerified(false)
             ->setPassword($passwordHasher->hashPassword($user, $registerUserRequest->getPassword()))
             ->setRoles(['ROLE_USER']);

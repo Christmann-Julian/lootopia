@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,17 +22,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $pseudo = null;
 
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $company = null;
 
     /**
      * @var list<string> The user roles
@@ -46,6 +48,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $isVerified = null;
+
+    #[ORM\Column]
+    private ?int $experience = null;
+
+    #[ORM\Column]
+    private ?int $huntCount = null;
+
+    #[ORM\Column]
+    private ?int $rewardCount = null;
+
+    #[ORM\ManyToOne(targetEntity: Rank::class, inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    private ?Rank $rank = null;
+
+    /**
+     * @var Collection<int, Badge>
+     */
+    #[ORM\ManyToMany(targetEntity: Badge::class)]
+    private Collection $badges;
+
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Company $company = null;
+
+    /**
+     * @var Collection<int, Reward>
+     */
+    #[ORM\ManyToMany(targetEntity: Reward::class)]
+    private Collection $rewards;
+
+    public function __construct()
+    {
+        $this->badges = new ArrayCollection();
+        $this->rewards = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,18 +134,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(string $lastname): static
     {
         $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    public function getCompany(): ?string
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?string $company): static
-    {
-        $this->company = $company;
 
         return $this;
     }
@@ -174,16 +198,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $data;
     }
 
-    public function toArray(): array
+    public function toArray(?string $locale = null): array
     {
         return [
             'id' => $this->getId(),
             'email' => $this->getEmail(),
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
-            'company' => $this->getCompany(),
+            'pseudo' => $this->getPseudo(),
+            'company' => $this->getCompany()?->getName(),
             'roles' => $this->getRoles(),
             'isVerified' => $this->isVerified(),
+            'experience' => $this->getExperience(),
+            'huntCount' => $this->getHuntCount(),
+            'rewardCount' => $this->getRewardCount(),
+            'rank' => $this->getRank()?->toArray($locale),
+            'badges' => array_map(
+                fn (Badge $badge) => $badge->toArray($locale),
+                $this->getBadges()->toArray()
+            ),
             'createdAt' => $this->getCreatedAt()?->format(\DateTimeInterface::ATOM),
             'updatedAt' => $this->getUpdatedAt()?->format(\DateTimeInterface::ATOM),
         ];
@@ -193,5 +226,130 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    public function getExperience(): ?int
+    {
+        return $this->experience;
+    }
+
+    public function setExperience(int $experience): static
+    {
+        $this->experience = $experience;
+
+        return $this;
+    }
+
+    public function getHuntCount(): ?int
+    {
+        return $this->huntCount;
+    }
+
+    public function setHuntCount(int $huntCount): static
+    {
+        $this->huntCount = $huntCount;
+
+        return $this;
+    }
+
+    public function getRewardCount(): ?int
+    {
+        return $this->rewardCount;
+    }
+
+    public function setRewardCount(int $rewardCount): static
+    {
+        $this->rewardCount = $rewardCount;
+
+        return $this;
+    }
+
+    public function getRank(): ?Rank
+    {
+        return $this->rank;
+    }
+
+    public function setRank(?Rank $rank): static
+    {
+        $this->rank = $rank;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Badge>
+     */
+    public function getBadges(): Collection
+    {
+        return $this->badges;
+    }
+
+    public function addBadge(Badge $badge): static
+    {
+        if (!$this->badges->contains($badge)) {
+            $this->badges->add($badge);
+        }
+
+        return $this;
+    }
+
+    public function removeBadge(Badge $badge): static
+    {
+        $this->badges->removeElement($badge);
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        // set the owning side of the relation if necessary
+        if ($company && $company->getUser() !== $this) {
+            $company->setUser($this);
+        }
+
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reward>
+     */
+    public function getRewards(): Collection
+    {
+        return $this->rewards;
+    }
+
+    public function addReward(Reward $reward): static
+    {
+        if (!$this->rewards->contains($reward)) {
+            $this->rewards->add($reward);
+        }
+
+        return $this;
+    }
+
+    public function removeReward(Reward $reward): static
+    {
+        $this->rewards->removeElement($reward);
+
+        return $this;
     }
 }

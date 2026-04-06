@@ -1,0 +1,48 @@
+{
+    "navbar": {
+        "home": "Accueil",
+        "profile": "Profil",
+        "radar": "Radar",
+        "rewards": "Bons"
+    },
+    "profile": {
+        "stats": {
+            "hunts": "Chasses",
+            "rewards": "Récompenses"
+        },
+        "badges": {
+            "title": "Succès débloqués"
+        },
+        "preferences": {
+            "title": "Préférences de langue",
+            "language": "Langues disponibles"
+        },
+        "info": {
+            "title": "Informations personnelles"
+        },
+        "security": {
+            "title": "Mot de passe et sécurité"
+        },
+        "actions": {
+            "edit": "Enregistrer les modifications",
+            "delete": "Supprimer mon compte"
+        },
+        "delete": {
+            "title": "Zone Critique",
+            "notice": "L'effacement du compte est définitif. Vos bons de réduction non utilisés seront supprimés du serveur."
+        }
+    },
+    "input": {
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "pseudo": "Pseudo",
+        "email": "Adresse e-mail",
+        "password": "Mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "oldPassword": "Ancien mot de passe",
+        "newPassword": "Nouveau mot de passe"
+    },
+    "error": {
+        "invalidEmail": "Adresse e-mail invalide"
+    }
+}

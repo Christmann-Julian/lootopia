@@ -1,6 +1,12 @@
 {
-    "title": {
-        "userDetails": "User Details"
+    "titleDetails": {
+        "user": "User Details",
+        "rarity": "Rarity Details",
+        "rank": "Rank Details",
+        "badge": "Badge Details",
+        "category": "Category Details",
+        "hunt": "Hunt Details",
+        "reward": "Reward Details"
     },
     "action": {
         "title": "Actions",
@@ -15,10 +21,40 @@
     "id": "ID",
     "lastname": "Last Name",
     "firstname": "First Name",
+    "pseudo": "Pseudo",
     "email": "Email",
     "company": "Company",
+    "experience": "Experience",
+    "huntCount": "Hunt Count",
+    "rewardCount": "Reward Count",
+    "rank": "Rank",
+    "badges": "Badges",
     "roles": "Roles",
     "isVerified": "Verified",
     "createdAt": "Created At",
-    "updatedAt": "Updated At"
+    "updatedAt": "Updated At",
+    "empty": "Empty",
+    "icon": "Icon",
+    "name": "Name",
+    "description": "Description",
+    "title": "Title",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "minExperience": "Minimum Experience",
+    "maxExperience": "Maximum Experience",
+    "experienceMin": "Minimum Experience",
+    "experienceMax": "Maximum Experience",
+    "experienceGain": "Experience Gained",
+    "level": "Level",
+    "code": "Code",
+    "link": "Link",
+    "huntId": "Hunt ID",
+    "question": "Question",
+    "answer": "Answer",
+    "location": "Location",
+    "lat": "Latitude",
+    "lon": "Longitude",
+    "category": "Category",
+    "reward": "Reward",
+    "rarity": "Rarity"
 }

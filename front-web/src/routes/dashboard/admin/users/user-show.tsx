@@ -42,7 +42,20 @@ export default function UserShow({ loaderData }: { loaderData: UserShowData | { 
   const { t } = useTranslation(["show", "navigation", "common"]);
   const { lang } = useParams();
   const data =
-    "roles" in loaderData ? { ...loaderData, roles: loaderData.roles.join(", ") } : loaderData;
+    "roles" in loaderData
+      ? {
+          ...loaderData,
+          roles: loaderData.roles.join(", "),
+          rank: loaderData.rank
+            ? `${loaderData.rank.level} (Exp: ${loaderData.rank.experienceMin}-${loaderData.rank.experienceMax})`
+            : t("empty", { ns: "show" }),
+          badges: loaderData.badges
+            ? loaderData.badges
+                .map((badge) => badge.translations?.[lang || "en"] || badge.icon)
+                .join(", ")
+            : t("empty", { ns: "show" }),
+        }
+      : loaderData;
 
   return (
     <div className="container">
@@ -50,7 +63,7 @@ export default function UserShow({ loaderData }: { loaderData: UserShowData | { 
       <main className="main-content">
         <DashboardHeader title={t("users", { ns: "navigation" })} />
         <Show
-          title={t("title.userDetails", { ns: "show" })}
+          title={t("titleDetails.user", { ns: "show" })}
           data={data}
           backUrl={`/${lang}/dashboard/admin/users`}
           editUrl={"id" in data ? `/${lang}/dashboard/admin/users/${data.id}/edit` : undefined}

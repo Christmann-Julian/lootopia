@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Dto\User\CreateUserRequest;
 use App\Dto\User\UpdateUserPasswordRequest;
 use App\Dto\User\UpdateUserRequest;
+use App\Entity\Company;
+use App\Entity\Rank;
 use App\Entity\User;
 use App\Exception\ApiException;
+use App\Repository\CompanyRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Validator\DtoValidator;
@@ -82,7 +85,13 @@ final class UserController extends AbstractController
                                     new OA\Property(property: 'id', type: 'integer', example: 1),
                                     new OA\Property(property: 'firstname', type: 'string', example: 'Jean'),
                                     new OA\Property(property: 'lastname', type: 'string', example: 'Dupont'),
+                                    new OA\Property(property: 'pseudo', type: 'string', example: 'jdupont'),
+                                    new OA\Property(property: 'company', type: 'string', example: 'Lootopia'),
                                     new OA\Property(property: 'email', type: 'string', example: 'jean.dupont@example.com'),
+                                    new OA\Property(property: 'experience', type: 'integer', example: 100),
+                                    new OA\Property(property: 'huntCount', type: 'integer', example: 5),
+                                    new OA\Property(property: 'rewardCount', type: 'integer', example: 10),
+                                    new OA\Property(property: 'rankLevel', type: 'integer', example: 5),
                                     new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
                                     new OA\Property(property: 'isVerified', type: 'boolean'),
                                 ],
@@ -169,8 +178,13 @@ final class UserController extends AbstractController
                         new OA\Property(property: 'id', type: 'integer'),
                         new OA\Property(property: 'firstname', type: 'string'),
                         new OA\Property(property: 'lastname', type: 'string'),
+                        new OA\Property(property: 'pseudo', type: 'string'),
                         new OA\Property(property: 'company', type: 'string', nullable: true),
                         new OA\Property(property: 'email', type: 'string'),
+                        new OA\Property(property: 'experience', type: 'integer'),
+                        new OA\Property(property: 'huntCount', type: 'integer'),
+                        new OA\Property(property: 'rewardCount', type: 'integer'),
+                        new OA\Property(property: 'rankLevel', type: 'integer'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'isVerified', type: 'boolean'),
                         new OA\Property(property: 'createdAt', type: 'string'),
@@ -206,6 +220,8 @@ final class UserController extends AbstractController
                     new OA\Property(property: 'firstname', type: 'string', example: 'Jean'),
                     new OA\Property(property: 'lastname', type: 'string', example: 'Dupont'),
                     new OA\Property(property: 'email', type: 'string', example: 'jean.dupont@example.com'),
+                    new OA\Property(property: 'pseudo', type: 'string', example: 'jdupont'),
+                    new OA\Property(property: 'company', type: 'string', example: 'Lootopia'),
                     new OA\Property(property: 'password', type: 'string', example: 'Secret123!'),
                     new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string'), example: ['ROLE_USER']),
                     new OA\Property(property: 'isVerified', type: 'boolean', example: false),
@@ -222,10 +238,15 @@ final class UserController extends AbstractController
                         new OA\Property(property: 'id', type: 'integer'),
                         new OA\Property(property: 'firstname', type: 'string'),
                         new OA\Property(property: 'lastname', type: 'string'),
+                        new OA\Property(property: 'pseudo', type: 'string'),
                         new OA\Property(property: 'company', type: 'string', nullable: true),
                         new OA\Property(property: 'email', type: 'string'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'isVerified', type: 'boolean'),
+                        new OA\Property(property: 'experience', type: 'integer'),
+                        new OA\Property(property: 'huntCount', type: 'integer'),
+                        new OA\Property(property: 'rewardCount', type: 'integer'),
+                        new OA\Property(property: 'rankLevel', type: 'integer'),
                         new OA\Property(property: 'createdAt', type: 'string'),
                         new OA\Property(property: 'updatedAt', type: 'string'),
                     ],
@@ -250,6 +271,7 @@ final class UserController extends AbstractController
         $dto = new CreateUserRequest(
             $data['firstname'] ?? '',
             $data['lastname'] ?? '',
+            $data['pseudo'] ?? '',
             $data['company'] ?? null,
             $data['email'] ?? '',
             $data['password'] ?? '',
@@ -259,11 +281,25 @@ final class UserController extends AbstractController
 
         $dtoValidator->validate($dto);
 
+        $company = null;
+        if ($dto->getCompany()) {
+            $company = new Company();
+            $company->setName($dto->getCompany());
+            $em->persist($company);
+        }
+
+        $rank = $em->getRepository(Rank::class)->findOneBy(['level' => 1]);
+
         $user = new User();
         $user->setFirstname($dto->getFirstname())
             ->setLastname($dto->getLastname())
             ->setEmail($dto->getEmail())
-            ->setCompany($dto->getCompany())
+            ->setCompany($company)
+            ->setPseudo($dto->getPseudo())
+            ->setExperience(0)
+            ->setHuntCount(0)
+            ->setRewardCount(0)
+            ->setRank($rank)
             ->setRoles(array_values($dto->getRoles()))
             ->setIsVerified($dto->isVerified())
             ->setPassword($passwordHasher->hashPassword($user, $dto->getPassword()));
@@ -290,6 +326,8 @@ final class UserController extends AbstractController
                 properties: [
                     new OA\Property(property: 'firstname', type: 'string', example: 'Jean'),
                     new OA\Property(property: 'lastname', type: 'string', example: 'Dupont'),
+                    new OA\Property(property: 'pseudo', type: 'string', example: 'jdupont'),
+                    new OA\Property(property: 'company', type: 'string', example: 'Lootopia'),
                     new OA\Property(property: 'email', type: 'string', example: 'jean.dupont@example.com'),
                     new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string'), example: ['ROLE_USER']),
                     new OA\Property(property: 'isVerified', type: 'boolean', example: false),
@@ -306,6 +344,7 @@ final class UserController extends AbstractController
                         new OA\Property(property: 'id', type: 'integer'),
                         new OA\Property(property: 'firstname', type: 'string'),
                         new OA\Property(property: 'lastname', type: 'string'),
+                        new OA\Property(property: 'pseudo', type: 'string'),
                         new OA\Property(property: 'company', type: 'string', nullable: true),
                         new OA\Property(property: 'email', type: 'string'),
                         new OA\Property(property: 'roles', type: 'array', items: new OA\Items(type: 'string')),
@@ -327,6 +366,7 @@ final class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserRepository $userRepository,
+        CompanyRepository $companyRepository,
         DtoValidator $dtoValidator,
         EmailVerifier $emailVerifier,
         TranslatorInterface $translator,
@@ -344,6 +384,7 @@ final class UserController extends AbstractController
         $dto = new UpdateUserRequest(
             $data['firstname'] ?? '',
             $data['lastname'] ?? '',
+            $data['pseudo'] ?? '',
             $data['company'] ?? null,
             $data['email'] ?? '',
             $this->isGranted('ROLE_ADMIN') ? $data['roles'] ?? [] : $currentUser->getRoles(),
@@ -357,10 +398,28 @@ final class UserController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, 'Validation failed', ['email' => [$translator->trans('user_already_exists', [], 'validators')]]);
         }
 
+        if ($dto->getCompany()) {
+            $company = $user->getCompany();
+
+            if ($company) {
+                $company->setName($dto->getCompany());
+            } else {
+                $company = $companyRepository->findOneBy(['name' => $dto->getCompany()]);
+                if (null === $company) {
+                    $company = new Company();
+                    $company->setName($dto->getCompany());
+                    $em->persist($company);
+                } else {
+                    $company->setName($dto->getCompany());
+                }
+                $user->setCompany($company);
+            }
+        }
+
         $user->setFirstname($dto->getFirstname())
             ->setLastname($dto->getLastname())
             ->setEmail($dto->getEmail())
-            ->setCompany($dto->getCompany());
+            ->setPseudo($dto->getPseudo());
 
         if ($isAdmin) {
             $user->setRoles(array_values($dto->getRoles()))

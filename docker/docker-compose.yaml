@@ -50,21 +50,18 @@ services:
     networks:
       - lootopia_network
 
-  # Front Mobile (React Native + Expo)
-  front-mobile:
+  # Front PWA (Vite + React)
+  front-pwa:
     build:
-      context: ../front-mobile
+      context: ../front-pwa
       dockerfile: Dockerfile
-    container_name: lootopia_front_mobile
+    container_name: lootopia_front_pwa
     volumes:
-      - ../front-mobile:/app
+      - ../front-pwa:/app
     ports:
-      - "19000:19000"
-      - "19001:19001"
-      - "19002:19002"
+      - "5174:5173"
     environment:
-      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-      - REACT_NATIVE_PACKAGER_HOSTNAME=localhost
+      - VITE_API_URL=http://localhost:8000
     networks:
       - lootopia_network
 

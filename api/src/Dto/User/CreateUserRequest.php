@@ -17,6 +17,10 @@ final class CreateUserRequest
     #[Assert\Length(min: 2, max: 100)]
     private string $lastname;
 
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 2, max: 255)]
+    private string $pseudo;
+
     #[Assert\Length(max: 255)]
     private ?string $company = null;
 
@@ -42,6 +46,7 @@ final class CreateUserRequest
     public function __construct(
         string $firstname,
         string $lastname,
+        string $pseudo,
         ?string $company,
         string $email,
         string $password,
@@ -50,6 +55,7 @@ final class CreateUserRequest
     ) {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
+        $this->pseudo = $pseudo;
         $this->company = $company;
         $this->email = $email;
         $this->password = $password;
@@ -65,6 +71,11 @@ final class CreateUserRequest
     public function getLastname(): string
     {
         return $this->lastname;
+    }
+
+    public function getPseudo(): string
+    {
+        return $this->pseudo;
     }
 
     public function getCompany(): ?string

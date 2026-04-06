@@ -1,6 +1,12 @@
 {
     "title": {
-        "users": "Users List"
+        "users": "Users List",
+        "badges": "Badges List",
+        "ranks": "Ranks List",
+        "categories": "Categories List",
+        "rarities": "Rarities List",
+        "hunts": "Hunts List",
+        "rewards": "Rewards List"
     },
     "columns": {
         "id": "ID",
@@ -8,6 +14,18 @@
         "lastname": "Last Name",
         "email": "Email",
         "company": "Company",
-        "roles": "Roles"
+        "roles": "Roles",
+        "name": "Name",
+        "icon": "Icon",
+        "level": "Level",
+        "experienceMin": "XP Min",
+        "experienceMax": "XP Max",
+        "minExperience": "XP Min",
+        "experienceGain": "XP Gain",
+        "code": "Code",
+        "endDate": "End Date",
+        "category": "Category",
+        "title": "Title",
+        "location": "Location"
     }
 }

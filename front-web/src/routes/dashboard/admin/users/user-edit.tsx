@@ -226,6 +226,34 @@ export default function UserEdit({
               </div>
 
               <div className="form-group">
+                <label className="label label-required" htmlFor="pseudo">
+                  {t("pseudo", { ns: "form" })}
+                </label>
+                <input
+                  type="text"
+                  id="pseudo"
+                  className="input"
+                  placeholder={t("pseudoPlaceholder", { ns: "form" })}
+                  {...register("pseudo", {
+                    required: t("required", { ns: "validation" }),
+                    minLength: {
+                      value: 2,
+                      message: t("minLength", { min: 2, ns: "validation" }),
+                    },
+                    maxLength: {
+                      value: 100,
+                      message: t("maxLength", { max: 100, ns: "validation" }),
+                    },
+                  })}
+                />
+                {errors.pseudo && (
+                  <div className="input-feedback error" id="pseudoError">
+                    {errors.pseudo.message}
+                  </div>
+                )}
+              </div>
+
+              <div className="form-group">
                 <label className="label label-required" htmlFor="email">
                   {t("email", { ns: "form" })}
                 </label>

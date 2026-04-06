@@ -39,6 +39,7 @@ if "%exitCode%"=="0" (
     echo Services disponibles :
     echo   - API Symfony      : http://localhost:8000/api/doc (30s pour le démarrage)
     echo   - Front Web        : http://localhost:5173
+    echo   - Front PWA        : https://localhost:5174
     echo   - phpMyAdmin       : http://localhost:8080
     echo   - Mailpit          : http://localhost:8025
     echo.

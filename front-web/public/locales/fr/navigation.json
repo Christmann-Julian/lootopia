@@ -4,5 +4,10 @@
     "users": "Utilisateurs",
     "settings": "Paramètres",
     "admin": "Admin",
-    "treasureHunts": "Chasses au trésor"
+    "hunts": "Chasses au trésor",
+    "rewards": "Récompenses",
+    "categories": "Catégories",
+    "rarities": "Raretés",
+    "badges": "Badges",
+    "ranks": "Rangs"
 }

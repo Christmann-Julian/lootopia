@@ -28,4 +28,4 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash && \
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "composer install --no-interaction --optimize-autoloader && chown -R www-data:www-data /var/www/var && symfony server:start --no-tls --port=8000 --allow-http --allow-all-ip"]
+CMD ["sh", "-c", "composer install --no-interaction --optimize-autoloader && chown -R www-data:www-data /var/www/var && symfony server:ca:install && symfony server:start --port=8000 --allow-all-ip"]

@@ -8,17 +8,24 @@ use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Psr\Container\ContainerInterface;
 
-/**
- * Trait à utiliser dans des classes étendant KernelTestCase ou WebTestCase.
- */
 trait FixtureAwareTrait
 {
     private ?ORMExecutor $fixtureExecutor = null;
     private ?Loader $fixtureLoader = null;
 
-    protected function addFixture(FixtureInterface $fixture): void
+    protected function addFixture(FixtureInterface|string $fixture): void
     {
+        if (is_string($fixture)) {
+            $fixture = static::getContainer()->get($fixture);
+        }
+
+        // On garantit à l'analyseur statique et à PHP que $fixture est bien une FixtureInterface
+        if (!$fixture instanceof FixtureInterface) {
+            throw new \InvalidArgumentException(sprintf('The service "%s" must implement Doctrine\\Common\\DataFixtures\\FixtureInterface.', get_debug_type($fixture)));
+        }
+
         $this->getFixtureLoader()->addFixture($fixture);
     }
 
@@ -43,7 +50,24 @@ trait FixtureAwareTrait
     private function getFixtureLoader(): Loader
     {
         if (!$this->fixtureLoader) {
-            $this->fixtureLoader = new Loader();
+            $container = static::getContainer();
+
+            $this->fixtureLoader = new class($container) extends Loader {
+                public function __construct(private ContainerInterface $container)
+                {
+                }
+
+                protected function createFixture(string $class): FixtureInterface
+                {
+                    $fixture = $this->container->get($class);
+
+                    if (!$fixture instanceof FixtureInterface) {
+                        throw new \InvalidArgumentException(sprintf('The class "%s" must implement Doctrine\\Common\\DataFixtures\\FixtureInterface.', $class));
+                    }
+
+                    return $fixture;
+                }
+            };
         }
 
         return $this->fixtureLoader;

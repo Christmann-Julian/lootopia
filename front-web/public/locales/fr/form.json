@@ -20,6 +20,8 @@
   "firstNamePlaceholder": "Jean",
   "lastName": "Nom de famille",
   "lastNamePlaceholder": "Dupont",
+  "pseudo": "Pseudo",
+  "pseudoPlaceholder": "JeanD",
   "email": "Email",
   "emailPlaceholder": "jean.dupont@example.com",
   "company": "Entreprise",
