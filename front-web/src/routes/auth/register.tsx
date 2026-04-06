@@ -203,6 +203,46 @@ export default function Register() {
           </div>
 
           <div className="form-group">
+            <label className="label" htmlFor="pseudo">
+              {t("register.pseudo")}
+            </label>
+            <div className="input-wrapper">
+              <svg
+                className="input-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input
+                type="text"
+                id="pseudo"
+                className="input input-with-icon"
+                placeholder={t("register.pseudoPlaceholder")}
+                {...register("pseudo", {
+                  required: t("required", { ns: "validation" }),
+                  minLength: {
+                    value: 2,
+                    message: t("minLength", { min: 2, ns: "validation" }),
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: t("maxLength", { max: 100, ns: "validation" }),
+                  },
+                })}
+              />
+            </div>
+            {errors.pseudo && (
+              <div className="input-feedback error" id="pseudoError">
+                {errors.pseudo.message}
+              </div>
+            )}
+          </div>
+
+          <div className="form-group">
             <label className="label" htmlFor="email">
               {t("register.email")}
             </label>

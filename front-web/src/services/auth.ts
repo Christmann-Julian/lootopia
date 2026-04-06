@@ -13,7 +13,7 @@ let accessToken: string | null = null;
 let refreshPromise: Promise<boolean> | null = null;
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL.replace(/^http:/, "https:"),
   withCredentials: true,
 });
 
