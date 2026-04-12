@@ -31,11 +31,15 @@ api.interceptors.request.use(async (config) => {
     }
   }
 
-  const locale = i18next.language;
-  if (config.url && !config.url.includes("locale=")) {
-    const url = new URL(config.url, config.baseURL);
-    url.searchParams.set("locale", locale);
-    config.url = url.pathname + url.search;
+  if (config.headers["X-Skip-Locale"]) {
+    delete config.headers["X-Skip-Locale"];
+  } else {
+    const locale = i18next.language;
+    if (config.url && !config.url.includes("locale=")) {
+      const url = new URL(config.url, config.baseURL || window.location.origin);
+      url.searchParams.set("locale", locale);
+      config.url = url.pathname + url.search;
+    }
   }
 
   return config;
