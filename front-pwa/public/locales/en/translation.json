@@ -43,6 +43,19 @@
         "newPassword": "New Password"
     },
     "error": {
-        "invalidEmail": "Invalid email address"
+        "invalidEmail": "Invalid email address",
+        "requiredField": "This field is required",
+        "passwordTooShort": "Password must be at least 6 characters",
+        "passwordsDoNotMatch": "Passwords do not match",
+        "lengthConstraint": "This field must be between {{min}} and {{max}} characters",
+        "serverError": "An error occurred"
+    },
+    "register": {
+        "title": "New Recruit",
+        "subtitle": "Initializing neural profile",
+        "submit": "Create Profile",
+        "alreadyHaveAccount": "Already have an account?",
+        "login": "Log in",
+        "success": "Registration successful! Please check your email."
     }
 }

@@ -43,6 +43,19 @@
         "newPassword": "Nouveau mot de passe"
     },
     "error": {
-        "invalidEmail": "Adresse e-mail invalide"
+        "invalidEmail": "Adresse e-mail invalide",
+        "requiredField": "Ce champ est requis",
+        "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères",
+        "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+        "lengthConstraint": "Ce champ doit avoir entre {{min}} et {{max}} caractères",
+        "serverError": "Une erreur est survenue"
+    },
+    "register": {
+        "title": "Nouvelle Recrue",
+        "subtitle": "Initialisation du profil neuronal",
+        "submit": "Créer le Profil",
+        "alreadyHaveAccount": "Déjà un profil ?",
+        "login": "S'identifier",
+        "success": "Inscription réussie ! Veuillez vérifier vos emails."
     }
 }
