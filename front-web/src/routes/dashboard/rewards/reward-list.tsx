@@ -51,6 +51,10 @@ export default function RewardList() {
           title={t("title.rewards", { ns: "list-view" })}
           columns={columns}
           apiEndpoint="/api/rewards"
+          canAdd={false}
+          canEdit={true}
+          canDelete={false}
+          canView={true}
         />
       </main>
     </div>

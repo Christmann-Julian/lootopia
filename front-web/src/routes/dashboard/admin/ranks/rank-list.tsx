@@ -47,7 +47,7 @@ export default function RankList() {
         <Table
           title={t("title.ranks", { ns: "list-view" })}
           columns={columns}
-          apiEndpoint="/api/ranks/admin"
+          apiEndpoint="/api/ranks"
         />
       </main>
     </div>

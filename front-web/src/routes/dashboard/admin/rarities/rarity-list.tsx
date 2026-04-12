@@ -50,7 +50,7 @@ export default function RarityList() {
         <Table
           title={t("title.rarities", { ns: "list-view" })}
           columns={columns}
-          apiEndpoint="/api/rarities/admin"
+          apiEndpoint="/api/rarities"
         />
       </main>
     </div>

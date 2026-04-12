@@ -45,7 +45,7 @@ export default function BadgeList() {
         <Table
           title={t("title.badges", { ns: "list-view" })}
           columns={columns}
-          apiEndpoint="/api/badges/admin"
+          apiEndpoint="/api/badges"
         />
       </main>
     </div>
