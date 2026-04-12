@@ -16,7 +16,7 @@ final class CreateRewardRequest
     private string $link;
 
     #[Assert\NotBlank]
-    #[Assert\DateTime]
+    #[Assert\DateTime(format: 'Y-m-d\TH:i')]
     private string $endDate;
 
     /** @var array<string, string> */
