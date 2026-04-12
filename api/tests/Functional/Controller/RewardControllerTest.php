@@ -27,7 +27,7 @@ class RewardControllerTest extends WebTestCase
     {
         $token = $this->getJwtToken('user@lootopia.fr', 'user');
 
-        $this->client->request('GET', '/api/rewards', [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
+        $this->client->request('GET', '/api/rewards/admin', [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
@@ -42,7 +42,7 @@ class RewardControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            '/api/rewards',
+            '/api/rewards/admin',
             ['page' => 1, 'limit' => 5],
             [],
             ['HTTP_AUTHORIZATION' => 'Bearer '.$token]

@@ -117,7 +117,7 @@ final class UserController extends AbstractController
         ]
     )]
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('', name: 'list', methods: ['GET'])]
+    #[Route('/admin', name: 'list', methods: ['GET'])]
     public function list(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): JsonResponse
     {
         $page = max(1, $request->query->getInt('page', 1));

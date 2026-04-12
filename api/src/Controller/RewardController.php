@@ -106,7 +106,7 @@ final class RewardController extends AbstractController
         ]
     )]
     #[IsGranted('ROLE_USER')]
-    #[Route('', name: 'list', methods: ['GET'])]
+    #[Route('/admin', name: 'list', methods: ['GET'])]
     public function list(RewardRepository $rewardRepository, Request $request, PaginatorInterface $paginator): JsonResponse
     {
         $page = max(1, $request->query->getInt('page', 1));
