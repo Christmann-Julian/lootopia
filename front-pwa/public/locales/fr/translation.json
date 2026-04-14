@@ -48,6 +48,7 @@
         "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères",
         "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
         "lengthConstraint": "Ce champ doit avoir entre {{min}} et {{max}} caractères",
+        "invalidCredentials": "Identifiants invalides",
         "serverError": "Une erreur est survenue"
     },
     "register": {
@@ -57,5 +58,14 @@
         "alreadyHaveAccount": "Déjà un profil ?",
         "login": "S'identifier",
         "success": "Inscription réussie ! Veuillez vérifier vos emails."
+    },
+    "login": {
+        "title": "Lootopia",
+        "subtitle": "Expédition tactique",
+        "emailPlaceholder": "Adresse e-mail",
+        "passwordPlaceholder": "••••••••",
+        "submit": "S'identifier",
+        "noAccount": "Pas de profil ?",
+        "register": "S'inscrire"
     }
 }

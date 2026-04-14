@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import Toast from "../components/Toast";
 import type { RegisterFormInputs } from "../types/FormType";
 import { Link } from "react-router-dom";
+import { api } from "../services/auth";
+import type { AxiosError } from "axios";
 
 const Register = () => {
   const {
@@ -24,35 +26,7 @@ const Register = () => {
     setToast(null);
 
     try {
-      const response = await fetch("https://localhost:8000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-
-        setToast({
-          message: errorData.message || t("error.serverError"),
-          type: "error",
-        });
-
-        if (errorData.details) {
-          Object.keys(errorData.details).forEach((field) => {
-            const fieldName = field as keyof RegisterFormInputs;
-            const errorMessage = errorData.details[field][0];
-
-            setError(fieldName, {
-              type: "error",
-              message: errorMessage,
-            });
-          });
-        }
-        return;
-      }
+      await api.post("/api/auth/register", data);
 
       setToast({
         message: t("register.success"),
@@ -60,11 +34,38 @@ const Register = () => {
       });
 
       reset();
-    } catch {
-      setToast({
-        message: t("error.serverError"),
-        type: "error",
-      });
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response && axiosError.response.status === 400) {
+        const errorData = axiosError.response.data as {
+          message?: string;
+          details?: Record<string, string[]>;
+        };
+
+        setToast({
+          message: errorData.message || t("error.serverError"),
+          type: "error",
+        });
+
+        if (errorData.details && typeof errorData.details === "object") {
+          Object.keys(errorData.details).forEach((field) => {
+            const fieldName = field as keyof RegisterFormInputs;
+            const errorMessage = errorData.details?.[field]?.[0];
+
+            if (errorMessage) {
+              setError(fieldName, {
+                type: "error",
+                message: errorMessage,
+              });
+            }
+          });
+        }
+      } else {
+        setToast({
+          message: t("error.serverError"),
+          type: "error",
+        });
+      }
     }
   };
 
