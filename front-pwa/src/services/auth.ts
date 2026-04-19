@@ -3,6 +3,7 @@ import i18next from "i18next";
 import { jwtDecode } from "jwt-decode";
 
 type MyTokenPayload = {
+  id: number;
   username: string;
   roles: string[];
   iat: number;
