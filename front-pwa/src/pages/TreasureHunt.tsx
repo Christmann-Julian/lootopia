@@ -1,95 +1,89 @@
-import { useState } from "react";
-import {
-  Target,
-  Zap,
-  Cpu,
-  MapPin,
-  ChevronLeft,
-  ChevronRight,
-  Flame,
-  Search,
-  ShoppingBag,
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { MapPin, ChevronLeft, ChevronRight, Search, Target } from "lucide-react";
 import "../assets/css/treasure-hunt.css";
 import Navbar from "../components/Navbar";
+import { api } from "../services/auth";
+import { getBadgeIcon } from "../services/badgeIconService";
+import type { CategoryData, HuntData, UserStatsData } from "../types/DataTypes";
 
 const TreasureHunt = () => {
-  const [filter, setFilter] = useState("All");
+  const { t } = useTranslation();
+
+  const [hunts, setHunts] = useState<HuntData[]>([]);
+  const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [userStats, setUserStats] = useState<UserStatsData>({ experience: 0, level: "?" });
+
+  const [filter, setFilter] = useState<number | "All">("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 3;
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const hunts = [
-    {
-      id: 1,
-      title: "The Golden Whopper",
-      merchant: "BURGER KING",
-      reward: "-50% Discount",
-      distance: "320m",
-      rarity: "Legendary",
-      category: "Food",
-    },
-    {
-      id: 2,
-      title: "Velocity Sprint",
-      merchant: "NIKE STORE",
-      reward: "-20% Voucher",
-      distance: "1.2km",
-      rarity: "Rare",
-      category: "Fashion",
-    },
-    {
-      id: 3,
-      title: "Neon Caffeine",
-      merchant: "STARBUCKS",
-      reward: "Free Double Shot",
-      distance: "450m",
-      rarity: "Common",
-      category: "Drink",
-    },
-    {
-      id: 4,
-      title: "Tech Fragment",
-      merchant: "FNAC",
-      reward: "€10 Gift Card",
-      distance: "850m",
-      rarity: "Rare",
-      category: "Tech",
-    },
-    {
-      id: 5,
-      title: "Cyber Sneakers",
-      merchant: "ADIDAS",
-      reward: "-30% Code",
-      distance: "2.1km",
-      rarity: "Epic",
-      category: "Fashion",
-    },
-    {
-      id: 6,
-      title: "Pixel Feast",
-      merchant: "SUBWAY",
-      reward: "Free Cookie",
-      distance: "150m",
-      rarity: "Common",
-      category: "Food",
-    },
-  ];
+  const ITEMS_PER_PAGE = 5;
 
-  const categories = ["All", "Food", "Fashion", "Tech", "Drink"];
-  const filteredHunts = hunts.filter((h) => filter === "All" || h.category === filter);
-  const totalPages = Math.ceil(filteredHunts.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedHunts = filteredHunts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  useEffect(() => {
+    api
+      .get("/api/auth/me")
+      .then((res) => {
+        if (res.data && res.data.id) {
+          return api.get(`/api/users/${res.data.id}`);
+        }
+        throw new Error("User me error: ");
+      })
+      .then((res) => {
+        if (res && res.data) {
+          setUserStats({
+            experience: res.data.experience || 0,
+            level: res.data.rankLevel || res.data.rank?.level || res.data.rank?.name || 1,
+          });
+        }
+      })
+      .catch((err) => console.error("User detail error: ", err));
+
+    api
+      .get("/api/categories")
+      .then((res) => {
+        if (res.data && res.data.data) {
+          setCategories(res.data.data);
+        }
+      })
+      .catch((err) => console.error("Category error: ", err));
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams({
+      page: currentPage.toString(),
+      limit: ITEMS_PER_PAGE.toString(),
+    });
+
+    if (filter !== "All") {
+      params.append("category", filter.toString());
+    }
+
+    api
+      .get(`/api/hunts?${params.toString()}`)
+      .then((res) => {
+        if (res.data) {
+          setHunts(res.data.data || []);
+          const totalItems = res.data.meta?.total || 0;
+          setTotalPages(Math.ceil(totalItems / ITEMS_PER_PAGE) || 1);
+        }
+      })
+      .catch((err) => console.error("Erreur chasses:", err))
+      .finally(() => setIsLoading(false));
+  }, [currentPage, filter]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
+      setIsLoading(true);
       setCurrentPage(newPage);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  const handleFilterChange = (cat: string) => {
-    setFilter(cat);
+  const handleFilterChange = (categoryId: number | "All") => {
+    setIsLoading(true);
+    setFilter(categoryId);
     setCurrentPage(1);
   };
 
@@ -102,57 +96,66 @@ const TreasureHunt = () => {
           <div className="user-status">
             <div className="status-dot"></div>
             <div>
-              <div className="radar-status">RADAR_ACTIVE</div>
-              <div className="sector-label">PARIS_SECTOR_01</div>
+              <div className="radar-status">{t("hunt.radarActive")}</div>
+              <div className="sector-label">{t("hunt.sector")}</div>
             </div>
           </div>
           <div className="user-stats-summary">
-            <div className="xp-display">14,250 XP</div>
-            <div className="level-display">LEVEL 14</div>
+            <div className="xp-display">
+              {userStats.experience.toLocaleString()} {t("hunt.xp")}
+            </div>
+            <div className="level-display">
+              {t("hunt.level")} {userStats.level}
+            </div>
           </div>
         </header>
 
         <div className="page-title-section">
-          <h1 className="page-main-title">Expeditions</h1>
-          <p className="page-subtitle">Select a neural signature to begin tracking.</p>
+          <h1 className="page-main-title">{t("hunt.title")}</h1>
+          <p className="page-subtitle">{t("hunt.subtitle")}</p>
         </div>
 
         <div className="filter-scroll">
+          <button
+            className={`filter-pill ${filter === "All" ? "active" : ""}`}
+            onClick={() => handleFilterChange("All")}
+          >
+            {t("hunt.all")}
+          </button>
           {categories.map((cat) => (
             <button
-              key={cat}
-              className={`filter-pill ${filter === cat ? "active" : ""}`}
-              onClick={() => handleFilterChange(cat)}
+              key={cat.id}
+              className={`filter-pill ${filter === cat.id ? "active" : ""}`}
+              onClick={() => handleFilterChange(cat.id)}
             >
-              {cat}
+              {cat.name}
             </button>
           ))}
         </div>
 
         <div className="hunts-list">
-          {paginatedHunts.length > 0 ? (
-            paginatedHunts.map((hunt) => (
+          {isLoading ? (
+            <div className="empty-search-state">
+              <p>{t("hunt.loading")}</p>
+            </div>
+          ) : hunts.length > 0 ? (
+            hunts.map((hunt) => (
               <div key={hunt.id} className="hunt-card">
-                <div className="rarity-tag">{hunt.rarity}</div>
+                <div className="rarity-tag">{hunt.rarity?.name || t("hunt.standardRarity")}</div>
 
-                <div className="hunt-icon">
-                  {hunt.category === "Food" && <ShoppingBag size={24} />}
-                  {hunt.category === "Fashion" && <Zap size={24} />}
-                  {hunt.category === "Drink" && <Flame size={24} />}
-                  {hunt.category === "Tech" && <Cpu size={24} />}
-                </div>
+                <div className="hunt-icon">{getBadgeIcon(hunt.category?.icon, 24)}</div>
 
                 <div className="hunt-info">
-                  <div className="hunt-merchant">{hunt.merchant}</div>
+                  <div className="hunt-merchant">{hunt.company}</div>
                   <h3 className="hunt-title">{hunt.title}</h3>
                   <div className="hunt-meta">
                     <div className="meta-item">
                       <MapPin size={12} />
-                      <span>{hunt.distance}</span>
+                      <span>{hunt.location}</span>
                     </div>
                     <div className="meta-item">
                       <Target size={12} />
-                      <span>{hunt.reward}</span>
+                      <span>{hunt.reward?.title || t("hunt.mysteryReward")}</span>
                     </div>
                   </div>
                 </div>
@@ -165,7 +168,7 @@ const TreasureHunt = () => {
           ) : (
             <div className="empty-search-state">
               <Search size={40} className="empty-search-icon" />
-              <p>NO SIGNATURES DETECTED</p>
+              <p>{t("hunt.empty")}</p>
             </div>
           )}
         </div>
@@ -181,7 +184,7 @@ const TreasureHunt = () => {
             </button>
 
             <div className="page-indicator">
-              PAGE {currentPage} / {totalPages}
+              {t("hunt.page")} {currentPage} / {totalPages}
             </div>
 
             <button

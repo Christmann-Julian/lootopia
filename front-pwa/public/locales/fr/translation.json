@@ -67,5 +67,19 @@
         "submit": "S'identifier",
         "noAccount": "Pas de profil ?",
         "register": "S'inscrire"
+    },
+    "hunt": {
+        "radarActive": "RADAR_ACTIF",
+        "sector": "SECTEUR_PARIS_01",
+        "xp": "XP",
+        "level": "NIVEAU",
+        "title": "Expéditions",
+        "subtitle": "Sélectionnez une signature neurale pour commencer la traque.",
+        "all": "Tout",
+        "loading": "CHARGEMENT DES SIGNATURES...",
+        "standardRarity": "Standard",
+        "mysteryReward": "Récompense mystère",
+        "empty": "AUCUNE SIGNATURE DÉTECTÉE",
+        "page": "PAGE"
     }
 }

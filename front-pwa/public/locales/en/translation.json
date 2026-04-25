@@ -67,5 +67,19 @@
         "submit": "Log in",
         "noAccount": "Don't have an account?",
         "register": "Sign up"
+    },
+    "hunt": {
+        "radarActive": "RADAR_ACTIVE",
+        "sector": "PARIS_SECTOR_01",
+        "xp": "XP",
+        "level": "LEVEL",
+        "title": "Expeditions",
+        "subtitle": "Select a neural signature to begin tracking.",
+        "all": "All",
+        "loading": "LOADING SIGNATURES...",
+        "standardRarity": "Standard",
+        "mysteryReward": "Mystery reward",
+        "empty": "NO SIGNATURES DETECTED",
+        "page": "PAGE"
     }
 }

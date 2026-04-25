@@ -26,3 +26,24 @@ export type UserProfileData = {
     } & TranslatedItem
   >;
 };
+
+export type CategoryData = {
+  id: number;
+  icon: string;
+  name: string;
+};
+
+export type HuntData = {
+  id: number;
+  title: string;
+  company: string;
+  location: string;
+  category: CategoryData;
+  rarity: { name: string };
+  reward: { title: string };
+};
+
+export type UserStatsData = {
+  experience: number;
+  level: number | string;
+};

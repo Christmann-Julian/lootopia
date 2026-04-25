@@ -47,12 +47,18 @@ final class HuntController extends AbstractController
     }
 
     #[OA\Get(
-        summary: 'List all hunts',
-        description: 'Returns a full list of all hunts without pagination.',
+        summary: 'List all public hunts',
+        description: 'Returns a paginated list of all hunts, with an optional category filter.',
+        parameters: [
+            new OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer', default: 1)),
+            new OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer', default: 10)),
+            new OA\Parameter(name: 'category', in: 'query', description: 'Filter by category ID', schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'locale', in: 'query', schema: new OA\Schema(type: 'string', example: 'fr')),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'List of all hunts',
+                description: 'Paginated list of hunts',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(
@@ -77,16 +83,19 @@ final class HuntController extends AbstractController
                                             new OA\Property(property: 'location', type: 'string'),
                                         ]
                                     ),
-                                    new OA\Property(
-                                        property: 'reward',
-                                        type: 'object',
-                                    ),
-                                    new OA\Property(
-                                        property: 'rarity',
-                                        type: 'object',
-                                    ),
+                                    new OA\Property(property: 'reward', type: 'object'),
+                                    new OA\Property(property: 'rarity', type: 'object'),
                                 ]
                             )
+                        ),
+                        new OA\Property(
+                            property: 'meta',
+                            properties: [
+                                new OA\Property(property: 'page', type: 'integer'),
+                                new OA\Property(property: 'limit', type: 'integer'),
+                                new OA\Property(property: 'total', type: 'integer'),
+                            ],
+                            type: 'object'
                         ),
                     ],
                     type: 'object'
@@ -96,14 +105,34 @@ final class HuntController extends AbstractController
     )]
     #[IsGranted('ROLE_USER')]
     #[Route('', name: 'public_list', methods: ['GET'])]
-    public function listPublic(HuntRepository $huntRepository, Request $request): JsonResponse
+    public function listPublic(HuntRepository $huntRepository, Request $request, PaginatorInterface $paginator): JsonResponse
     {
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = (int) max(5, min(100, $request->query->getInt('limit', 10)));
+        $categoryId = null !== $request->query->get('category') ? $request->query->getInt('category') : null;
         $locale = is_string($request->query->get('locale')) ? (string) $request->query->get('locale') : null;
-        $hunts = $huntRepository->findAll();
 
-        $data = array_map(fn (Hunt $h) => $h->toArray($locale), $hunts);
+        $queryBuilder = $huntRepository->createPublicListQueryBuilder($categoryId);
 
-        return new JsonResponse(['data' => $data]);
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $page,
+            $limit,
+            [
+                'distinct' => true,
+            ]
+        );
+
+        $data = array_map(fn (Hunt $h) => $h->toArray($locale), iterator_to_array($pagination->getItems()));
+
+        return new JsonResponse([
+            'data' => $data,
+            'meta' => [
+                'page' => $pagination->getCurrentPageNumber(),
+                'limit' => $pagination->getItemNumberPerPage(),
+                'total' => $pagination->getTotalItemCount(),
+            ],
+        ]);
     }
 
     #[OA\Get(

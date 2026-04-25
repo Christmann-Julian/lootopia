@@ -89,13 +89,11 @@ class HuntControllerTest extends TestCase
     public function testListPublic(): void
     {
         $request = new Request();
-        $hunt = clone $this->createHuntMock(1);
 
         $this->huntRepository->expects($this->once())
-            ->method('findAll')
-            ->willReturn([$hunt]);
+            ->method('createPublicListQueryBuilder');
 
-        $response = $this->controller->listPublic($this->huntRepository, $request);
+        $response = $this->controller->listPublic($this->huntRepository, $request, $this->paginator);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
