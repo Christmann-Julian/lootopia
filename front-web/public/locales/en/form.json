@@ -112,5 +112,7 @@
   "associatedReward": "Associated Reward",
   "rewardTitleFr": "Reward Title in French",
   "rewardTitleEn": "Reward Title in English",
-  "selectOption": "Select an option"
+  "selectOption": "Select an option",
+  "isSponsor": "Is this hunt sponsored?",
+  "isSponsorHelper": "Indicate whether this hunt is sponsored by a partner. Sponsored"
 }

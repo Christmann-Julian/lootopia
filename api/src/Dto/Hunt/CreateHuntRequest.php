@@ -17,6 +17,8 @@ final class CreateHuntRequest
     #[Assert\Type('integer')]
     private ?int $categoryId;
 
+    private bool $isSponsor = false;
+
     #[Assert\NotBlank]
     #[Assert\Type('integer')]
     private int $rarityId;
@@ -53,6 +55,7 @@ final class CreateHuntRequest
     public function __construct(
         float $lat = 0.0,
         float $lon = 0.0,
+        bool $isSponsor = false,
         ?int $categoryId = null,
         int $rarityId = 0,
         array $translations = [],
@@ -60,6 +63,7 @@ final class CreateHuntRequest
     ) {
         $this->lat = $lat;
         $this->lon = $lon;
+        $this->isSponsor = $isSponsor;
         $this->categoryId = $categoryId;
         $this->rarityId = $rarityId;
         $this->translations = $translations;
@@ -94,5 +98,10 @@ final class CreateHuntRequest
     public function getReward(): array
     {
         return $this->reward;
+    }
+
+    public function getIsSponsor(): bool
+    {
+        return $this->isSponsor;
     }
 }

@@ -18,6 +18,7 @@ import type { ApiErrorResponse } from "../../../types/ApiType";
 import { api } from "../../../services/auth";
 import type { AxiosError } from "axios";
 import type { CreateHuntFormData } from "../../../types/FormType";
+import { useCan } from "../../../hooks/useCan";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -68,6 +69,7 @@ export default function HuntCreate() {
   const { t } = useTranslation(["form", "validation", "navigation", "common"]);
   const { lang } = useParams();
   const fetcher = useFetcher();
+  const can = useCan();
   const loaderData = useLoaderData();
   const [toast, setToast] = useState<{
     message: string;
@@ -209,6 +211,20 @@ export default function HuntCreate() {
                     </div>
                   )}
                 </div>
+                {can("ROLE_ADMIN") && (
+                  <div className="form-group">
+                    <label className="label label-required">{t("isSponsor", { ns: "form" })}</label>
+                    <div className="toggle-wrapper">
+                      <label className="toggle">
+                        <input type="checkbox" id="isSponsor" {...register("isSponsor")} />
+                        <span className="toggle-slider"></span>
+                      </label>
+                      <label htmlFor="isSponsor" className="toggle-label">
+                        {t("isSponsorHelper", { ns: "form" })}
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <hr className="divider" />

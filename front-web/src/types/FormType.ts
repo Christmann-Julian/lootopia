@@ -149,6 +149,7 @@ export interface EditRewardFormData {
 export interface CreateHuntFormData {
   lat: number;
   lon: number;
+  isSponsor: boolean;
   categoryId?: number;
   rarityId: number;
   translations: {
@@ -170,6 +171,7 @@ export interface EditHuntFormData {
   id?: number;
   lat: number;
   lon: number;
+  isSponsor: boolean;
   categoryId?: number;
   rarityId: number;
   translations: {

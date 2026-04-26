@@ -112,5 +112,7 @@
   "associatedReward": "Récompense associée",
   "rewardTitleFr": "Récompense en français",
   "rewardTitleEn": "Récompense en anglais",
-  "selectOption": "Sélectionnez une option"
+  "selectOption": "Sélectionnez une option",
+  "isSponsor": "Cette chasse est-elle sponsorisée ?",
+  "isSponsorHelper": "Indiquez si cette chasse est sponsorisée par un partenaire."
 }

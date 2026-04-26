@@ -131,15 +131,12 @@ final class UserGameplayController extends AbstractController
             throw new ApiException(Response::HTTP_BAD_REQUEST, 'You have already claimed this reward');
         }
 
-        // Add reward to user's inventory and increment reward count
         $user->addReward($reward);
         $user->setRewardCount(($user->getRewardCount() ?? 0) + 1);
 
-        // Grant experience points based on the hunt's rarity
         $xpToGain = $hunt->getRarity() ? $hunt->getRarity()->getExperienceGain() : 0;
         $this->progressService->addExperience($user, $xpToGain ?? 0);
 
-        // Check for rank updates and badge awards after claiming the reward
         $this->progressService->checkAndAwardBadges($user);
 
         $this->em->flush();

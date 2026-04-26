@@ -18,6 +18,7 @@ import type { ApiErrorResponse } from "../../../types/ApiType";
 import { api } from "../../../services/auth";
 import type { AxiosError } from "axios";
 import type { EditHuntFormData } from "../../../types/FormType";
+import { useCan } from "../../../hooks/useCan";
 
 export async function clientAction({ request }: ClientActionFunctionArgs) {
   const data = await request.json();
@@ -80,6 +81,7 @@ export default function HuntEdit() {
   const { lang } = useParams();
   const fetcher = useFetcher();
   const loaderData = useLoaderData();
+  const can = useCan();
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error" | "info" | "warning";
@@ -234,6 +236,20 @@ export default function HuntEdit() {
                     </div>
                   )}
                 </div>
+                {can("ROLE_ADMIN") && (
+                  <div className="form-group">
+                    <label className="label label-required">{t("isSponsor", { ns: "form" })}</label>
+                    <div className="toggle-wrapper">
+                      <label className="toggle">
+                        <input type="checkbox" id="isSponsor" {...register("isSponsor")} />
+                        <span className="toggle-slider"></span>
+                      </label>
+                      <label htmlFor="isSponsor" className="toggle-label">
+                        {t("isSponsorHelper", { ns: "form" })}
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <hr className="divider" />

@@ -373,6 +373,7 @@
   font-weight: 700;
   color: var(--gold);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .menu-wrapper .locked-footer {

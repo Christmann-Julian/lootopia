@@ -140,10 +140,13 @@ class Reward
             'code' => $this->getCode(),
             'link' => $this->getLink(),
             'endDate' => $this->getEndDate()?->format(\DateTimeInterface::ATOM),
+            'company' => $this->getHunt()?->getCompany()?->getName(),
             'huntId' => $this->getHunt()?->getId(),
         ];
 
         if ($locale) {
+            $data['category'] = $this->getHunt()?->getCategory()?->getTranslation($locale)?->getName();
+            $data['rarity'] = $this->getHunt()?->getRarity()?->getTranslation($locale)?->getName();
             $translation = $this->getTranslation($locale);
             $data['title'] = $translation ? $translation->getTitle() : null;
         } else {

@@ -16,7 +16,6 @@ export async function clientLoader({
 }): Promise<HuntShowData | { error: string }> {
   try {
     const { id } = params;
-    // On ne passe pas de locale pour récupérer toutes les données et traductions imbriquées
     const response = await api.get(`/api/hunts/${id}`);
     return response.data;
   } catch (err: unknown) {
