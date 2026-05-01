@@ -1,0 +1,123 @@
+name: CI Lootopia
+
+on:
+  push:
+    branches: 
+      - develop
+  pull_request:
+    branches: 
+      - develop
+      - main
+
+jobs:
+  # ==========================================
+  # JOB 1 : API (Symfony)
+  # ==========================================
+  api:
+    name: API (PHPStan, CS-Fixer, PHPUnit)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api 
+
+    services:
+      database:
+        image: mariadb:10.4.32
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: lootopia_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo, pdo_mysql, intl, zip, gd, opcache
+          tools: composer:v2
+
+      - name: Installation des dépendances Composer
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Vérification du code avec PHP-CS-Fixer
+        run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run --diff
+
+      - name: Analyse statique avec PHPStan
+        run: composer phpstan
+
+      - name: Préparation de la base de données de test
+        env:
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/lootopia_test?serverVersion=mariadb-10.4.32
+        run: |
+          bin/console doctrine:database:create --env=test --if-not-exists
+          bin/console doctrine:schema:update --force --env=test
+
+      - name: Exécution des tests avec PHPUnit
+        env:
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/lootopia_test?serverVersion=mariadb-10.4.32
+        run: bin/phpunit
+
+  # JOB 2 : FRONT-WEB (Vite + React)
+  front-web:
+    name: Front Web (ESLint, Prettier)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front-web
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './front-web/package-lock.json'
+
+      - name: Installation des dépendances NPM
+        run: npm ci || npm install --legacy-peer-deps
+
+      - name: Vérification avec ESLint
+        run: npm run lint
+
+      - name: Vérification avec Prettier
+        run: npx prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}"
+
+  # JOB 3 : FRONT-PWA
+  front-pwa:
+    name: Front PWA (ESLint, Prettier)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front-pwa
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './front-pwa/package-lock.json'
+
+      - name: Installation des dépendances NPM
+        run: npm ci || npm install
+
+      - name: Vérification avec ESLint
+        run: npm run lint
+
+      - name: Vérification avec Prettier
+        run: npx prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}"
