@@ -1,0 +1,58 @@
+# Changelog
+
+## 1.0.0 (2026-05-01)
+
+
+### Features
+
+* Ajout des Statistics dans l'admin et l'api. ([633ff22](https://github.com/Christmann-Julian/lootopia/commit/633ff224734199a0b5a9e86835e7fac052e38e89))
+* Api complète, Front-web presque complet, Front-pwa (manque la partie radar fonctionnel), CI et release. ([f92e29d](https://github.com/Christmann-Julian/lootopia/commit/f92e29d1899c2e2b54294387711c2be77dc3fb5d))
+* Api complète, Front-web presque complet, Front-pwa (manque la partie radar fonctionnel), CI et release. ([f92e29d](https://github.com/Christmann-Julian/lootopia/commit/f92e29d1899c2e2b54294387711c2be77dc3fb5d))
+* **api:** Ajout des controllers suivant : BadgeController, CategoryController, HuntController, RankController, RewardController, UserGameplayController ([e1e5665](https://github.com/Christmann-Julian/lootopia/commit/e1e5665deb1c8c69d81628f2d074233ab8c81974))
+* **api:** Ajout des fixtures (User, Badge, Rank, ...) ([f687e89](https://github.com/Christmann-Julian/lootopia/commit/f687e89e72386166b91ab0c63245e79e4f23b114))
+* **api:** mise en place des tests phpunit ([6f5459b](https://github.com/Christmann-Julian/lootopia/commit/6f5459b0f6cd5da66b5330483cb1024cf45c64e2))
+* config docker ([9429482](https://github.com/Christmann-Julian/lootopia/commit/942948239d91a5601033aa7323573eeca24f831a))
+* config docker pour la pwa (remplace front-mobile) ([accca89](https://github.com/Christmann-Julian/lootopia/commit/accca8971f398d6b3074f13321d2be8e00b9cdf6))
+* **docker:** config docker pour les tests api ([f125ec5](https://github.com/Christmann-Julian/lootopia/commit/f125ec5f6c41b8d26737cdf5a376cb6099b6ed9f))
+* **docker:** création des clés et chargement des fixtures ([567cdba](https://github.com/Christmann-Julian/lootopia/commit/567cdbad6f2747d19cad18eb0141e02300033868))
+* **front-pwa:** Ajout de la page register ([2d06b61](https://github.com/Christmann-Julian/lootopia/commit/2d06b61a09a80e552b504076c9a1968516554f75))
+* **front-pwa:** style, prettier, esLint, i18n, router ([53f0686](https://github.com/Christmann-Julian/lootopia/commit/53f0686fbd36b3fc15ae2404e0469e5e5d6bc146))
+* **front-pwa:** Système d'authentification ([83a6418](https://github.com/Christmann-Julian/lootopia/commit/83a64183bca0ced3ed38817ba49c0b6b0eb475fb))
+* **front-web:** Ajout des pages create et edit pour toutes les listes. ([8541088](https://github.com/Christmann-Julian/lootopia/commit/8541088df71198185f90b89697b10e5d61a0ee56))
+* **front-web:** Ajout des vues list et details pour tous ([cbbd303](https://github.com/Christmann-Julian/lootopia/commit/cbbd30377338ad89d0871485012e4dca571057fd))
+* **front-web:** Ajout du logo ([4deda08](https://github.com/Christmann-Julian/lootopia/commit/4deda08b86572e544f8ce51e92d145420623be1b))
+* **front-web:** gestion des permissions ([3cf8ba0](https://github.com/Christmann-Julian/lootopia/commit/3cf8ba0eda8c2b149703cc7fcf12bd719f5d9895))
+* **front-web:** mot de passe oublié ([328f695](https://github.com/Christmann-Julian/lootopia/commit/328f695745e6b49e5704a8eb2e9ffa1f4e3b94a0))
+* **front-web:** nouvelles traductions ([f7d09d4](https://github.com/Christmann-Julian/lootopia/commit/f7d09d4e7503fc9dc95d03a0537814c7d09ce2c3))
+* **front-web:** nouvelles traductions ([4ee766a](https://github.com/Christmann-Julian/lootopia/commit/4ee766a522db93a66d5c1239623e3345cf0572e1))
+* **front-web:** nouvelles traductions ([0dd1f49](https://github.com/Christmann-Julian/lootopia/commit/0dd1f49269f399100c065923a664c19c0df21fd8))
+* **front-web:** page 404 ([31b10f7](https://github.com/Christmann-Julian/lootopia/commit/31b10f73cb4b8d3a75e78c53584d001232094c02))
+* Gérer son compte ([95cbeb3](https://github.com/Christmann-Julian/lootopia/commit/95cbeb3f22870499f969b0e65400cee83d0be619))
+* init api, init front-web ([7ce743b](https://github.com/Christmann-Julian/lootopia/commit/7ce743b5d0e543e73b882c0c4c438c7a1b618804))
+* init front-mobile ([9de3909](https://github.com/Christmann-Julian/lootopia/commit/9de39093e8c7e2971b808d7deb5550ace469da25))
+* login et logout ([250f6ef](https://github.com/Christmann-Julian/lootopia/commit/250f6ef033d00aec1345240e50823e4a3c956586))
+* Page de liste des chasses avec filtre de catégorie et pagination. ([f1c91c2](https://github.com/Christmann-Julian/lootopia/commit/f1c91c2f82281d4670f283c4193d601ed80ebf8d))
+* Page home et reward de pwa ([f4daf3b](https://github.com/Christmann-Julian/lootopia/commit/f4daf3bbd682f87461b8f744dce46ef2051571c0))
+* Page profile pour pwa. ([4a070be](https://github.com/Christmann-Julian/lootopia/commit/4a070be3202f95d1398701f4df24d5c7e8f0e81e))
+* Pages CreateUser, EditUser, ShowUser ([578732f](https://github.com/Christmann-Julian/lootopia/commit/578732f1322767dbef0d68cce18017325605d0e4))
+* register + react router ([9a36798](https://github.com/Christmann-Julian/lootopia/commit/9a36798c1ce3ff9ebb5f65df1b2286a2a4ed5329))
+* users listView ([b900401](https://github.com/Christmann-Julian/lootopia/commit/b90040196e43f9cf64ee4154986349a91b0a2434))
+
+
+### Bug Fixes
+
+* Ajout de la génération des clés JWT à la ci pour éviter que les tests échouent. ([3a9ff83](https://github.com/Christmann-Julian/lootopia/commit/3a9ff8342034c1c26c4c1c47bc472f43aa6d199c))
+* **api:** endDate avec format spécifique pour le DateTime ([5dfee31](https://github.com/Christmann-Julian/lootopia/commit/5dfee31c590cb2ae9bca4df3847ad4652a704646))
+* **api:** L'utilisateur créé n'avait pas de Rank ([565f2db](https://github.com/Christmann-Julian/lootopia/commit/565f2dbf54b6f1b2480b6371f44e61d3c57507fd))
+* **api:** phpstan ([9fff7df](https://github.com/Christmann-Julian/lootopia/commit/9fff7df449acd114d71b1477cfc2de4193355e99))
+* appel api sans locale ([a9d54df](https://github.com/Christmann-Julian/lootopia/commit/a9d54df3dcb257bce038d94655caeb21882681bf))
+* Correction pour la ci des permissions symfony et des dépendances npm pwa. ([18ed295](https://github.com/Christmann-Julian/lootopia/commit/18ed2953ecb160b9bea4473dd2a390c66d2c9e01))
+* **docker:** erreur de mémoire pour phpstan ([895690a](https://github.com/Christmann-Julian/lootopia/commit/895690a055d225bd1e577e3cf8501920b82dde25))
+* **docker:** oubli de changement dans help de connect.sh ([8509232](https://github.com/Christmann-Julian/lootopia/commit/8509232f4637721802f5f4cac8b7c98d4046dacd))
+* erreur doctrine mappage ([7ef2f4e](https://github.com/Christmann-Julian/lootopia/commit/7ef2f4eff6d58e3428e20dae7f29cdbb9b7d11c7))
+* **front-web:** changement de langue sans effet sur les traductions ([972f5b8](https://github.com/Christmann-Julian/lootopia/commit/972f5b86faef5abd1edc148f7e78232ec674759b))
+* **front-web:** Correction user et https ([8db992b](https://github.com/Christmann-Julian/lootopia/commit/8db992be13dd4d2e1435734c73cc0623c545b57f))
+* **front-web:** duplication de requête sur les filtres de liste ([90623fc](https://github.com/Christmann-Julian/lootopia/commit/90623fc6d6d252478553b816793f1840dd7e9ece))
+* **front-web:** erreur de token lors du rechargement de page ([28d4207](https://github.com/Christmann-Julian/lootopia/commit/28d4207e996762347fbdfc25f133ce1647938859))
+* **front-web:** erreurs eslint ([739a79a](https://github.com/Christmann-Julian/lootopia/commit/739a79a19659722261070a9d15b6d5895cfb6a41))
+* **front-web:** server side error en console (css, meta, i18n) ([8096f6a](https://github.com/Christmann-Julian/lootopia/commit/8096f6adb6df14075c606dd97bceb5bb549da530))
