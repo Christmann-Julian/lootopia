@@ -1,0 +1,20 @@
+{
+  "totalUsers": "Total Users",
+  "usersDesc": "Registered on Lootopia",
+  "totalHunts": "Total Hunts",
+  "huntsDesc": "Created on the platform",
+  "totalCompanies": "Partner Companies",
+  "companiesDesc": "Active in database",
+  "huntsCreated": "Hunts Created",
+  "companyHuntsDesc": "By your company",
+  "uniqueParticipants": "Unique Participants",
+  "participantsDesc": "On your hunts",
+  "rewardsClaimed": "Rewards Claimed",
+  "rewardsDesc": "Rewards distributed",
+  "registrationsChart": "Registrations (Last 7 days)",
+  "categoriesChart": "Category Distribution",
+  "companyCategoriesChart": "Your Hunts by Category",
+  "companyRarityChart": "Rarity Distribution",
+  "newAgents": "New agents",
+  "huntsCount": "Number of hunts"
+}
