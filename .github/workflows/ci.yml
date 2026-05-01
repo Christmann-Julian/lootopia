@@ -10,9 +10,7 @@ on:
       - main
 
 jobs:
-  # ==========================================
   # JOB 1 : API (Symfony)
-  # ==========================================
   api:
     name: API (PHPStan, CS-Fixer, PHPUnit)
     runs-on: ubuntu-latest
@@ -60,6 +58,9 @@ jobs:
         run: |
           php bin/console doctrine:database:create --env=test --if-not-exists
           php bin/console doctrine:schema:update --force --env=test
+
+      - name: Génération des clés JWT
+        run: php bin/console lexik:jwt:generate-keypair --env=test --no-interaction
 
       - name: Exécution des tests avec PHPUnit
         env:
