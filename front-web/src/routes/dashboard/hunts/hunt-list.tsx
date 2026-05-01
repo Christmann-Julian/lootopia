@@ -45,7 +45,7 @@ export default function HuntList() {
         <Table
           title={t("title.hunts", { ns: "list-view" })}
           columns={columns}
-          apiEndpoint="/api/hunts/admin"
+          apiEndpoint="/api/hunts"
         />
       </main>
     </div>

@@ -7,7 +7,15 @@ import { api } from "../services/auth";
 import { useTranslation } from "react-i18next";
 import type { TableProps, TableRow, MetaData } from "../types/TableType";
 
-export default function Table({ title, columns, apiEndpoint }: TableProps) {
+export default function Table({
+  title,
+  columns,
+  apiEndpoint,
+  canAdd = true,
+  canEdit = true,
+  canDelete = true,
+  canView = true,
+}: TableProps) {
   const { t } = useTranslation(["table", "common"]);
 
   const [data, setData] = useState<TableRow[]>([]);
@@ -33,6 +41,7 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
   const currentSearch = localParams.q;
 
   const [localSearch, setLocalSearch] = useState(currentSearch);
+  const hasActions = canView || canEdit || canDelete;
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -47,7 +56,7 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
     );
 
     try {
-      const response = await api.get(`${apiEndpoint}?${params.toString()}`);
+      const response = await api.get(`${apiEndpoint}/admin?${params.toString()}`);
       setData(response.data.data);
       setMeta(response.data.meta);
     } catch {
@@ -227,20 +236,24 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
             </svg>
             {t("exportBtn", { ns: "table" })}
           </button>
-          <Link to="create" className="button button-primary">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            {t("addBtn", { ns: "table" })}
-          </Link>
+
+          {/* CONDITION BOUTON AJOUT */}
+          {canAdd && (
+            <Link to="create" className="button button-primary">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              {t("addBtn", { ns: "table" })}
+            </Link>
+          )}
         </div>
 
         <div
@@ -255,9 +268,13 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
             >
               {t("exportMultipleBtn", { ns: "table" })}
             </button>
-            <button className="button button-primary" onClick={handleBulkDeleteClick}>
-              {t("deleteBtn", { ns: "table" })} ({selectedIds.length})
-            </button>
+
+            {/* CONDITION BOUTON SUPPRESSION MULTIPLE */}
+            {canDelete && (
+              <button className="button button-primary" onClick={handleBulkDeleteClick}>
+                {t("deleteBtn", { ns: "table" })} ({selectedIds.length})
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -291,14 +308,16 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
                   </div>
                 </th>
               ))}
-              <th style={{ width: "120px" }}>{t("columnActions", { ns: "table" })}</th>
+              {hasActions && (
+                <th style={{ width: "120px" }}>{t("columnActions", { ns: "table" })}</th>
+              )}
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
                 <td
-                  colSpan={columns.length + 3}
+                  colSpan={columns.length + (hasActions ? 2 : 1)}
                   style={{ textAlign: "center", padding: "40px", color: "#666" }}
                 >
                   <div className="loading-spinner">{t("tableLoading", { ns: "table" })}</div>
@@ -322,67 +341,75 @@ export default function Table({ title, columns, apiEndpoint }: TableProps) {
                         : (row[column.key] as string)}
                     </td>
                   ))}
-                  <td>
-                    <div className="actions">
-                      <Link
-                        to={`${row.id}/show`}
-                        className="button button-ghost button-icon view"
-                        title="Voir"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                      </Link>
-                      <Link
-                        to={`${row.id}/edit`}
-                        className="button button-ghost button-icon edit"
-                        title="Modifier"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                      </Link>
-                      <button
-                        className="button button-ghost button-icon delete"
-                        title="Supprimer"
-                        onClick={() => handleDeleteClick(row.id)}
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </td>
+                  {hasActions && (
+                    <td>
+                      <div className="actions">
+                        {canView && (
+                          <Link
+                            to={`${row.id}/show`}
+                            className="button button-ghost button-icon view"
+                            title="Voir"
+                          >
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                              <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                          </Link>
+                        )}
+                        {canEdit && (
+                          <Link
+                            to={`${row.id}/edit`}
+                            className="button button-ghost button-icon edit"
+                            title="Modifier"
+                          >
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                          </Link>
+                        )}
+                        {canDelete && (
+                          <button
+                            className="button button-ghost button-icon delete"
+                            title="Supprimer"
+                            onClick={() => handleDeleteClick(row.id)}
+                          >
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <polyline points="3 6 5 6 21 6"></polyline>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))
             ) : (
               <tr>
                 <td
-                  colSpan={columns.length + 3}
+                  colSpan={columns.length + (hasActions ? 2 : 1)}
                   style={{ textAlign: "center", padding: "24px", color: "#666" }}
                 >
                   {t("noResults", { ns: "table" })}

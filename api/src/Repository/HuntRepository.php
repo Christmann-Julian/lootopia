@@ -55,4 +55,37 @@ class HuntRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    public function createPublicListQueryBuilder(?int $categoryId): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->leftJoin('h.huntTranslations', 'ht')
+            ->leftJoin('h.category', 'c')
+            ->leftJoin('h.rarity', 'r')
+            ->addSelect('ht', 'c', 'r');
+
+        if (null !== $categoryId) {
+            $qb->andWhere('c.id = :categoryId')
+               ->setParameter('categoryId', $categoryId);
+        }
+
+        $qb->orderBy('h.id', 'DESC');
+
+        return $qb;
+    }
+
+    public function findSponsoredHunts(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('h')
+            ->leftJoin('h.huntTranslations', 'ht')
+            ->leftJoin('h.category', 'c')
+            ->leftJoin('h.rarity', 'r')
+            ->addSelect('ht', 'c', 'r')
+            ->andWhere('h.isSponsor = :isSponsor')
+            ->setParameter('isSponsor', true)
+            ->orderBy('h.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

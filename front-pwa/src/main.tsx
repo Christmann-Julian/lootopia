@@ -2,7 +2,7 @@ import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import "./assets/css/index.css";
 import App from "./App.tsx";
-import "./service/i18n";
+import "./services/i18n";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

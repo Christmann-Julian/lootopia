@@ -92,6 +92,38 @@
   margin-top: 4px;
 }
 
+.form-container .divider {
+  color: hsl(var(--border));
+  margin: 15px 0;
+  border-top: 1px solid hsl(var(--border));
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+}
+
+.form-container .divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 40%;
+  height: 1px;
+  background: hsl(var(--border));
+  transform: translateY(-50%);
+}
+
+.form-container .divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 40%;
+  height: 1px;
+  background: hsl(var(--border));
+  transform: translateY(-50%);
+}
+
 .form-container .form-actions {
   display: flex;
   gap: 12px;

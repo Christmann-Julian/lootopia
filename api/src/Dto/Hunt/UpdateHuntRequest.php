@@ -14,6 +14,8 @@ final class UpdateHuntRequest
     #[Assert\Type('float')]
     private float $lon;
 
+    private ?bool $isSponsor = false;
+
     #[Assert\Type('integer')]
     private ?int $categoryId;
 
@@ -51,12 +53,14 @@ final class UpdateHuntRequest
         ?int $categoryId = null,
         int $rarityId = 0,
         array $translations = [],
+        ?bool $isSponsor = false,
     ) {
         $this->lat = $lat;
         $this->lon = $lon;
         $this->categoryId = $categoryId;
         $this->rarityId = $rarityId;
         $this->translations = $translations;
+        $this->isSponsor = $isSponsor;
     }
 
     public function getLat(): float
@@ -82,5 +86,10 @@ final class UpdateHuntRequest
     public function getTranslations(): array
     {
         return $this->translations;
+    }
+
+    public function getIsSponsor(): ?bool
+    {
+        return $this->isSponsor;
     }
 }

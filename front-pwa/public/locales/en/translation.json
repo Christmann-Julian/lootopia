@@ -43,6 +43,82 @@
         "newPassword": "New Password"
     },
     "error": {
-        "invalidEmail": "Invalid email address"
+        "invalidEmail": "Invalid email address",
+        "requiredField": "This field is required",
+        "passwordTooShort": "Password must be at least 6 characters",
+        "passwordsDoNotMatch": "Passwords do not match",
+        "lengthConstraint": "This field must be between {{min}} and {{max}} characters",
+        "invalidCredentials": "Invalid credentials",
+        "serverError": "An error occurred"
+    },
+    "register": {
+        "title": "New Recruit",
+        "subtitle": "Initializing neural profile",
+        "submit": "Create Profile",
+        "alreadyHaveAccount": "Already have an account?",
+        "login": "Log in",
+        "success": "Registration successful! Please check your email."
+    },
+    "login": {
+        "title": "Lootopia",
+        "subtitle": "Tactical Expedition",
+        "emailPlaceholder": "Email",
+        "passwordPlaceholder": "••••••••",
+        "submit": "Log in",
+        "noAccount": "Don't have an account?",
+        "register": "Sign up"
+    },
+    "hunt": {
+        "radarActive": "RADAR_ACTIVE",
+        "sector": "PARIS_SECTOR_01",
+        "xp": "XP",
+        "level": "LEVEL",
+        "title": "Expeditions",
+        "subtitle": "Select a neural signature to begin tracking.",
+        "all": "All",
+        "loading": "LOADING SIGNATURES...",
+        "standardRarity": "Standard",
+        "mysteryReward": "Mystery reward",
+        "empty": "NO SIGNATURES DETECTED",
+        "page": "PAGE"
+    },
+    "reward": {
+        "inventoryLabel": "REWARDS INVENTORY",
+        "title": "My Rewards",
+        "subtitle": "Extracted loot available for immediate deployment.",
+        "standardRarity": "Standard",
+        "mysteryPartner": "Mystery Partner",
+        "defaultTitle": "Reward",
+        "generalCategory": "General",
+        "codePrefix": "CODE: ",
+        "expired": "Expired",
+        "days": "d",
+        "hours": "h",
+        "minutes": "m",
+        "loading": "LOADING INVENTORY...",
+        "emptyTitle": "Cargo Empty",
+        "emptyText": "No active loot detected in your current sector.",
+        "protocolTitle": "Field Protocol",
+        "protocolText": "Each reward code is encrypted and valid for a single extraction. Present this terminal to the checkout officer to authorize the discount.",
+        "viewBtn": "View Reward"
+    },
+    "home": {
+        "streak": "STREAK: {{days}}D",
+        "rank": "RANK: {{rank}}",
+        "xp": "XP",
+        "scanInfo": "LOCAL_SCAN // CURRENT_SECTOR",
+        "targetDetected": "TARGET DETECTED",
+        "lootBox": "LOOT BOX",
+        "rewardPrefix": "Reward:",
+        "distance": "NEAR THIS LOCATION : ",
+        "initRadar": "INITIALIZE RADAR",
+        "sponsoredTitle": "Sponsored Sectors",
+        "viewAll": "VIEW ALL",
+        "sectorPrefix": "SECTOR:",
+        "locked": "LOCKED",
+        "levelRequired": "REQUIRED LEVEL: {{level}}",
+        "loading": "LOADING INTERFACE...",
+        "noSponsored": "No active sponsored sectors at the moment.",
+        "noDescription": "No description available"
     }
 }

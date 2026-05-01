@@ -130,7 +130,7 @@ class HuntControllerTest extends WebTestCase
                 'reward' => [
                     'code' => 'TESTPROMO',
                     'link' => 'https://example.com/test',
-                    'endDate' => '2026-12-31 23:59:59',
+                    'endDate' => '2025-12-31T23:59',
                     'translations' => [
                         'fr' => 'Récompense Test',
                         'en' => 'Test Reward',

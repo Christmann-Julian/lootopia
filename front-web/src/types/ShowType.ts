@@ -69,6 +69,7 @@ export type HuntShowData = {
   id: number;
   lat: number;
   lon: number;
+  isSponsor: boolean;
   company?: string;
   category?: {
     id: number;

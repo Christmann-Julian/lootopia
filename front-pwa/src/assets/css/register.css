@@ -274,3 +274,9 @@
 .register-wrapper .input-wrap .field-icon {
   top: 2.15rem;
 }
+
+.register-wrapper .error-message {
+  margin-top: 0.5rem;
+  color: hsl(0 84.2% 60.2%);
+  font-size: 0.75rem;
+}

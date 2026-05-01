@@ -20,8 +20,12 @@ export type TableRow = {
   [key: string]: unknown;
 };
 
-export type TableProps = {
+export interface TableProps {
   title: string;
   columns: Column[];
   apiEndpoint: string;
-};
+  canAdd?: boolean;
+  canEdit?: boolean;
+  canDelete?: boolean;
+  canView?: boolean;
+}

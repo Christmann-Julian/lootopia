@@ -47,7 +47,7 @@ export default function CategoryList() {
         <Table
           title={t("title.categories", { ns: "list-view" })}
           columns={columns}
-          apiEndpoint="/api/categories/admin"
+          apiEndpoint="/api/categories"
         />
       </main>
     </div>

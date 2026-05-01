@@ -19,12 +19,15 @@ class LocaleListener
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
-        $locale = (string) $request->query->get('locale');
+        $locale = $request->query->get('locale');
 
-        if (!in_array($locale, $this->supportedLocales, true)) {
+        if ($locale && is_string($locale) && in_array($locale, $this->supportedLocales, true)) {
+            $request->setLocale($locale);
+        } elseif (null === $locale || !is_string($locale)) {
+            return;
+        } else {
             $locale = $request->getPreferredLanguage($this->supportedLocales);
+            $request->setLocale($locale ?? $this->supportedLocales[0]);
         }
-
-        $request->setLocale($locale ?? 'en');
     }
 }

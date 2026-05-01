@@ -47,12 +47,18 @@ final class HuntController extends AbstractController
     }
 
     #[OA\Get(
-        summary: 'List all hunts',
-        description: 'Returns a full list of all hunts without pagination.',
+        summary: 'List all public hunts',
+        description: 'Returns a paginated list of all hunts, with an optional category filter.',
+        parameters: [
+            new OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer', default: 1)),
+            new OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer', default: 10)),
+            new OA\Parameter(name: 'category', in: 'query', description: 'Filter by category ID', schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'locale', in: 'query', schema: new OA\Schema(type: 'string', example: 'fr')),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'List of all hunts',
+                description: 'Paginated list of hunts',
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(
@@ -64,6 +70,7 @@ final class HuntController extends AbstractController
                                     new OA\Property(property: 'id', type: 'integer'),
                                     new OA\Property(property: 'lat', type: 'number', format: 'float'),
                                     new OA\Property(property: 'lon', type: 'number', format: 'float'),
+                                    new OA\Property(property: 'isSponsor', type: 'boolean'),
                                     new OA\Property(property: 'category', type: 'string'),
                                     new OA\Property(property: 'company', type: 'string'),
                                     new OA\Property(
@@ -77,16 +84,19 @@ final class HuntController extends AbstractController
                                             new OA\Property(property: 'location', type: 'string'),
                                         ]
                                     ),
-                                    new OA\Property(
-                                        property: 'reward',
-                                        type: 'object',
-                                    ),
-                                    new OA\Property(
-                                        property: 'rarity',
-                                        type: 'object',
-                                    ),
+                                    new OA\Property(property: 'reward', type: 'object'),
+                                    new OA\Property(property: 'rarity', type: 'object'),
                                 ]
                             )
+                        ),
+                        new OA\Property(
+                            property: 'meta',
+                            properties: [
+                                new OA\Property(property: 'page', type: 'integer'),
+                                new OA\Property(property: 'limit', type: 'integer'),
+                                new OA\Property(property: 'total', type: 'integer'),
+                            ],
+                            type: 'object'
                         ),
                     ],
                     type: 'object'
@@ -96,14 +106,34 @@ final class HuntController extends AbstractController
     )]
     #[IsGranted('ROLE_USER')]
     #[Route('', name: 'public_list', methods: ['GET'])]
-    public function listPublic(HuntRepository $huntRepository, Request $request): JsonResponse
+    public function listPublic(HuntRepository $huntRepository, Request $request, PaginatorInterface $paginator): JsonResponse
     {
+        $page = max(1, $request->query->getInt('page', 1));
+        $limit = (int) max(5, min(100, $request->query->getInt('limit', 10)));
+        $categoryId = null !== $request->query->get('category') ? $request->query->getInt('category') : null;
         $locale = is_string($request->query->get('locale')) ? (string) $request->query->get('locale') : null;
-        $hunts = $huntRepository->findAll();
 
-        $data = array_map(fn (Hunt $h) => $h->toArray($locale), $hunts);
+        $queryBuilder = $huntRepository->createPublicListQueryBuilder($categoryId);
 
-        return new JsonResponse(['data' => $data]);
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $page,
+            $limit,
+            [
+                'distinct' => true,
+            ]
+        );
+
+        $data = array_map(fn (Hunt $h) => $h->toArray($locale), iterator_to_array($pagination->getItems()));
+
+        return new JsonResponse([
+            'data' => $data,
+            'meta' => [
+                'page' => $pagination->getCurrentPageNumber(),
+                'limit' => $pagination->getItemNumberPerPage(),
+                'total' => $pagination->getTotalItemCount(),
+            ],
+        ]);
     }
 
     #[OA\Get(
@@ -131,6 +161,7 @@ final class HuntController extends AbstractController
                                     new OA\Property(property: 'id', type: 'integer'),
                                     new OA\Property(property: 'lat', type: 'number', format: 'float'),
                                     new OA\Property(property: 'lon', type: 'number', format: 'float'),
+                                    new OA\Property(property: 'isSponsor', type: 'boolean'),
                                     new OA\Property(property: 'category', type: 'string'),
                                     new OA\Property(property: 'company', type: 'string'),
                                     new OA\Property(
@@ -214,6 +245,72 @@ final class HuntController extends AbstractController
     }
 
     #[OA\Get(
+        summary: 'List sponsored hunts',
+        description: 'Returns a list of hunts marked as sponsored.',
+        parameters: [
+            new OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer', default: 5)),
+            new OA\Parameter(name: 'locale', in: 'query', schema: new OA\Schema(type: 'string', example: 'fr')),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'List of sponsored hunts',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'object',
+                                properties: [
+                                    new OA\Property(property: 'id', type: 'integer'),
+                                    new OA\Property(property: 'lat', type: 'number', format: 'float'),
+                                    new OA\Property(property: 'lon', type: 'number', format: 'float'),
+                                    new OA\Property(property: 'isSponsor', type: 'boolean'),
+                                    new OA\Property(property: 'category', type: 'string'),
+                                    new OA\Property(property: 'company', type: 'string'),
+                                    new OA\Property(
+                                        property: 'translations',
+                                        type: 'object',
+                                        properties: [
+                                            new OA\Property(property: 'title', type: 'string'),
+                                            new OA\Property(property: 'description', type: 'string'),
+                                            new OA\Property(property: 'question', type: 'string'),
+                                            new OA\Property(property: 'answer', type: 'string'),
+                                            new OA\Property(property: 'location', type: 'string'),
+                                        ]
+                                    ),
+                                    new OA\Property(
+                                        property: 'reward',
+                                        type: 'object',
+                                    ),
+                                    new OA\Property(
+                                        property: 'rarity',
+                                        type: 'object',
+                                    ),
+                                ]
+                            )
+                        ),
+                    ],
+                    type: 'object'
+                )
+            ),
+        ]
+    )]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/sponsored', name: 'sponsored_list', methods: ['GET'])]
+    public function listSponsored(HuntRepository $huntRepository, Request $request): JsonResponse
+    {
+        $limit = (int) max(1, min(10, $request->query->getInt('limit', 5)));
+        $locale = is_string($request->query->get('locale')) ? (string) $request->query->get('locale') : null;
+
+        $hunts = $huntRepository->findSponsoredHunts($limit);
+        $data = array_map(fn (Hunt $h) => $h->toArray($locale), $hunts);
+
+        return new JsonResponse(['data' => $data]);
+    }
+
+    #[OA\Get(
         summary: 'Get hunt details',
         parameters: [
             new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
@@ -227,6 +324,7 @@ final class HuntController extends AbstractController
                         new OA\Property(property: 'id', type: 'integer'),
                         new OA\Property(property: 'lat', type: 'number', format: 'float'),
                         new OA\Property(property: 'lon', type: 'number', format: 'float'),
+                        new OA\Property(property: 'isSponsor', type: 'boolean'),
                         new OA\Property(property: 'category', type: 'string'),
                         new OA\Property(property: 'company', type: 'string'),
                         new OA\Property(
@@ -273,6 +371,7 @@ final class HuntController extends AbstractController
                 properties: [
                     new OA\Property(property: 'lat', type: 'number', format: 'float', example: 48.8566),
                     new OA\Property(property: 'lon', type: 'number', format: 'float', example: 2.3522),
+                    new OA\Property(property: 'isSponsor', type: 'boolean', example: false),
                     new OA\Property(property: 'categoryId', type: 'integer', example: 1),
                     new OA\Property(property: 'rarityId', type: 'integer', example: 2),
                     new OA\Property(
@@ -341,9 +440,13 @@ final class HuntController extends AbstractController
     ): JsonResponse {
         $data = json_decode((string) $request->getContent(), true) ?? [];
 
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+        $isSponsor = $isAdmin ? ($data['isSponsor'] ?? false) : false;
+
         $huntDto = new CreateHuntRequest(
             $data['lat'] ?? 0.0,
             $data['lon'] ?? 0.0,
+            $isSponsor,
             $data['categoryId'] ?? null,
             $data['rarityId'] ?? 0,
             $data['translations'] ?? [],
@@ -386,7 +489,8 @@ final class HuntController extends AbstractController
              ->setLon($huntDto->getLon())
              ->setCompany($currentUser->getCompany())
              ->setRarity($rarity)
-             ->setCategory($category);
+             ->setCategory($category)
+             ->setIsSponsor($huntDto->getIsSponsor());
 
         foreach ($huntDto->getTranslations() as $locale => $tData) {
             $translation = new HuntTranslation();
@@ -430,6 +534,7 @@ final class HuntController extends AbstractController
                 properties: [
                     new OA\Property(property: 'lat', type: 'number', format: 'float', example: 48.8566),
                     new OA\Property(property: 'lon', type: 'number', format: 'float', example: 2.3522),
+                    new OA\Property(property: 'isSponsor', type: 'boolean', example: false),
                     new OA\Property(property: 'categoryId', type: 'integer', example: 1),
                     new OA\Property(property: 'rarityId', type: 'integer', example: 2),
                     new OA\Property(
@@ -487,12 +592,18 @@ final class HuntController extends AbstractController
 
         $data = json_decode((string) $request->getContent(), true) ?? [];
 
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+        $isSponsor = $isAdmin && array_key_exists('isSponsor', $data)
+            ? $data['isSponsor']
+            : $hunt->isSponsor();
+
         $dto = new UpdateHuntRequest(
             $data['lat'] ?? $hunt->getLat(),
             $data['lon'] ?? $hunt->getLon(),
             array_key_exists('categoryId', $data) ? $data['categoryId'] : $hunt->getCategory()?->getId(),
             $data['rarityId'] ?? $hunt->getRarity()?->getId(),
-            $data['translations'] ?? []
+            $data['translations'] ?? [],
+            $isSponsor
         );
 
         $dtoValidator->validate($dto);
@@ -513,7 +624,8 @@ final class HuntController extends AbstractController
         $hunt->setLat($dto->getLat())
              ->setLon($dto->getLon())
              ->setRarity($rarity)
-             ->setCategory($category);
+             ->setCategory($category)
+             ->setIsSponsor($dto->getIsSponsor() ?? false);
 
         foreach ($dto->getTranslations() as $locale => $tData) {
             $translation = $hunt->getTranslation($locale);

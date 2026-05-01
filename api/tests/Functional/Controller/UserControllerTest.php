@@ -36,7 +36,7 @@ class UserControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            '/api/users',
+            '/api/users/admin',
             ['page' => 1, 'limit' => 5],
             [],
             ['HTTP_AUTHORIZATION' => 'Bearer '.$token]
@@ -56,7 +56,7 @@ class UserControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            '/api/users',
+            '/api/users/admin',
             [],
             [],
             ['HTTP_AUTHORIZATION' => 'Bearer '.$token]

@@ -21,6 +21,9 @@ class Hunt
     #[ORM\Column]
     private ?float $lon = null;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $isSponsor = false;
+
     /**
      * @var Collection<int, HuntTranslation>
      */
@@ -70,6 +73,18 @@ class Hunt
     public function setLon(float $lon): static
     {
         $this->lon = $lon;
+
+        return $this;
+    }
+
+    public function isSponsor(): bool
+    {
+        return $this->isSponsor;
+    }
+
+    public function setIsSponsor(bool $isSponsor): static
+    {
+        $this->isSponsor = $isSponsor;
 
         return $this;
     }
@@ -174,6 +189,7 @@ class Hunt
             'id' => $this->getId(),
             'lat' => $this->getLat(),
             'lon' => $this->getLon(),
+            'isSponsor' => $this->isSponsor(),
             'company' => $this->getCompany()?->getName(),
             'category' => $this->getCategory()?->toArray($locale),
             'rarity' => $this->getRarity()?->toArray($locale),

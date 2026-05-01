@@ -254,7 +254,7 @@
   margin-top: 1.5rem;
 }
 
-.login-wrapper .register-link span {
+.login-wrapper .register-link a {
   color: var(--gold);
   cursor: pointer;
   font-weight: 800;

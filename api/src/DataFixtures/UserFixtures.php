@@ -44,7 +44,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $adminUser->setLastname('Admin Lastname');
         $adminUser->setEmail('admin@lootopia.fr');
         $adminUser->setPseudo('AdminHunter');
-        $adminUser->setExperience(15000);
+        $adminUser->setExperience(450000);
         $adminUser->setHuntCount(150);
         $adminUser->setRewardCount(120);
         $adminUser->setPassword($this->passwordHasher->hashPassword($adminUser, 'admin'));
