@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import { api } from "../services/auth";
 import { getBadgeIcon } from "../services/badgeIconService";
 import type { CategoryData, HuntData, UserStatsData } from "../types/DataTypes";
+import { Link } from "react-router-dom";
 
 const TreasureHunt = () => {
   const { t } = useTranslation();
@@ -140,7 +141,7 @@ const TreasureHunt = () => {
             </div>
           ) : hunts.length > 0 ? (
             hunts.map((hunt) => (
-              <div key={hunt.id} className="hunt-card">
+              <Link key={hunt.id} className="hunt-card" to={`/radar/${hunt.id}`}>
                 <div className="rarity-tag">{hunt.rarity?.name || t("hunt.standardRarity")}</div>
 
                 <div className="hunt-icon">{getBadgeIcon(hunt.category?.icon, 24)}</div>
@@ -163,7 +164,7 @@ const TreasureHunt = () => {
                 <div className="hunt-arrow">
                   <ChevronRight size={24} />
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <div className="empty-search-state">

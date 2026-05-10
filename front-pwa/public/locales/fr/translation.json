@@ -1,124 +1,157 @@
 {
-    "navbar": {
-        "home": "Accueil",
-        "profile": "Profil",
-        "radar": "Radar",
-        "rewards": "Bons"
+  "navbar": {
+    "home": "Accueil",
+    "profile": "Profil",
+    "radar": "Radar",
+    "rewards": "Bons"
+  },
+  "profile": {
+    "stats": {
+      "hunts": "Chasses",
+      "rewards": "Récompenses"
     },
-    "profile": {
-        "stats": {
-            "hunts": "Chasses",
-            "rewards": "Récompenses"
-        },
-        "badges": {
-            "title": "Succès débloqués"
-        },
-        "preferences": {
-            "title": "Préférences de langue",
-            "language": "Langues disponibles"
-        },
-        "info": {
-            "title": "Informations personnelles"
-        },
-        "security": {
-            "title": "Mot de passe et sécurité"
-        },
-        "actions": {
-            "edit": "Enregistrer les modifications",
-            "delete": "Supprimer mon compte"
-        },
-        "delete": {
-            "title": "Zone Critique",
-            "notice": "L'effacement du compte est définitif. Vos bons de réduction non utilisés seront supprimés du serveur."
-        }
+    "badges": {
+      "title": "Succès débloqués"
     },
-    "input": {
-        "firstName": "Prénom",
-        "lastName": "Nom",
-        "pseudo": "Pseudo",
-        "email": "Adresse e-mail",
-        "password": "Mot de passe",
-        "confirmPassword": "Confirmer le mot de passe",
-        "oldPassword": "Ancien mot de passe",
-        "newPassword": "Nouveau mot de passe"
+    "preferences": {
+      "title": "Préférences de langue",
+      "language": "Langues disponibles"
     },
-    "error": {
-        "invalidEmail": "Adresse e-mail invalide",
-        "requiredField": "Ce champ est requis",
-        "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères",
-        "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
-        "lengthConstraint": "Ce champ doit avoir entre {{min}} et {{max}} caractères",
-        "invalidCredentials": "Identifiants invalides",
-        "serverError": "Une erreur est survenue"
+    "info": {
+      "title": "Informations personnelles"
     },
-    "register": {
-        "title": "Nouvelle Recrue",
-        "subtitle": "Initialisation du profil neuronal",
-        "submit": "Créer le Profil",
-        "alreadyHaveAccount": "Déjà un profil ?",
-        "login": "S'identifier",
-        "success": "Inscription réussie ! Veuillez vérifier vos emails."
+    "security": {
+      "title": "Mot de passe et sécurité"
     },
-    "login": {
-        "title": "Lootopia",
-        "subtitle": "Expédition tactique",
-        "emailPlaceholder": "Adresse e-mail",
-        "passwordPlaceholder": "••••••••",
-        "submit": "S'identifier",
-        "noAccount": "Pas de profil ?",
-        "register": "S'inscrire"
+    "actions": {
+      "edit": "Enregistrer les modifications",
+      "delete": "Supprimer mon compte"
     },
-    "hunt": {
-        "radarActive": "RADAR_ACTIF",
-        "sector": "SECTEUR_PARIS_01",
-        "xp": "XP",
-        "level": "NIVEAU",
-        "title": "Expéditions",
-        "subtitle": "Sélectionnez une signature neurale pour commencer la traque.",
-        "all": "Tout",
-        "loading": "CHARGEMENT DES SIGNATURES...",
-        "standardRarity": "Standard",
-        "mysteryReward": "Récompense mystère",
-        "empty": "AUCUNE SIGNATURE DÉTECTÉE",
-        "page": "PAGE"
+    "delete": {
+      "title": "Zone Critique",
+      "notice": "L'effacement du compte est définitif. Vos bons de réduction non utilisés seront supprimés du serveur."
+    }
+  },
+  "input": {
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "pseudo": "Pseudo",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "oldPassword": "Ancien mot de passe",
+    "newPassword": "Nouveau mot de passe"
+  },
+  "error": {
+    "invalidEmail": "Adresse e-mail invalide",
+    "requiredField": "Ce champ est requis",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+    "lengthConstraint": "Ce champ doit avoir entre {{min}} et {{max}} caractères",
+    "invalidCredentials": "Identifiants invalides",
+    "serverError": "Une erreur est survenue"
+  },
+  "register": {
+    "title": "Nouvelle Recrue",
+    "subtitle": "Initialisation du profil neuronal",
+    "submit": "Créer le Profil",
+    "alreadyHaveAccount": "Déjà un profil ?",
+    "login": "S'identifier",
+    "success": "Inscription réussie ! Veuillez vérifier vos emails."
+  },
+  "login": {
+    "title": "Lootopia",
+    "subtitle": "Expédition tactique",
+    "emailPlaceholder": "Adresse e-mail",
+    "passwordPlaceholder": "••••••••",
+    "submit": "S'identifier",
+    "noAccount": "Pas de profil ?",
+    "register": "S'inscrire"
+  },
+  "hunt": {
+    "radarActive": "RADAR_ACTIF",
+    "sector": "SECTEUR_PARIS_01",
+    "xp": "XP",
+    "level": "NIVEAU",
+    "title": "Expéditions",
+    "subtitle": "Sélectionnez une signature neurale pour commencer la traque.",
+    "all": "Tout",
+    "loading": "CHARGEMENT DES SIGNATURES...",
+    "standardRarity": "Standard",
+    "mysteryReward": "Récompense mystère",
+    "empty": "AUCUNE SIGNATURE DÉTECTÉE",
+    "page": "PAGE"
+  },
+  "reward": {
+    "inventoryLabel": "INVENTAIRE DES BONS",
+    "title": "Mes Bons",
+    "subtitle": "Butin extrait disponible pour un déploiement immédiat.",
+    "standardRarity": "Standard",
+    "mysteryPartner": "Partenaire Mystère",
+    "defaultTitle": "Récompense",
+    "generalCategory": "Général",
+    "codePrefix": "CODE : ",
+    "expired": "Expiré",
+    "days": "j",
+    "hours": "h",
+    "minutes": "m",
+    "loading": "CHARGEMENT DE L'INVENTAIRE...",
+    "emptyTitle": "Soute Vide",
+    "emptyText": "Aucun butin actif détecté dans votre secteur actuel.",
+    "protocolTitle": "Protocole de Terrain",
+    "protocolText": "Chaque code de récompense est chiffré et valide pour une seule extraction. Présentez ce terminal à l'officier de caisse pour autoriser la réduction.",
+    "viewBtn": "Voir le bon"
+  },
+  "home": {
+    "streak": "SÉRIE: {{days}}J",
+    "rank": "RANG : {{rank}}",
+    "xp": "XP",
+    "scanInfo": "SCAN_LOCAL // SECTEUR_ACTUEL",
+    "targetDetected": "CIBLE DÉTECTÉE",
+    "lootBox": "BOÎTE DE BUTIN",
+    "rewardPrefix": "Récompense :",
+    "distance": "À PROXIMITÉ DE CETTE POSITION : ",
+    "initRadar": "INITIALISER LE RADAR",
+    "sponsoredTitle": "Secteurs sponsorisés",
+    "viewAll": "VOIR TOUT",
+    "sectorPrefix": "SECTEUR :",
+    "locked": "BLOQUÉ",
+    "levelRequired": "NIVEAU REQUIS : {{level}}",
+    "loading": "CHARGEMENT DE L'INTERFACE...",
+    "noSponsored": "Aucun secteur sponsorisé actif pour le moment.",
+    "noDescription": "Aucune description disponible"
+  },
+  "radar": {
+    "connection": "CONNEXION SATELLITE EN COURS...",
+    "targetNotFound": "ERREUR : CIBLE INTROUVABLE.",
+    "target": "CIBLE",
+    "targetDistance": "DISTANCE CIBLE",
+    "meters": "MÈTRES",
+    "targetSearch": "RECHERCHE...",
+    "targetLocked": "VERROUILLÉ",
+    "targetReady": "PRÊT POUR EXTRACTION",
+    "alert": {
+      "title": "ALERTE : TROP LOIN",
+      "message": "Approchez à moins de 50m pour lancer l'extraction."
     },
     "reward": {
-        "inventoryLabel": "INVENTAIRE DES BONS",
-        "title": "Mes Bons",
-        "subtitle": "Butin extrait disponible pour un déploiement immédiat.",
-        "standardRarity": "Standard",
-        "mysteryPartner": "Partenaire Mystère",
-        "defaultTitle": "Récompense",
-        "generalCategory": "Général",
-        "codePrefix": "CODE : ",
-        "expired": "Expiré",
-        "days": "j",
-        "hours": "h",
-        "minutes": "m",
-        "loading": "CHARGEMENT DE L'INVENTAIRE...",
-        "emptyTitle": "Soute Vide",
-        "emptyText": "Aucun butin actif détecté dans votre secteur actuel.",
-        "protocolTitle": "Protocole de Terrain",
-        "protocolText": "Chaque code de récompense est chiffré et valide pour une seule extraction. Présentez ce terminal à l'officier de caisse pour autoriser la réduction.",
-        "viewBtn": "Voir le bon"
+      "alreadyClaimed": {
+        "title": "BUTIN DÉJÀ SÉCURISÉ",
+        "message": "Redirection vers votre inventaire..."
+      },
+      "success": {
+        "title": "EXTRACTION RÉUSSIE",
+        "message": "Votre récompense a été ajoutée à votre inventaire."
+      }
     },
-    "home": {
-        "streak": "SÉRIE: {{days}}J",
-        "rank": "RANG : {{rank}}",
-        "xp": "XP",
-        "scanInfo": "SCAN_LOCAL // SECTEUR_ACTUEL",
-        "targetDetected": "CIBLE DÉTECTÉE",
-        "lootBox": "BOÎTE DE BUTIN",
-        "rewardPrefix": "Récompense :",
-        "distance": "À PROXIMITÉ DE CETTE POSITION : ",
-        "initRadar": "INITIALISER LE RADAR",
-        "sponsoredTitle": "Secteurs sponsorisés",
-        "viewAll": "VOIR TOUT",
-        "sectorPrefix": "SECTEUR :",
-        "locked": "BLOQUÉ",
-        "levelRequired": "NIVEAU REQUIS : {{level}}",
-        "loading": "CHARGEMENT DE L'INTERFACE...",
-        "noSponsored": "Aucun secteur sponsorisé actif pour le moment.",
-        "noDescription": "Aucune description disponible"
+    "ar": {
+      "abort": "ABORTER",
+      "anomalyDetected": "ANOMALIE CAPTURÉE // DÉCRYPTAGE",
+      "incorrectAnswer": "CLÉ DE SÉCURITÉ INCORRECTE. RÉESSAYEZ.",
+      "answerPlaceholder": "ENTREZ LA RÉPONSE...",
+      "checking": "VÉRIFICATION...",
+      "unlock": "DÉVERROUILLER LE BUTIN",
+      "searchText": "SCRUTEZ LA ZONE ET\nCLIQUEZ SUR L'ANOMALIE"
     }
+  }
 }

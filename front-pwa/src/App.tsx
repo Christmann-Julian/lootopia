@@ -63,7 +63,7 @@ export default function App() {
           }
         />
         <Route
-          path="/radar"
+          path="/radar/:huntId"
           element={
             <AuthGuard>
               <Radar />

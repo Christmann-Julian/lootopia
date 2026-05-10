@@ -146,6 +146,8 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  text-decoration: none;
+  color: #f8fafc;
 }
 
 .hunts-wrapper .hunt-card:hover {
