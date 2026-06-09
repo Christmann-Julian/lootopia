@@ -1,11 +1,11 @@
 nelmio_api_doc:
     documentation:
         info:
-            title: My App
-            description: This is an awesome app!
+            title: Lootopia API Documentation
+            description: This is the documentation for the Lootopia API.
             version: 1.0.0
         servers:
-            - url: "http://localhost:8000"
+            - url: "%env(DEFAULT_API_URI)%"
               description: "Serveur local"
         components:
             securitySchemes:
