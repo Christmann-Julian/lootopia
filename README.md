@@ -34,3 +34,4 @@ feat(api): ajout de la fonctionnalité de connexion
 **Christmann Julian**
 
 - <https://github.com/Christmann-Julian>
+- https://github.com/Itaazz>
