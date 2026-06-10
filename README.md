@@ -38,3 +38,7 @@ feat(api): ajout de la fonctionnalité de connexion
 **Baloup Clément**
 
 - https://github.com/Itaazz>
+
+**Mohammad Bilal**
+
+- https://github.com/bilal2709
