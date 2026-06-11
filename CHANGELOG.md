@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.1.0](https://github.com/Christmann-Julian/lootopia/compare/v1.0.0...v1.1.0) (2026-06-11)
+
+
+### Features
+
+* Ajout  variable dans .env. ([7f67a0b](https://github.com/Christmann-Julian/lootopia/commit/7f67a0bb1dc892b2704e2cbf001936731d83ab2b))
+* Ajout d'un dossier docs avec de la documentation. ([37cf57e](https://github.com/Christmann-Julian/lootopia/commit/37cf57e42bd8a0d703ac5886504c1ef1b93576e3))
+* Ajout de la documentation dans le projet. ([c63de36](https://github.com/Christmann-Julian/lootopia/commit/c63de36a5189cbcbcb137df2094427ff26b288ee))
+* Ajout titre, description pour la doc nelmio. ([fe5a57e](https://github.com/Christmann-Julian/lootopia/commit/fe5a57ecacecf748af77da307ab924477fcb3d99))
+* Radar avec AR et géolocalisation. ([b6c048a](https://github.com/Christmann-Julian/lootopia/commit/b6c048a2a73278f10f62d81231446217ae03feab))
+
+
+### Bug Fixes
+
+* **front-pwa:** Fix map reload ([f644ad9](https://github.com/Christmann-Julian/lootopia/commit/f644ad9b694fbb9d4a17524956f10385ab31a0e1))
+* **front-pwa:** Fix map reload ([dc5c930](https://github.com/Christmann-Julian/lootopia/commit/dc5c9309cb591428dc063438e049d7d982f5d1e1))
+* **front-pwa:** Last commit ([f66a219](https://github.com/Christmann-Julian/lootopia/commit/f66a2196ca34387c1fb310d10df903fc8784c216))
+
 ## 1.0.0 (2026-05-01)
 
 
