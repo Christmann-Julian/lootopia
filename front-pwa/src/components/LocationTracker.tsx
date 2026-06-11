@@ -1,13 +1,16 @@
 import { useEffect } from "react";
 import { useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import "../assets/css/radar.css";
 import L from "leaflet";
 
-type Props = {
+export default function LocationTracker({
+  onUpdate,
+  treasurePos,
+}: {
   onUpdate: (pos: L.LatLng, dist: number) => void;
   treasurePos: [number, number];
-};
-
-export function LocationTracker({ onUpdate, treasurePos }: Props) {
+}) {
   const map = useMapEvents({
     locationfound(e) {
       const dist = e.latlng.distanceTo(L.latLng(treasurePos[0], treasurePos[1]));
@@ -15,7 +18,7 @@ export function LocationTracker({ onUpdate, treasurePos }: Props) {
       map.flyTo(e.latlng, 17, { animate: true });
     },
     locationerror(e) {
-      console.error("GPS Signal Lost:", e.message);
+      console.error("GPS Signal lost :", e.message);
     },
   });
 

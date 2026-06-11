@@ -128,7 +128,6 @@
 }
 
 .menu-wrapper .main-btn {
-  width: 100%;
   background: linear-gradient(90deg, #d4af37, #fef08a, #d4af37);
   background-size: 200% auto;
   animation: shimmer 2s linear infinite;
@@ -147,6 +146,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  text-decoration: none;
 }
 
 .menu-wrapper .main-btn:hover {
@@ -183,6 +183,9 @@
   position: relative;
   transition: all 0.3s ease;
   overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  color: #f8fafc;
 }
 
 .menu-wrapper .sector-card:hover {

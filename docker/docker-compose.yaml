@@ -32,6 +32,8 @@ services:
     environment:
       DATABASE_URL: "mysql://lootopia:lootopia@db:3306/lootopia?serverVersion=mariadb-10.4.32"
       MAILER_DSN: "smtp://mailpit:1025"
+      DEFAULT_API_URI: "https://localhost:8000"
+      DEFAULT_URI: "https://localhost"
     networks:
       - lootopia_network
 
@@ -46,7 +48,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=https://localhost:8000
     networks:
       - lootopia_network
 
@@ -61,7 +63,7 @@ services:
     ports:
       - "5174:5173"
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=https://localhost:8000
     networks:
       - lootopia_network
 

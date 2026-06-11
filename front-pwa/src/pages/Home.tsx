@@ -22,7 +22,7 @@ interface MenuProps {
   onStartRadar?: () => void;
 }
 
-const Home: React.FC<MenuProps> = ({ onStartRadar }) => {
+const Home: React.FC<MenuProps> = () => {
   const { t, i18n } = useTranslation();
 
   const [userInfo, setUserInfo] = useState<UserHomeData>({
@@ -45,7 +45,6 @@ const Home: React.FC<MenuProps> = ({ onStartRadar }) => {
       })
       .then((res) => {
         if (res && res.data) {
-          console.log("User details:", res.data);
           setUserInfo({
             pseudo: res.data.pseudo || `${res.data.firstname} ${res.data.lastname}` || "Agent",
             experience: res.data.experience || 0,
@@ -168,10 +167,10 @@ const Home: React.FC<MenuProps> = ({ onStartRadar }) => {
                 </div>
               )}
 
-              <button className="main-btn" onClick={onStartRadar}>
+              <Link className="main-btn" to={`/radar/${featuredHunt ? featuredHunt.id : ""}`}>
                 <Compass size={22} />
                 <span>{t("home.initRadar")}</span>
-              </button>
+              </Link>
             </section>
 
             {gridHunts.length > 0 && (
@@ -189,7 +188,11 @@ const Home: React.FC<MenuProps> = ({ onStartRadar }) => {
                     const isLocked = reqXp > userInfo.experience;
 
                     return (
-                      <div key={hunt.id} className={`sector-card ${isLocked ? "locked" : ""}`}>
+                      <Link
+                        key={hunt.id}
+                        className={`sector-card ${isLocked ? "locked" : ""}`}
+                        to={`/radar/${hunt.id}`}
+                      >
                         <div className="brand-header">
                           <span className="brand-label">{hunt.company}</span>
                           <span
@@ -228,7 +231,7 @@ const Home: React.FC<MenuProps> = ({ onStartRadar }) => {
                             </>
                           )}
                         </div>
-                      </div>
+                      </Link>
                     );
                   })}
                 </div>
