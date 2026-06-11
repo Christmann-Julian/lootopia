@@ -6,7 +6,7 @@ Lootopia est une plateforme de chasse aux trésors complète composée de plusie
 
 - **API Symfony** : Fournit les fonctionnalités backend nécessaires.
 - **Front Web** : Une application web développée avec React et Vite.
-- **Front Mobile** : Une application mobile basée sur Expo et React Native.
+- **Front Mobile** : Une PWA basée sur React et Vite.
 
 Pour plus de détails sur le lancement du projet et la configuration Docker, consultez le [README Docker](docker/README.md).
 
